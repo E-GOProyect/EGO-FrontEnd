@@ -1,4 +1,6 @@
 import { Component } from '@angular/core';
+import { Router } from '@angular/router';
+import { RouterNavigate } from './Common/enums';
 
 @Component({
   selector: 'app-root',
@@ -7,4 +9,10 @@ import { Component } from '@angular/core';
 })
 export class AppComponent {
   title = 'ego-app';
+  constructor(
+    private router:Router
+  ){}
+  prueba(){
+    this.router.navigate([RouterNavigate.PLAYABLE_APP,RouterNavigate.QUESTION_STEP]);
+  }
 }
