@@ -3,7 +3,7 @@ section {
   height: 48em;
 }
 .title {
-  font-family: RifficFree;
+  font-family: RifficFree, serif;
   font-size: 7em;
   color: white;
   @media (min-width: 576px) {
@@ -14,12 +14,6 @@ section {
   max-width: 20em;
   @media (min-width: 576px) {
     max-width: 30em;
-  }
-}
-.topButtons {
-  font-size: 7em;
-  @media (min-width: 576px) {
-    font-size: 12em;
   }
 }
 .box {

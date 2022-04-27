@@ -1,4 +1,4 @@
-import { RouterNavigate } from './../../Common/enums/router-navigate.enum'
+import { RouterNavigate } from 'src/app/Common/enums'
 import { NgModule } from '@angular/core'
 import { RouterModule, Routes } from '@angular/router'
 
