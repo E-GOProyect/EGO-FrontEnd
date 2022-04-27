@@ -1,1 +1,1 @@
-export * from './playable-app.module';
+export * from './playable-app.module'

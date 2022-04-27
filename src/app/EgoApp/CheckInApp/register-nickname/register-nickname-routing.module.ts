@@ -1,16 +1,16 @@
-import { NgModule } from '@angular/core';
-import { RouterModule, Routes } from '@angular/router';
-import { RegisterNicknameComponent } from './register-nickname.component';
+import { NgModule } from '@angular/core'
+import { RouterModule, Routes } from '@angular/router'
+import { RegisterNicknameComponent } from './register-nickname.component'
 
 const routes: Routes = [
   {
-    path:'',
+    path: '',
     component: RegisterNicknameComponent,
-  }
-];
+  },
+]
 
 @NgModule({
   imports: [RouterModule.forChild(routes)],
-  exports: [RouterModule]
+  exports: [RouterModule],
 })
-export class RegisterNicknameRoutingModule { }
+export class RegisterNicknameRoutingModule {}

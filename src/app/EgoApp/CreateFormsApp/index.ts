@@ -1,1 +1,1 @@
-export * from './create-forms-app.module';
+export * from './create-forms-app.module'

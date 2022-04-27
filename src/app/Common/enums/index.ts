@@ -1,1 +1,1 @@
-export * from './router-navigate.enum';
+export * from './router-navigate.enum'

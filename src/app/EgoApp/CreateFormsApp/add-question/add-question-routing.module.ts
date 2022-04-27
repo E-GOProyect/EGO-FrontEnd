@@ -1,16 +1,16 @@
-import { NgModule } from '@angular/core';
-import { RouterModule, Routes } from '@angular/router';
-import { AddQuestionComponent } from './add-question.component';
+import { NgModule } from '@angular/core'
+import { RouterModule, Routes } from '@angular/router'
+import { AddQuestionComponent } from './add-question.component'
 
 const routes: Routes = [
   {
-    path:'',
+    path: '',
     component: AddQuestionComponent,
-  }
-];
+  },
+]
 
 @NgModule({
   imports: [RouterModule.forChild(routes)],
-  exports: [RouterModule]
+  exports: [RouterModule],
 })
-export class AddQuestionRoutingModule { }
+export class AddQuestionRoutingModule {}

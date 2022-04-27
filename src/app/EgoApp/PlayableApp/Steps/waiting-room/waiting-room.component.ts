@@ -1,16 +1,13 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core'
 
 @Component({
   selector: 'app-waiting-room',
   templateUrl: './waiting-room.component.html',
-  styleUrls: ['./waiting-room.component.scss']
+  styleUrls: ['./waiting-room.component.scss'],
 })
 export class WaitingRoomComponent implements OnInit {
-
-  constructor() { }
+  constructor() {}
 
   // eslint-disable-next-line @angular-eslint/no-empty-lifecycle-method
-  ngOnInit(): void {
-  }
-
+  ngOnInit(): void {}
 }

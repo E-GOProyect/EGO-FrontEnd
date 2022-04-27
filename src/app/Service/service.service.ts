@@ -1,20 +1,19 @@
-import { User,Credentials } from './../Common/interfaces';
-import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { User, Credentials } from './../Common/interfaces'
+import { Injectable } from '@angular/core'
+import { HttpClient } from '@angular/common/http'
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class ServiceService {
+  private Url = 'http://localhost:9000/usuario/login'
 
-  private Url='http://localhost:9000/usuario/login'
+  constructor(private http: HttpClient) {}
 
-  constructor(private http:HttpClient) { }
-
-  checkUser(){
-    return this.http.get<User[]>(this.Url);
+  checkUser() {
+    return this.http.get<User[]>(this.Url)
   }
-  public login(credentials:Credentials){
-    return this.http.post<Credentials>(this.Url,credentials);
+  public login(credentials: Credentials) {
+    return this.http.post<Credentials>(this.Url, credentials)
   }
 }

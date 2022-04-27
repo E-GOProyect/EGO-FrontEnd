@@ -1,25 +1,24 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed } from '@angular/core/testing'
 
-import { RegisterNicknameComponent } from './register-nickname.component';
+import { RegisterNicknameComponent } from './register-nickname.component'
 
 describe('RegisterNicknameComponent', () => {
-  let component: RegisterNicknameComponent;
-  let fixture: ComponentFixture<RegisterNicknameComponent>;
+  let component: RegisterNicknameComponent
+  let fixture: ComponentFixture<RegisterNicknameComponent>
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ RegisterNicknameComponent ]
-    })
-    .compileComponents();
-  });
+      declarations: [RegisterNicknameComponent],
+    }).compileComponents()
+  })
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(RegisterNicknameComponent);
-    component = fixture.componentInstance;
-    fixture.detectChanges();
-  });
+    fixture = TestBed.createComponent(RegisterNicknameComponent)
+    component = fixture.componentInstance
+    fixture.detectChanges()
+  })
 
   it('should create', () => {
-    expect(component).toBeTruthy();
-  });
-});
+    expect(component).toBeTruthy()
+  })
+})

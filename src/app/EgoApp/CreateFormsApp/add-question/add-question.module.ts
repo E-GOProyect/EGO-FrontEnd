@@ -1,17 +1,11 @@
-import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { NgModule } from '@angular/core'
+import { CommonModule } from '@angular/common'
 
-import { AddQuestionRoutingModule } from './add-question-routing.module';
-import { AddQuestionComponent } from './add-question.component';
-
+import { AddQuestionRoutingModule } from './add-question-routing.module'
+import { AddQuestionComponent } from './add-question.component'
 
 @NgModule({
-  declarations: [
-    AddQuestionComponent,
-  ],
-  imports: [
-    CommonModule,
-    AddQuestionRoutingModule
-  ]
+  declarations: [AddQuestionComponent],
+  imports: [CommonModule, AddQuestionRoutingModule],
 })
-export class AddQuestionModule { }
+export class AddQuestionModule {}

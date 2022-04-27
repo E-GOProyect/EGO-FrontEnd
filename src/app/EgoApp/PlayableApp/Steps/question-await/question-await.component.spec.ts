@@ -1,25 +1,24 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed } from '@angular/core/testing'
 
-import { QuestionAwaitComponent } from './question-await.component';
+import { QuestionAwaitComponent } from './question-await.component'
 
 describe('QuestionAwaitComponent', () => {
-  let component: QuestionAwaitComponent;
-  let fixture: ComponentFixture<QuestionAwaitComponent>;
+  let component: QuestionAwaitComponent
+  let fixture: ComponentFixture<QuestionAwaitComponent>
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ QuestionAwaitComponent ]
-    })
-    .compileComponents();
-  });
+      declarations: [QuestionAwaitComponent],
+    }).compileComponents()
+  })
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(QuestionAwaitComponent);
-    component = fixture.componentInstance;
-    fixture.detectChanges();
-  });
+    fixture = TestBed.createComponent(QuestionAwaitComponent)
+    component = fixture.componentInstance
+    fixture.detectChanges()
+  })
 
   it('should create', () => {
-    expect(component).toBeTruthy();
-  });
-});
+    expect(component).toBeTruthy()
+  })
+})

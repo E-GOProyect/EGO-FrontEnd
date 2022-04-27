@@ -1,17 +1,11 @@
-import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { NgModule } from '@angular/core'
+import { CommonModule } from '@angular/common'
 
-import { ReviewFormRoutingModule } from './review-form-routing.module';
-import { ReviewFormComponent } from './review-form.component';
-
+import { ReviewFormRoutingModule } from './review-form-routing.module'
+import { ReviewFormComponent } from './review-form.component'
 
 @NgModule({
-  declarations: [
-    ReviewFormComponent,
-  ],
-  imports: [
-    CommonModule,
-    ReviewFormRoutingModule
-  ]
+  declarations: [ReviewFormComponent],
+  imports: [CommonModule, ReviewFormRoutingModule],
 })
-export class ReviewFormModule { }
+export class ReviewFormModule {}

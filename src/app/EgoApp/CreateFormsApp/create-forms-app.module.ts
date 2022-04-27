@@ -1,14 +1,10 @@
-import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { NgModule } from '@angular/core'
+import { CommonModule } from '@angular/common'
 
-import { CreateFormsAppRoutingModule } from './create-forms-app-routing.module';
-
+import { CreateFormsAppRoutingModule } from './create-forms-app-routing.module'
 
 @NgModule({
   declarations: [],
-  imports: [
-    CommonModule,
-    CreateFormsAppRoutingModule
-  ]
+  imports: [CommonModule, CreateFormsAppRoutingModule],
 })
-export class CreateFormsAppModule { }
+export class CreateFormsAppModule {}

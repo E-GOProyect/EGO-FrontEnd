@@ -1,1 +1,1 @@
-export * from './check-in-app.module';
+export * from './check-in-app.module'

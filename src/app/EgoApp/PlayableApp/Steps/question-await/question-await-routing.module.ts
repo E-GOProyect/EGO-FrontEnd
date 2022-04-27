@@ -1,16 +1,16 @@
-import { QuestionAwaitComponent } from './question-await.component';
-import { NgModule } from '@angular/core';
-import { RouterModule, Routes } from '@angular/router';
+import { QuestionAwaitComponent } from './question-await.component'
+import { NgModule } from '@angular/core'
+import { RouterModule, Routes } from '@angular/router'
 
 const routes: Routes = [
   {
-    path:'',
-    component:QuestionAwaitComponent,
-  }
-];
+    path: '',
+    component: QuestionAwaitComponent,
+  },
+]
 
 @NgModule({
   imports: [RouterModule.forChild(routes)],
-  exports: [RouterModule]
+  exports: [RouterModule],
 })
-export class QuestionAwaitRoutingModule { }
+export class QuestionAwaitRoutingModule {}
