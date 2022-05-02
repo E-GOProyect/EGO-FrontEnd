@@ -1,0 +1,54 @@
+* {
+  box-sizing: border-box;
+}
+html,
+body {
+  background: #ebf1f5;
+}
+h1 {
+  margin: 0;
+  padding: 0;
+  text-align: center;
+  color: #017efc;
+  text-transform: uppercase;
+}
+.custom-form {
+  min-width: 300px;
+  max-width: 30%;
+  margin: 0px auto;
+  background: rgba(146, 144, 144, 0.15);
+  padding: 2rem 3rem;
+  margin: auto;
+  border-radius: 2.5rem;
+  background-color: #ecf0f3;
+  box-shadow: 13px 13px 20px #cbced1, -13px -13px 20px #ffffff;
+  color: rgb(29, 8, 8);
+  margin-top: 10rem;
+}
+.btn-group{
+  padding: 20px;
+  left: 90px;
+}
+
+.btnAceptar{
+  text-transform: capitalize;
+  letter-spacing: 0.25em;
+  border: none;
+  font-size: 0.875rem;
+  color: #ffffff;
+  font-weight: bold;
+  background-color: #2b5af7;
+  width: 100%;
+  display: block;
+  padding: 0.9rem 2rem;
+  border-radius: 1.5rem;
+  box-shadow: 3px 3px 8px #b1b1b1, -3px -3px 8px #ffffff;
+  cursor: pointer;
+}
+.respuesta{
+  padding: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: end;
+}
+
