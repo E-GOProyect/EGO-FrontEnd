@@ -13,6 +13,6 @@ export class AppComponent {
     private router:Router
   ){}
   prueba(){
-    this.router.navigate([RouterNavigate.CHECK_IN_APP,RouterNavigate.CHECK_IN]);
+    this.router.navigate([RouterNavigate.PLAYABLE_APP,RouterNavigate.QUESTION_STEP]);
   }
 }
