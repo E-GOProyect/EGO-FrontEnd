@@ -13,6 +13,6 @@ export class AppComponent {
     private router:Router
   ){}
   prueba(){
-    this.router.navigate([RouterNavigate.PLAYABLE_APP,RouterNavigate.QUESTION_STEP]);
+    this.router.navigate([RouterNavigate.PLAYABLE_APP,RouterNavigate.WAITING_ROOM]);
   }
 }
