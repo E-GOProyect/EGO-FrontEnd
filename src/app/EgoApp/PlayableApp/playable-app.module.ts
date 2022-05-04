@@ -5,7 +5,7 @@ import { PlayableAppRoutingModule } from './playable-app-routing.module';
 
 
 @NgModule({
-  declarations: [],
+  declarations: [  ],
   imports: [
     CommonModule,
     PlayableAppRoutingModule

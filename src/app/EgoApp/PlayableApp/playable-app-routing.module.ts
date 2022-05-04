@@ -21,6 +21,10 @@ const routes: Routes = [
       {
         path: RouterNavigate.WAITING_ROOM,
         loadChildren: () => import('./Steps/waiting-room/waiting-room.module').then((m)=>m.WaitingRoomModule),
+      },
+      {
+        path: RouterNavigate.CHATROOM,
+        loadChildren: () => import('./chat-room/chat-room.module').then((m)=>m.ChatRoomModule),
       }
     ]
 
