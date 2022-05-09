@@ -4,6 +4,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { ChatRoomModule } from './EgoApp/PlayableApp/chat-room/chat-room.module';
+import {CountdownModule} from 'ngx-countdown';
 
 @NgModule({
   declarations: [
@@ -13,7 +14,8 @@ import { ChatRoomModule } from './EgoApp/PlayableApp/chat-room/chat-room.module'
     BrowserModule,
     AppRoutingModule,
     HttpClientModule,
-    ChatRoomModule
+    ChatRoomModule,
+    CountdownModule
   ],
   providers: [],
   bootstrap: [AppComponent]
