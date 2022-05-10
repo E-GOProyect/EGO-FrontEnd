@@ -13,6 +13,6 @@ export class AppComponent {
     private router:Router
   ){}
   prueba(){
-    this.router.navigate([RouterNavigate.CREATE_FORMS,RouterNavigate.FORM_NAME]);
+    this.router.navigate([RouterNavigate.PLAYABLE_APP,RouterNavigate.RESULT]);
   }
 }
