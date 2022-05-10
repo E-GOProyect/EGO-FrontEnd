@@ -1,0 +1,30 @@
+
+  .SalaEspera {
+    display: flex;
+    flex: 1 1 0%;
+    flex-direction: column;
+    margin: auto;
+    width: 90%;
+    height: 100%;
+    border: 3px solid green;
+    padding: 15px ;
+    text-align: center;
+    justify-content: center;
+  }
+  .mensajeEspera {
+    margin: auto;
+    width: 90%;
+    height: 100%;
+    border: 3px solid blue;
+    padding: 10px ;
+    
+    text-align: center;
+  }
+  img {
+    border-radius: 8px;
+    border: 1px solid #ddd;
+    padding: 5px;
+    width: 150px;
+    align-self: center;
+  }
+  

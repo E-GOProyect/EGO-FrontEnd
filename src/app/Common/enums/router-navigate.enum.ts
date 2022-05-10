@@ -13,4 +13,5 @@ export enum RouterNavigate{
     QUESTION_AWAIT_STEP='question_await_step',
     RESULT='result',
     WAITING_ROOM='waiting_room',
+    FINAL_STEP= 'final'
 }
