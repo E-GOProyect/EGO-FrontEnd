@@ -1,1 +1,44 @@
-<p>result works!</p>
+<div class="NombreFormulario">
+  <form class="custom-form">
+   <table class="table">
+     <thead>
+       <tr>
+         <th scope="col">#</th>
+         <th scope="col">Pregunta</th>
+         <th scope="col">respuesta Correcta</th>
+         <th scope="col">respuesta Incorrecta</th>
+       </tr>
+     </thead>
+     <tbody>
+       <tr *ngFor="let participante of concursantes; index as i ">
+        <th scope="row">{{i+1}}</th>
+        <td> {{participante.pregunta}} </td>
+        <td> {{participante.respuestaCorrecta}} </td>
+        <td> {{participante.respuestaIncorrecta}} </td>
+       </tr>
+     </tbody>
+   </table>
+  </form>
+  </div>
+  <div class="NombreFormulario">
+    <form class="custom-form">
+      <table class="table">
+        <thead>
+          <tr>
+            <th scope="col">#</th>
+            <th scope="col">Nombre</th>
+            <th scope="col">Total de Preguntas</th>
+            <th scope="col">Puntajes</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let participante of concursantes; index as i ">
+           <th scope="row">{{i+1}}</th>
+           <td></td>
+           <td></td>
+           <td></td>
+          </tr>
+        </tbody>
+      </table>
+     </form>
+ </div>

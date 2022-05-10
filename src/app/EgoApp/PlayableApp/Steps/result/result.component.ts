@@ -13,4 +13,13 @@ export class ResultComponent implements OnInit {
   ngOnInit(): void {
   }
 
+  concursantes:Array<any> = [
+    {pregunta:'pregunta1', respuestaCorrecta:'v', respuestaIncorrecta:'f'},
+    {pregunta:'pregunta2', respuestaCorrecta:'v', respuestaIncorrecta:'f'},
+    {pregunta:'pregunta3', respuestaCorrecta:'v', respuestaIncorrecta:'f'}
+  ]
+
+
+
+
 }
