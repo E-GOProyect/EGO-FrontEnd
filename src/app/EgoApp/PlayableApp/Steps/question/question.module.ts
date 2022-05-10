@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-
+import { CountdownModule } from 'ngx-countdown';
 import { QuestionRoutingModule } from './question-routing.module';
 import { QuestionComponent } from './question.component';
 
@@ -11,7 +11,8 @@ import { QuestionComponent } from './question.component';
   ],
   imports: [
     CommonModule,
-    QuestionRoutingModule
+    QuestionRoutingModule,
+    CountdownModule
   ]
 })
 export class QuestionModule { }

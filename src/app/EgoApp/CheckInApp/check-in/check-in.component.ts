@@ -2,7 +2,7 @@ import { ServiceService } from '../../../Service/service.service';
 import { Component, OnInit } from '@angular/core';
 import { Credentials } from 'src/app/Common/interfaces';
 import { FaIconLibrary } from '@fortawesome/angular-fontawesome';
-import { faSquare } from '@fortawesome/free-solid-svg-icons';
+import { faDoorOpen, faRightToBracket, faSquare } from '@fortawesome/free-solid-svg-icons';
 
 @Component({
   selector: 'app-check-in',
@@ -20,7 +20,9 @@ export class CheckInComponent implements OnInit {
 
   public constructor(library:FaIconLibrary) { 
     library.addIcons(
-      faSquare
+      faSquare,
+      faDoorOpen,
+      faRightToBracket
     );
   }
 

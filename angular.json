@@ -118,6 +118,7 @@
   },
   "defaultProject": "ego-app",
   "cli": {
+    "analytics": false,
     "defaultCollection": "@angular-eslint/schematics"
   }
 }
