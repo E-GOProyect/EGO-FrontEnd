@@ -1,1 +1,36 @@
-<p>singup works!</p>
+<div class="Registro">
+
+    <form>
+      <h1>Registro</h1> 
+      <div class="user">
+        <label for="InputUser" class="form-label"></label>
+        <input type="user" class="form-control" id="User" placeholder="Usuario" required="required">
+      </div>
+      <div class="mail">
+        <label for="InputEmail1" class="form-label"></label>
+        <input type="email" class="form-control" id="Email1" placeholder="Correo Electronico" aria-describedby="emailHelp" required="required">
+        <div id="emailHelp" class="form-text">Ingrese su correo electronico</div>
+      </div>
+      <div class="fecha">
+        <label for="Birth" class="form-label"></label>
+        <input type="birth" class="form-control" id="birth" placeholder="Fecha de Nacimiento" aria-describedby="birthHelp" required="required">
+        <div id="birthHelp" class="form-text">Ingrese su fecha de nacimiento D/M/A</div>
+      </div>
+      <div class="password">
+        <label for="InputPassword1" class="form-label"></label>
+        <input type="password" class="form-control" id="InputPassword1" placeholder="Contrasena" required="required">
+      </div>
+      <div class="form-check">
+        <input type="checkbox" class="form-check-input" id="Check1"  required="required">
+        <label class="form-check-label" for="Check1">Recordarme</label>
+      </div>
+      <button type="enviar" class="btn btn-primary">Registrar</button>
+      <p>Iniciar Sesion</p>
+    </form>
+  
+  
+  
+  </div>
+  
+  <router-outlet></router-outlet>
+  
