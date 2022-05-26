@@ -1,6 +1,8 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
-import { RouterNavigate } from './Common/enums';
+import { NavigateTo } from './Common/Class/navigate-to.class';
+import { nav } from './Common/constants';
+import { ParalelicRoutes, RouterNavigate } from './Common/enums';
 
 @Component({
   selector: 'app-root',
@@ -11,8 +13,7 @@ export class AppComponent {
   title = 'ego-app';
   constructor(
     private router:Router
-  ){}
-  prueba(){
-    this.router.navigate([RouterNavigate.PLAYABLE_APP,RouterNavigate.WAITING_ROOM]);
+  ){
+    this.router.navigate(nav(RouterNavigate.ADD_QUESTION));
   }
 }
