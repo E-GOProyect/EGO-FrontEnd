@@ -1,13 +1,54 @@
 <form>
   <div class="container">
-    <div class="row justify-content-center" style="--bs-columns:2;">
-      <p class="fs-4" [textContent]="'form name'"></p>
+    <div class="row justify-content-center"
+         style="--bs-columns:2;">
+      <p class="fs-4"
+         [textContent]="'form name'"></p>
       <div class="input-group mb-3">
-        <span class="input-group-text" id="basic-addon1">Pregunta: </span>
-        <input type="text" class="form-control" placeholder="Username" aria-label="Username" aria-describedby="basic-addon1">
+        <span class="input-group-text"
+              id="basic-addon1">Pregunta: </span>
+        <input type="text"
+               class="form-control"
+               placeholder=""
+               aria-label="Username"
+               aria-describedby="basic-addon1">
       </div>
-      
+      <div>
+        <div class="marco"
+             *ngFor="let card of cardRes">
+          <div class="input-group mb-3">
+            <span class="input-group-text"
+                  id="basic-addon1"
+                  [textContent]="'Respuesta '+card.resNum+': '"></span>
+            <input type="text"
+                   class="form-control"
+                   placeholder=""
+                   aria-label="Username"
+                   aria-describedby="basic-addon1">
+            <div *ngIf="card.isCorrect">
+              <span class="input-group-text"
+                    id="basic-addon1"
+                    [textContent]="'Puntos: '"></span>
+              <input type="text"
+                     class="form-control"
+                     placeholder=""
+                     aria-label="Username"
+                     aria-describedby="basic-addon1">
+            </div>
+          </div>
+        </div>
+        <div *ngIf="numRes<4">
+          <button type="button"
+                class="btn btn-primary"
+                (click)="addCardRes()">Agregar otra respuesta</button>
+        </div>
+        <div *ngIf="numRes>2">
+          <button type="button"
+                class="btn btn-primary"
+                (click)="delCardRes()">Quitar una respuesta</button>
+        </div>
+      </div>
     </div>
   </div>
- 
+
 </form>
