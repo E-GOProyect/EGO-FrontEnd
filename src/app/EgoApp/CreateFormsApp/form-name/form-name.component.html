@@ -1,1 +1,21 @@
-<p>form-name works!</p>
+<form [formGroup]="form">
+    <div class="container">
+        <h1 class="col">Ingresa el Nombre de tu cuestionario</h1>
+        <div class="input-group mb-3 col">
+            <input type="text"
+                   class="form-control"
+                   placeholder="Bautízame"
+                   aria-describedby="basic-addon1"
+                   formControlName="quizName">
+        </div>
+        <div>
+            <button type="submit"
+                    class="btn btn-primary me-2"
+                    (click)="onSubmitQuizName()">Aceptar</button>
+            <button type="button"
+                    class="btn btn-secondary "
+                    (click)="onCancel()">Cancelar</button>
+        </div>
+    </div>
+
+</form>

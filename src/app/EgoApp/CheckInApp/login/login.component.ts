@@ -43,8 +43,8 @@ export class LoginComponent implements OnInit {
       console.log(res);
       if(res.responseStatus.codigoRespuesta===CodeType.SUCCESS){
         const data=res.responseData as IUserData;
-        sessionStorage.setItem('userData',JSON.stringify(data));
-        sessionStorage.setItem('idUser',data.idUsuario);
+        sessionStorage.setItem('userdata',JSON.stringify(data));
+        sessionStorage.setItem('iduser',data.idUsuario);
         const temp=JSON.parse(sessionStorage.getItem('userData'),(key,val)=>{
           if(key.includes('fecha')){
             return new Date(val)

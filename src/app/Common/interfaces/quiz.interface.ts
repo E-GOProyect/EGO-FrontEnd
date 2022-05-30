@@ -1,17 +1,21 @@
-export interface IForm{
+export interface IQuiz{
     nombreCuestionario:string;
     usuario:string;
     preguntas: Array<IPregunta>;
 }
 
 export interface IPregunta{
-    idPregunta: string;
     descripcionPregunta: string;
     opciones: Array<IOpciones>;
 }
 
 export interface IOpciones{
-    idOpcion: string;
     descripcion:string;
     esRespuesta: boolean;
-}   
+    valorDePuntaje?: number;
+}
+
+export interface IShowQuestion{
+    question: IPregunta;
+    page: number;
+}
