@@ -1,11 +1,11 @@
-import { Credentials } from 'src/app/Common/interfaces';
-import { IUser } from './../../../Common/interfaces/User.interface';
+import { IUserCredentials } from 'src/app/Common/interfaces';
+import { IUserRegister } from '../../../Common/interfaces/user-register.interface';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { CodeType, RouterNavigate } from 'src/app/Common/enums';
 import { nav } from 'src/app/Common/constants';
-import { RegisterUserService } from 'src/app/Service/register-user.service';
+import { UserService } from 'src/app/Service/user.service';
 import Swal from 'sweetalert2';
 
 @Component({
@@ -23,7 +23,7 @@ export class SingupComponent implements OnInit {
    */
   constructor(
     private router: Router,
-    private registerUsersService: RegisterUserService,
+    private registerUsersService: UserService,
   ) {}
 
   // eslint-disable-next-line @angular-eslint/no-empty-lifecycle-method
@@ -44,7 +44,7 @@ export class SingupComponent implements OnInit {
   }
   public async onSubmitForm() {
     if (this.form.valid) {
-      const userRegister = this.form.value as IUser;
+      const userRegister = this.form.value as IUserRegister;
       try {
         const res = await this.registerUsersService.registerUser(userRegister);
 
@@ -67,7 +67,7 @@ export class SingupComponent implements OnInit {
             const credentials={
               username: this.form.value.username,
               password: this.form.value.password
-            }as Credentials;
+            }as IUserCredentials;
             sessionStorage.setItem('credentials',JSON.stringify(credentials))
             this.router.navigate(nav(RouterNavigate.LOGIN));
           });

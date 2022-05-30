@@ -1,4 +1,4 @@
-import { Credentials } from './../Common/interfaces';
+import { IUserCredentials } from './../Common/interfaces';
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { URLS } from '../Common/enums';
@@ -12,7 +12,7 @@ export class ServiceService {
 
   constructor(private http:HttpClient) { }
 
-  public login(credentials:Credentials){
-    return this.http.post<Credentials>(this.Url,credentials);
+  public login(userCredentials:IUserCredentials){
+    return this.http.post<IUserCredentials>(this.Url,userCredentials);
   }
 }

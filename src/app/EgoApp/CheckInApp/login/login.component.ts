@@ -1,9 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { CookieService } from 'ngx-cookie-service';
 import { CodeType } from 'src/app/Common/enums';
-import { Credentials } from 'src/app/Common/interfaces';
+import { IUserCredentials } from 'src/app/Common/interfaces';
 import { IUserData } from 'src/app/Common/interfaces/user-data.interface';
-import { RegisterUserService } from 'src/app/Service/register-user.service';
+import { UserService } from 'src/app/Service/user.service';
 
 @Component({
   selector: 'app-login',
@@ -12,10 +12,10 @@ import { RegisterUserService } from 'src/app/Service/register-user.service';
 })
 export class LoginComponent implements OnInit {
 
-  protected credentials: Credentials;
+  protected credentials: IUserCredentials;
   
   constructor(
-    private registerUsersService: RegisterUserService,
+    private registerUsersService: UserService,
   ) { 
   }
 
@@ -29,7 +29,7 @@ export class LoginComponent implements OnInit {
     this.mockCredentials();
     const credentialsInCache = sessionStorage.getItem('credentials');
     console.log("initParamenters ~ credentialsInCache", credentialsInCache);
-    this.credentials=JSON.parse(credentialsInCache) as Credentials;
+    this.credentials=JSON.parse(credentialsInCache) as IUserCredentials;
     if(this.credentials.username && this.credentials.password){
       console.log("initParamenters ~ this.credentials", this.credentials);
       this.loginUser();

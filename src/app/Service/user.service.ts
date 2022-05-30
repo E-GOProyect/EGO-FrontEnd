@@ -1,12 +1,12 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from "@angular/core";
 import { URLS } from "../Common/enums";
-import { Credentials, IUser } from '../Common/interfaces';
+import { IUserCredentials, IUserRegister } from '../Common/interfaces';
 
 @Injectable({
     providedIn: 'root'
 })
-export class RegisterUserService{
+export class UserService{
     private Url=URLS.API+'/usuario';
     private subUrlRegistro='/register';
     private subUrlLogin='/login';
@@ -16,7 +16,7 @@ export class RegisterUserService{
 
     }
     
-    public async registerUser(user:IUser): Promise<any>{
+    public async registerUser(user:IUserRegister): Promise<any>{
         return new Promise<any>((resolve)=>{
             this.http.post<any>(this.Url+this.subUrlRegistro,user)
             .pipe()
@@ -25,7 +25,7 @@ export class RegisterUserService{
             })
         })
     }
-    public async loginUser(credenciales:Credentials): Promise<any>{
+    public async loginUser(credenciales:IUserCredentials): Promise<any>{
         return new Promise<any>((resolve)=>{
             this.http.post<any>(this.Url+this.subUrlLogin,credenciales)
             .pipe()

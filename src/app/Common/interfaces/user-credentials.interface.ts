@@ -1,4 +1,4 @@
-export interface Credentials{
+export interface IUserCredentials{
     username: string;
     password: string;
 }
