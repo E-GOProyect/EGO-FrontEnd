@@ -1,8 +1,7 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
-import { NavigateTo } from './Common/Class/navigate-to.class';
 import { nav } from './Common/constants';
-import { ParalelicRoutes, RouterNavigate } from './Common/enums';
+import { RouterNavigate } from './Common/enums';
 
 @Component({
   selector: 'app-root',
@@ -14,6 +13,6 @@ export class AppComponent {
   constructor(
     private router:Router
   ){
-    this.router.navigate(nav(RouterNavigate.ADD_QUESTION));
+    this.router.navigate(nav(RouterNavigate.LOGIN));
   }
 }

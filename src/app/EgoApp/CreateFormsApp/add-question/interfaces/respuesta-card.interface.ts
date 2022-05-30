@@ -1,12 +1,6 @@
 export interface IRespuestaCard{
     resNum: number;
     isCorrect: boolean;
+    answerName: string;
 }
 
-export interface IListRespuesta{
-    resList: Array<IRespuesta>;
-}
-export interface IRespuesta{
-    description: string;
-    points?: number;
-}

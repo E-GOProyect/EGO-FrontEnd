@@ -1,12 +1,8 @@
-export interface User{
-    id:string;
-    apellido: string;
-    email:string;
-    es_invitado: boolean;
-    fecha_actualizacion: Date;
-    fecha_de_creacion: Date;
-    fecha_de_nacimiento: Date;
-    nombres:string;
-    password:string;
+export interface IUser{
     username:string;
+    email:string;
+    password:string;
+    fechaNacimiento: Date;
+    nombres:string;
+    apellidos: string;
 }

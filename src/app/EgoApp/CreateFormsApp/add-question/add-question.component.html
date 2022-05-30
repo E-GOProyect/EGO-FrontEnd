@@ -1,4 +1,5 @@
-<form>
+<form [formGroup]="form">
+  <!-- TODO: mostrar los recuedros en rojo de las parte con error al momento de mandar el registro o antes de -->
   <div class="container">
     <div class="row justify-content-center"
          style="--bs-columns:2;">
@@ -9,13 +10,14 @@
               id="basic-addon1">Pregunta: </span>
         <input type="text"
                class="form-control"
+               formControlName="question"
                placeholder=""
                aria-label="Username"
                aria-describedby="basic-addon1">
       </div>
       <div>
         <div class="marco"
-             *ngFor="let card of cardRes">
+             *ngFor="let card of cardRes;">
           <div class="input-group mb-3">
             <span class="input-group-text"
                   id="basic-addon1"
@@ -24,6 +26,7 @@
                    class="form-control"
                    placeholder=""
                    aria-label="Username"
+                   formControlName="{{card.answerName}}"
                    aria-describedby="basic-addon1">
             <div *ngIf="card.isCorrect">
               <span class="input-group-text"
@@ -33,19 +36,28 @@
                      class="form-control"
                      placeholder=""
                      aria-label="Username"
+                     formControlName="points"
                      aria-describedby="basic-addon1">
             </div>
           </div>
         </div>
         <div *ngIf="numRes<4">
           <button type="button"
-                  class="btn btn-primary"
+                  class="btn btn-dark"
                   (click)="addCardRes()">Agregar otra respuesta</button>
         </div>
         <div *ngIf="numRes>2">
           <button type="button"
-                  class="btn btn-primary"
+                  class="btn btn-warning"
                   (click)="delCardRes()">Quitar una respuesta</button>
+        </div>
+        <div>
+          <button type="button"
+                  class="btn btn-success">Agregar pregunta</button>
+        </div>
+        <div>
+          <button type="button"
+                  class="btn btn-secondary">Finalizar Formulario</button>
         </div>
       </div>
     </div>

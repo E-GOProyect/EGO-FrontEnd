@@ -3,6 +3,8 @@ import { CommonModule } from '@angular/common';
 
 import { SingupRoutingModule } from './singup-routing.module';
 import { SingupComponent } from './singup.component';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { HttpClientModule } from '@angular/common/http';
 
 
 @NgModule({
@@ -11,7 +13,10 @@ import { SingupComponent } from './singup.component';
   ],
   imports: [
     CommonModule,
-    SingupRoutingModule
+    SingupRoutingModule,
+    HttpClientModule,
+    FormsModule,
+    ReactiveFormsModule
   ]
 })
 export class SingupModule { }
