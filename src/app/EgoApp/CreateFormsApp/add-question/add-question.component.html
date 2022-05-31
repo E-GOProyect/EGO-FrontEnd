@@ -16,12 +16,12 @@
                aria-describedby="basic-addon1">
 
         <div class="mt-2"
-             *ngFor="let opc of quiz.preguntas[currectQuestion].opciones;let i = index">
+             *ngFor="let opc of getQuestion(currectQuestion).opciones;let i = index">
           <div class="input-group mb-2 mt-2"
                style="width: 675px;">
             <span class="input-group-text"
                   id="basic-addon1"
-                  [textContent]="'Respuesta '+i+1+': '">
+                  [textContent]="'Respuesta '+(i+1)+': '">
                 <span type="text" *ngIf="opc.esRespuesta"> (Correcta)</span>
                 </span>
             <input type="text"
@@ -43,13 +43,13 @@
             </div>
           </div>
         </div>
-        <div *ngIf="quiz.preguntas[currectQuestion]?.opciones.length<4"
+        <div *ngIf="getQuestion(currectQuestion).opciones.length<4"
              class="me-2">
           <button type="button"
                   class="btn btn-dark"
                   (click)="addAnswer()">Agregar otra respuesta</button>
         </div>
-        <div *ngIf="quiz.preguntas[currectQuestion]?.opciones.length>2"
+        <div *ngIf="getQuestion(currectQuestion).opciones.length>2"
              class="me-2">
           <button type="button"
                   class="btn btn-warning"

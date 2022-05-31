@@ -1,10 +1,9 @@
 import { Component, OnInit } from '@angular/core';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
 import {
-  FormControl,
-  FormGroup,
-  Validators,
-} from '@angular/forms';
-import { defaultQuestion } from 'src/app/Common/constants/default-question.constants';
+  defaultOpcion,
+  defaultQuestion,
+} from 'src/app/Common/constants/default-question.constants';
 import { IOpciones, IPregunta, IQuiz } from 'src/app/Common/interfaces';
 import { CuestionarioService } from 'src/app/Service/cuestionario.service';
 
@@ -49,6 +48,7 @@ export class AddQuestionComponent implements OnInit {
       this.parseQuiz(quizInCache);
     } else {
       this.initQuizName();
+      this.currectQuestion = 1;
       const uuiUser = JSON.parse(sessionStorage.getItem('userid'));
       this.quiz = {
         nombreCuestionario: this.quizName,
@@ -58,7 +58,7 @@ export class AddQuestionComponent implements OnInit {
       this.createForm();
     }
   }
-  
+
   public parseQuiz(obj: any) {
     let count = 0;
     const questions = Object.keys(obj.preguntas).map((val: any) => {
@@ -80,16 +80,30 @@ export class AddQuestionComponent implements OnInit {
     } as IQuiz;
   }
   public createForm() {
-    // ! this.currectQuestion es la pagina, pero esto te devuelve la pregunta en la posicion de currectQuestion
-    const values= this.quiz.preguntas[this.currectQuestion];
-    this.form=new FormGroup({
-      question: new FormControl(values.descripcionPregunta, Validators.minLength(5)),
-    })
+    const values = this.getQuestion(this.currectQuestion);
+    console.log('createForm ~ values', values);
     this.form = new FormGroup({
-      answer1: new FormControl('', Validators.minLength(5)),
-      answer2: new FormControl('', Validators.minLength(5)),
-      points: new FormControl('', Validators.pattern('[0-9]*')),
+      question: new FormControl(
+        values.descripcionPregunta,
+        Validators.minLength(5)
+      ),
     });
+    // TODO: establecer los validadores
+    values.opciones.map((opc) => {
+      this.form.addControl(opc.controlName, new FormControl(opc.descripcion));
+      if (opc.esRespuesta) {
+        this.form.addControl('points', new FormControl(opc.valorDePuntaje));
+      }
+    });
+  }
+  public getQuestion(pageNumber: number) {
+    let question: IPregunta;
+    this.quiz.preguntas.map((val) => {
+      if (val.page == pageNumber) {
+        question = val;
+      }
+    });
+    return question;
   }
 
   public onNewQuestion() {
@@ -123,13 +137,23 @@ export class AddQuestionComponent implements OnInit {
         valorDePuntaje: points,
       };
     });
-    const question = {
-      descripcionPregunta: this.form.value.question,
-      opciones: opciones,
-      page: this.quiz.preguntas.length + 1,
-    } as IPregunta;
-    this.quiz.preguntas.push(question);
+    console.log("opciones ~ opciones", opciones);
+    this.quiz.preguntas=this.quiz.preguntas.map((ques)=>{
+      if(ques.page===this.currectQuestion){
+        return ques={
+          descripcionPregunta: this.form.value.question,
+          opciones: opciones,
+          page: this.quiz.preguntas.length + 1,
+        } as IPregunta;
+      }
+      return ques;
+    });
+    this.currectQuestion++;
+    this.quiz.preguntas.push(defaultQuestion('answer', this.currectQuestion));
+    this.displayCurrentCuestion();
     console.log('saveNewQuestion ~ this.quiz', this.quiz);
+    console.log("resetAll ~ this.form", this.form.value);
+
     return true;
   }
   public onSubmitQuiz() {
@@ -146,28 +170,31 @@ export class AddQuestionComponent implements OnInit {
   // TODO: tomar el currectQuestiony mostrarlo en display
   public displayCurrentCuestion() {
     this.resetAll();
-    try {
-      let question: IPregunta = undefined;
-      this.quiz.preguntas.map((res) => {
-        if (res.page && res.page === this.currectQuestion) {
-          question = res;
-        }
-      });
-      if (question) {
-        this.form.addControl(
-          'question',
-          new FormControl(question.descripcionPregunta)
-        );
-        question.opciones.forEach((opc: IOpciones) => {});
-        const values = {};
-        this.form.setValue(values);
-      } else {
-        //TODO: mensaje de seleccion incorrecta
-      }
-    } catch (e) {
-      console.log('displayCurrentCuestion ~ e', e);
-    }
+    this.createForm();
   }
-  public addAnswer() {}
-  public delAnswer() {}
+  public addAnswer() {
+    this.quiz.preguntas.forEach((ques) => {
+      if (ques.page === this.currectQuestion) {
+        const numAnswer=(ques.opciones.length+1).toString();
+        this.form.addControl(
+          'answer' +numAnswer,
+          new FormControl('')
+        );
+        ques.opciones.push(
+          defaultOpcion(false, 'answer' + numAnswer)
+        );
+      }
+    });
+  }
+  public delAnswer() {
+    this.quiz.preguntas.forEach((ques) => {
+      if (ques.page === this.currectQuestion) {
+        const numAnswer=ques.opciones.length;
+        if (numAnswer){
+          this.form.removeControl('answer' +numAnswer );
+          ques.opciones.pop();
+        }
+      }
+    });
+  }
 }

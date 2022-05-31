@@ -13,7 +13,7 @@ export const defaultQuestion = (controlName:string, page?:Number)=>{
     return question
 }
 
-const defaultOpcion = (isCorrect:boolean, formName:string)=>{
+export const defaultOpcion = (isCorrect:boolean, formName:string)=>{
     return {
         descripcion:'',
         esRespuesta:isCorrect,
