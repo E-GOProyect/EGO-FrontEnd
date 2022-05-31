@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { Alert } from 'src/app/Common/Class/alert.class';
 import {
   defaultOpcion,
   defaultQuestion,
@@ -11,22 +12,20 @@ import { CuestionarioService } from 'src/app/Service/cuestionario.service';
   selector: 'app-add-question',
   templateUrl: './add-question.component.html',
   styleUrls: ['./add-question.component.scss'],
-  providers: [],
+  providers: [ Alert],
 })
 export class AddQuestionComponent implements OnInit {
   public form: FormGroup;
   public quizName: string;
   public quiz: IQuiz;
   public currectQuestion: number;
-  constructor(private cuestionarioService: CuestionarioService) {}
+  constructor(
+    private cuestionarioService: CuestionarioService,
+    private alert: Alert,
+    ) {}
 
-  // eslint-disable-next-line @angular-eslint/no-empty-lifecycle-method
   ngOnInit(): void {
     this.initParameters();
-
-    // sessionStorage.setItem('quiz',JSON.stringify(tempQuiz));
-    // const temp=this.cuestionarioService.createQuiz(this.quiz);
-    // console.log("ngOnInit ~ temp", temp);
   }
 
   public initParameters() {
@@ -50,9 +49,10 @@ export class AddQuestionComponent implements OnInit {
       this.initQuizName();
       this.currectQuestion = 1;
       const uuiUser = JSON.parse(sessionStorage.getItem('userid'));
+      const mockUuiUser= '67dccb00-698e-4038-b37e-8762cc7ef739'
       this.quiz = {
         nombreCuestionario: this.quizName,
-        usuario: '67dccb00-698e-4038-b37e-8762cc7ef739',
+        usuario: uuiUser? uuiUser:mockUuiUser,
         preguntas: [defaultQuestion('answer')],
       } as IQuiz;
       this.createForm();
@@ -81,7 +81,6 @@ export class AddQuestionComponent implements OnInit {
   }
   public createForm() {
     const values = this.getQuestion(this.currectQuestion);
-    console.log('createForm ~ values', values);
     this.form = new FormGroup({
       question: new FormControl(
         values.descripcionPregunta,
@@ -94,11 +93,9 @@ export class AddQuestionComponent implements OnInit {
     });
     // TODO: establecer los validadores
     values.opciones.map((opc) => {
-      console.log('values.opciones.map ~ opc', opc);
 
       this.form.addControl(opc.controlName, new FormControl(opc.descripcion));
     });
-    console.log('createForm ~ this.form', this.form.value);
   }
   public getQuestion(pageNumber: number) {
     let question: IPregunta;
@@ -126,10 +123,8 @@ export class AddQuestionComponent implements OnInit {
       return false;
     }
     const values = this.form.value;
-    console.log('saveNewQuestion ~ values', values);
 
     const respuestas = this.getAnswerFromForm();
-    console.log('respuestas ~ respuestas', respuestas);
     const opciones = respuestas.map((opc, index) => {
       const isCorrectOpc = index === 0 ? true : false;
       return {
@@ -138,7 +133,6 @@ export class AddQuestionComponent implements OnInit {
         controlName: 'answer' + (index + 1).toString(),
       };
     });
-    console.log('opciones ~ opciones', opciones);
     this.quiz.preguntas = this.quiz.preguntas.map((ques) => {
       if (ques.page === this.currectQuestion) {
         return (ques = {
@@ -152,7 +146,6 @@ export class AddQuestionComponent implements OnInit {
     });
 
     console.log('saveNewQuestion ~ this.quiz', this.quiz);
-    console.log('resetAll ~ this.form', this.form.value);
 
     return true;
   }
@@ -170,22 +163,34 @@ export class AddQuestionComponent implements OnInit {
     this.saveNewQuestion();
     this.sendQuizToDB();
   }
-  public sendQuizToDB() {
-    this.cuestionarioService.createQuiz(this.quiz);
+  public async sendQuizToDB() {
+    const res = await this.cuestionarioService.createQuiz(this.quiz);
+    console.log("sendQuizToDB ~ res", res);
+    if(res){
+      if(res.responseStatus.codigoRespuesta==='0'){
+        this.alert.alertSuccess(
+          'Excelente',
+          'Tu cuestionario a sido registrado :D',
+        );
+      }else{
+        this.alert.alertError(
+          'Oh no!',
+          res.responseStatus.mensajeRespuesta,
+        );
+      }
+    }
+    
   }
   public resetAll() {
     this.form = new FormGroup({});
   }
   public onNavBar(showQuestion: number) {
-    console.log("onNavBar ~ showQuestion", showQuestion);
-    console.log("onNavBar ~ this.quiz.preguntas.length", this.quiz.preguntas.length);
     if (showQuestion => 1 && showQuestion <= 15 && showQuestion<=this.quiz.preguntas.length) {
       this.currectQuestion = showQuestion;
       console.log('onNavBar ~ currectQuestion', this.currectQuestion);
       this.displayCurrentCuestion();
     }
   }
-  // TODO: tomar el currectQuestiony mostrarlo en display
   public displayCurrentCuestion() {
     this.resetAll();
     this.createForm();

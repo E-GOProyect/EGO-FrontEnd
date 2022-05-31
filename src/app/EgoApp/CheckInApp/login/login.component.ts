@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 import { CookieService } from 'ngx-cookie-service';
-import { CodeType } from 'src/app/Common/enums';
+import { nav } from 'src/app/Common/constants';
+import { CodeType, RouterNavigate } from 'src/app/Common/enums';
 import { IUserCredentials } from 'src/app/Common/interfaces';
 import { IUserData } from 'src/app/Common/interfaces/user-data.interface';
 import { UserService } from 'src/app/Service/user.service';
@@ -16,6 +18,7 @@ export class LoginComponent implements OnInit {
   
   constructor(
     private registerUsersService: UserService,
+    private router: Router,
   ) { 
   }
 
@@ -30,7 +33,7 @@ export class LoginComponent implements OnInit {
     const credentialsInCache = sessionStorage.getItem('credentials');
     console.log("initParamenters ~ credentialsInCache", credentialsInCache);
     this.credentials=JSON.parse(credentialsInCache) as IUserCredentials;
-    if(this.credentials.username && this.credentials.password){
+    if(this.credentials?.username && this.credentials?.password){
       console.log("initParamenters ~ this.credentials", this.credentials);
       this.loginUser();
     }
@@ -45,14 +48,14 @@ export class LoginComponent implements OnInit {
         const data=res.responseData as IUserData;
         sessionStorage.setItem('userdata',JSON.stringify(data));
         sessionStorage.setItem('iduser',data.idUsuario);
-        const temp=JSON.parse(sessionStorage.getItem('userData'),(key,val)=>{
+        const temp=JSON.parse(sessionStorage.getItem('userdata'),(key,val)=>{
           if(key.includes('fecha')){
             return new Date(val)
           }
           return val;
         }) as IUserData;
         console.log("loginUser ~ data", temp);
-
+        this.router.navigate(nav(RouterNavigate.FORM_NAME));
       }
     }catch (e){
       console.log(e);

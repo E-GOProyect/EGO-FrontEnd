@@ -7,11 +7,13 @@ import { CodeType, RouterNavigate } from 'src/app/Common/enums';
 import { nav } from 'src/app/Common/constants';
 import { UserService } from 'src/app/Service/user.service';
 import Swal from 'sweetalert2';
+import { Alert } from 'src/app/Common/Class/alert.class';
 
 @Component({
   selector: 'app-singup',
   templateUrl: './singup.component.html',
   styleUrls: ['./singup.component.scss'],
+  providers:[Alert]
 })
 export class SingupComponent implements OnInit {
   public form: FormGroup;
@@ -24,6 +26,7 @@ export class SingupComponent implements OnInit {
   constructor(
     private router: Router,
     private registerUsersService: UserService,
+    private alert: Alert
   ) {}
 
   // eslint-disable-next-line @angular-eslint/no-empty-lifecycle-method
@@ -50,37 +53,30 @@ export class SingupComponent implements OnInit {
         console.log("onSubmitForm ~ res", res);
 
         // ? Descomentar solo para probar las credenciales 
-        // const credentials={
-        //   username: this.form.value.username,
-        //   password: this.form.value.password
-        // }as Credentials;
-        // sessionStorage.setItem('credentials',JSON.stringify(credentials))
-        // this.router.navigate(nav(RouterNavigate.LOGIN));
-        
         if (res.responseStatus.codigoRespuesta === CodeType.SUCCESS) {
           // TODO: mejorar esto, las password no se deben almacenar indefinidamente en cookies
-          Swal.fire({
-            title: 'Genial!',
-            text: 'Tu usuario ha sido creado con exito',
-            icon: 'success',
-            confirmButtonText: 'Aceptar',
-          }).then((result) => {
-            const credentials={
-              username: this.form.value.username,
-              password: this.form.value.password
-            }as IUserCredentials;
-            sessionStorage.setItem('credentials',JSON.stringify(credentials))
-            this.router.navigate(nav(RouterNavigate.LOGIN));
-          });
+          this.alert.alertSuccess(
+            'Genial',
+            'Tu usuario ha sido creado con exito',
+            ()=>{
+              const credentials={
+                username: this.form.value.username,
+                password: this.form.value.password
+              }as IUserCredentials;
+              sessionStorage.setItem('credentials',JSON.stringify(credentials))
+              this.router.navigate(nav(RouterNavigate.LOGIN));
+            }
+          );
+          
         }else{
-          Swal.fire({
-            title: 'Error!',
-            text: res.responseStatus.codigoRespuesta,
-            icon: 'error',
-            confirmButtonText: 'Aceptar',
-          })
+          this.alert.alertError(
+            'Error!',
+            res.responseStatus.codigoRespuesta,
+          );
         }
-      } catch (e) {}
+      } catch (e) {
+
+      }
     }
   }
   public onGoLogin() {
