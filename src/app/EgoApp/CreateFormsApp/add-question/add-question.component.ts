@@ -52,7 +52,7 @@ export class AddQuestionComponent implements OnInit {
       const uuiUser = JSON.parse(sessionStorage.getItem('userid'));
       this.quiz = {
         nombreCuestionario: this.quizName,
-        usuario: uuiUser,
+        usuario: '67dccb00-698e-4038-b37e-8762cc7ef739',
         preguntas: [defaultQuestion('answer')],
       } as IQuiz;
       this.createForm();
@@ -81,7 +81,7 @@ export class AddQuestionComponent implements OnInit {
   }
   public createForm() {
     const values = this.getQuestion(this.currectQuestion);
-    console.log('createForm ~ values', values);
+    console.log("createForm ~ values", values);
     this.form = new FormGroup({
       question: new FormControl(
         values.descripcionPregunta,
@@ -90,16 +90,20 @@ export class AddQuestionComponent implements OnInit {
     });
     // TODO: establecer los validadores
     values.opciones.map((opc) => {
+      console.log("values.opciones.map ~ opc", opc);
+
       this.form.addControl(opc.controlName, new FormControl(opc.descripcion));
       if (opc.esRespuesta) {
         this.form.addControl('points', new FormControl(opc.valorDePuntaje));
       }
     });
+    console.log("createForm ~ this.form", this.form.value);
+
   }
   public getQuestion(pageNumber: number) {
     let question: IPregunta;
     this.quiz.preguntas.map((val) => {
-      if (val.page == pageNumber) {
+      if (val.page === pageNumber) {
         question = val;
       }
     });
@@ -109,7 +113,10 @@ export class AddQuestionComponent implements OnInit {
   public onNewQuestion() {
     const isSave = this.saveNewQuestion();
     if (isSave) {
-      this.resetAll();
+      this.currectQuestion=this.quiz.preguntas.length +1;
+      console.log("onNewQuestion ~ this.currectQuestion", this.currectQuestion);
+      this.quiz.preguntas.push(defaultQuestion('answer', this.currectQuestion));
+      this.displayCurrentCuestion();
     }
   }
   public saveNewQuestion() {
@@ -121,12 +128,7 @@ export class AddQuestionComponent implements OnInit {
     const values = this.form.value;
     console.log('saveNewQuestion ~ values', values);
 
-    let respuestas = [];
-    Object.keys(values).map((key) => {
-      if (key.includes('answer')) {
-        respuestas.push(values[key]);
-      }
-    });
+    const respuestas = this.getAnswerFromForm();
     console.log('respuestas ~ respuestas', respuestas);
     const opciones = respuestas.map((opc, index) => {
       const points = index === 0 ? values.points : 0;
@@ -135,36 +137,49 @@ export class AddQuestionComponent implements OnInit {
         descripcion: opc,
         esRespuesta: isCorrectOpc,
         valorDePuntaje: points,
+        controlName: 'answer'+(index+1).toString()
       };
     });
-    console.log("opciones ~ opciones", opciones);
-    this.quiz.preguntas=this.quiz.preguntas.map((ques)=>{
-      if(ques.page===this.currectQuestion){
-        return ques={
+    console.log('opciones ~ opciones', opciones);
+    this.quiz.preguntas = this.quiz.preguntas.map((ques) => {
+      if (ques.page === this.currectQuestion) {
+        return (ques = {
           descripcionPregunta: this.form.value.question,
           opciones: opciones,
-          page: this.quiz.preguntas.length + 1,
-        } as IPregunta;
+          page: this.currectQuestion,
+        } as IPregunta);
       }
       return ques;
     });
-    this.currectQuestion++;
-    this.quiz.preguntas.push(defaultQuestion('answer', this.currectQuestion));
-    this.displayCurrentCuestion();
+
     console.log('saveNewQuestion ~ this.quiz', this.quiz);
-    console.log("resetAll ~ this.form", this.form.value);
+    console.log('resetAll ~ this.form', this.form.value);
 
     return true;
   }
+  public getAnswerFromForm() {
+    const values = this.form.value;
+    let respuestas = [];
+    Object.keys(values).map((key) => {
+      if (key.includes('answer')) {
+        respuestas.push(values[key]);
+      }
+    });
+    return respuestas;
+  }
   public onSubmitQuiz() {
     this.saveNewQuestion();
+    this.sendQuizToDB();
   }
-
+  public sendQuizToDB(){
+    this.cuestionarioService.createQuiz(this.quiz);
+  }
   public resetAll() {
     this.form = new FormGroup({});
   }
   public onNavBar(showQuestion: number) {
     this.currectQuestion = showQuestion;
+    console.log("onNavBar ~ currectQuestion", this.currectQuestion);
     this.displayCurrentCuestion();
   }
   // TODO: tomar el currectQuestiony mostrarlo en display
@@ -175,23 +190,18 @@ export class AddQuestionComponent implements OnInit {
   public addAnswer() {
     this.quiz.preguntas.forEach((ques) => {
       if (ques.page === this.currectQuestion) {
-        const numAnswer=(ques.opciones.length+1).toString();
-        this.form.addControl(
-          'answer' +numAnswer,
-          new FormControl('')
-        );
-        ques.opciones.push(
-          defaultOpcion(false, 'answer' + numAnswer)
-        );
+        const numAnswer = (ques.opciones.length + 1).toString();
+        this.form.addControl('answer' + numAnswer, new FormControl(''));
+        ques.opciones.push(defaultOpcion(false, 'answer' + numAnswer));
       }
     });
   }
   public delAnswer() {
     this.quiz.preguntas.forEach((ques) => {
       if (ques.page === this.currectQuestion) {
-        const numAnswer=ques.opciones.length;
-        if (numAnswer){
-          this.form.removeControl('answer' +numAnswer );
+        const numAnswer = ques.opciones.length;
+        if (numAnswer) {
+          this.form.removeControl('answer' + numAnswer);
           ques.opciones.pop();
         }
       }

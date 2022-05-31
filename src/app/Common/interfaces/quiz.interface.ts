@@ -14,7 +14,7 @@ export interface IOpciones{
     descripcion:string;
     esRespuesta: boolean;
     valorDePuntaje?: number;
-    controlName?:string;
+    controlName:string;
 }
 
 
