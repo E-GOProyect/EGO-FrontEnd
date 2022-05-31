@@ -1,1 +1,97 @@
-<p>singup works!</p>
+<div class="Registro">
+
+  <form [formGroup]="form">
+    <h1>Registro</h1>
+    <div class="user">
+      <div class="input-group mb-3">
+        <span class="input-group-text"
+              id="basic-addon1">Nickname: </span>
+        <input type="text"
+               class="form-control"
+               placeholder="Username"
+               aria-describedby="basic-addon1"
+               formControlName="username">
+      </div>
+    </div>
+    <div class="email">
+      <div class="input-group mb-3">
+        <span class="input-group-text"
+              id="basic-addon1">Email: </span>
+        <input type="text"
+               class="form-control"
+               placeholder="ejemplo@123.com"
+               aria-describedby="basic-addon1"
+               formControlName="email">
+      </div>
+    </div>
+    <div class="date">
+      <div class="input-group mb-3">
+        <span class="input-group-text"
+              id="basic-addon1">Fecha de nacimiento: </span>
+
+        <input class="form-control"
+               placeholder=""
+               aria-describedby="basic-addon1"
+               id="birthDate"
+               type="date"
+               formControlName="fechaNacimiento">
+
+        <button type="button"
+                class="btn btn-secondary"
+                onClick="document.getElementById('birthDate').click()">
+          <!-- TODO: revisar el date picker, no se activa al seleccionar el boton -->
+          <i class="fa-solid fa-calendar"></i>
+        </button>
+      </div>
+
+    </div>
+    <div class="Nombres">
+      <div class="input-group mb-3">
+        <span class="input-group-text"
+              id="basic-addon1">Nombres: </span>
+        <input type="text"
+               class="form-control"
+               placeholder=""
+               aria-describedby="basic-addon1"
+               formControlName="nombres">
+      </div>
+    </div>
+
+    <div class="Apellidos">
+      <div class="input-group mb-3">
+        <span class="input-group-text"
+              id="basic-addon1">Apellidos: </span>
+        <input type="text"
+               class="form-control"
+               placeholder=""
+               aria-describedby="basic-addon1"
+               formControlName="apellidos">
+      </div>
+    </div>
+    <div class="password">
+      <div class="input-group mb-3">
+        <span class="input-group-text"
+              id="basic-addon1">Contraseña: </span>
+        <input type="password"
+               class="form-control"
+               placeholder="EstAesMiContra123"
+               aria-describedby="basic-addon1"
+               formControlName="password">
+      </div>
+    </div>
+    <!-- TODO: redireccionar al login -->
+    <div class="grid-center">
+      <button (click)="onSubmitForm()" type="submit"
+              class="btn btn-primary">Registrar</button>
+      <a routerLink="/authentication/login" routerLinkActive="active"
+         class="text-decoration-none">O Iniciar Sesion</a>
+
+    </div>
+
+  </form>
+
+
+
+</div>
+
+<router-outlet></router-outlet>

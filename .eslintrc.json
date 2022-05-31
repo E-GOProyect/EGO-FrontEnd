@@ -9,9 +9,8 @@
         "*.ts"
       ],
       "parserOptions": {
-        "project": [
-          "tsconfig.json"
-        ],
+        "project": "tsconfig.json",
+        "sourceType": "module",
         "createDefaultProgram": true
       },
       "extends": [

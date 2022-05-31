@@ -1,0 +1,71 @@
+[
+    {
+        "nombreCuestionario": "Preguntas CALIDAD",
+        "usuario": "394dfc9d-18ab-473e-822a-5caa701f047",
+        "preguntas": [
+            {
+                "descripcionPregunta": "Pregunta 1",
+                "opciones": [
+                    {
+                        "descripcion": "Opcion 1",
+                        "esRespuesta": true
+                    },
+                    {
+                        "descripcion": "Opcion 1",
+                        "esRespuesta": true
+                    },
+                    {
+                        "descripcion": "Opcion 1",
+                        "esRespuesta": true
+                    },
+                    {
+                        "descripcion": "Opcion 1",
+                        "esRespuesta": true
+                    }
+                ]
+            },
+            {
+                "descripcionPregunta": "Pregunta 1",
+                "opciones": [
+                    {
+                        "descripcion": "Opcion 1",
+                        "esRespuesta": true
+                    },
+                    {
+                        "descripcion": "Opcion 1",
+                        "esRespuesta": true
+                    },
+                    {
+                        "descripcion": "Opcion 1",
+                        "esRespuesta": true
+                    },
+                    {
+                        "descripcion": "Opcion 1",
+                        "esRespuesta": true
+                    }
+                ]
+            },
+            {
+                "descripcionPregunta": "Pregunta 1",
+                "opciones": [
+                    {
+                        "descripcion": "Opcion 1",
+                        "esRespuesta": true
+                    },
+                    {
+                        "descripcion": "Opcion 1",
+                        "esRespuesta": true
+                    },
+                    {
+                        "descripcion": "Opcion 1",
+                        "esRespuesta": true
+                    },
+                    {
+                        "descripcion": "Opcion 1",
+                        "esRespuesta": true
+                    }
+                ]
+            }
+        ]
+    }
+]

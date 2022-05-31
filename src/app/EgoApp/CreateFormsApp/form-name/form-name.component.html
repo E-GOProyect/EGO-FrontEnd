@@ -1,13 +1,21 @@
-<div class="NombreFormulario">
-  <form class="custom-form">
-    <input
-        type="text"
-        name="NombreFormulario"
-        placeholder="Ingresa Nombre formulario"
-      />
-      <div class="btn-group">
-        <button class="btnAceptar" style="margin: 3px">ACEPTAR</button>
-        <button class="btnAtras" style="margin: 3px">ATRAS</button>
+<form [formGroup]="form">
+    <div class="container">
+        <h1 class="col">Ingresa el Nombre de tu cuestionario</h1>
+        <div class="input-group mb-3 col">
+            <input type="text"
+                   class="form-control"
+                   placeholder="Bautízame"
+                   aria-describedby="basic-addon1"
+                   formControlName="quizName">
+        </div>
+        <div>
+            <button type="submit"
+                    class="btn btn-primary me-2"
+                    (click)="onSubmitQuizName()">Aceptar</button>
+            <button type="button"
+                    class="btn btn-secondary "
+                    (click)="onCancel()">Cancelar</button>
+        </div>
     </div>
-  </form>
-  </div>
+
+</form>

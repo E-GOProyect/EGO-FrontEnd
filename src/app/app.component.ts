@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
+import { nav } from './Common/constants';
 import { RouterNavigate } from './Common/enums';
 
 @Component({
@@ -11,8 +12,9 @@ export class AppComponent {
   title = 'ego-app';
   constructor(
     private router:Router
-  ){}
-  prueba(){
-    this.router.navigate([RouterNavigate.PLAYABLE_APP,RouterNavigate.RESULT]);
+  ){
+    this.router.navigate(nav(RouterNavigate.FORM_NAME));
+    sessionStorage.clear();
+    localStorage.clear();
   }
 }
