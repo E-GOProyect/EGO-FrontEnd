@@ -5,6 +5,7 @@ export const defaultQuestion = (controlName:string, page?:Number)=>{
     const question= {
         descripcionPregunta: '',
         page: numberPage,
+        valorPregunta: 100,
         opciones:[
             defaultOpcion(true,controlName+'1'),
             defaultOpcion(false,controlName+'2'),
@@ -17,7 +18,6 @@ export const defaultOpcion = (isCorrect:boolean, formName:string)=>{
     return {
         descripcion:'',
         esRespuesta:isCorrect,
-        valorDePuntaje: isCorrect? 100:0,
         controlName:formName
     } as IOpciones;
 }

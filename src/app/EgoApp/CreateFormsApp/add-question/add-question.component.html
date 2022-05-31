@@ -47,6 +47,7 @@
              class="me-2">
           <button type="button"
                   class="btn btn-dark"
+                  
                   (click)="addAnswer()">Agregar otra respuesta</button>
         </div>
         <div *ngIf="getQuestion(currectQuestion).opciones.length>2"
@@ -64,12 +65,13 @@
       </div>
       <nav aria-label="Page navigation example">
         <ul class="pagination">
-          <li class="page-item"><button class="page-link">Anterior</button></li>
+          <li class="page-item" ><button class="page-link"
+            (click)="onNavBar(currectQuestion-1)">Anterior</button></li>
           <div *ngFor="let question of quiz.preguntas">
             <li class="page-item"><button class="page-link"
                       (click)="onNavBar(question.page)">{{question.page}}</button></li>
           </div>
-          <li class="page-item"><button class="page-link">Siguiente</button></li>
+          <li class="page-item" ><button class="page-link" (click)="onNavBar(currectQuestion+1)">Siguiente</button></li>
         </ul>
       </nav>
       <div class="me-2">
