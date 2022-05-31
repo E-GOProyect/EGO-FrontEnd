@@ -7,15 +7,14 @@ export interface IQuiz{
 export interface IPregunta{
     descripcionPregunta: string;
     opciones: Array<IOpciones>;
+    page?: number;
 }
 
 export interface IOpciones{
     descripcion:string;
     esRespuesta: boolean;
     valorDePuntaje?: number;
+    controlName?:string;
 }
 
-export interface IShowQuestion{
-    question: IPregunta;
-    page: number;
-}
+

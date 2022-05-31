@@ -14,5 +14,7 @@ export class AppComponent {
     private router:Router
   ){
     this.router.navigate(nav(RouterNavigate.FORM_NAME));
+    sessionStorage.clear();
+    localStorage.clear();
   }
 }

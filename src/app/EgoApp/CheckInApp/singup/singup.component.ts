@@ -47,6 +47,7 @@ export class SingupComponent implements OnInit {
       const userRegister = this.form.value as IUserRegister;
       try {
         const res = await this.registerUsersService.registerUser(userRegister);
+        console.log("onSubmitForm ~ res", res);
 
         // ? Descomentar solo para probar las credenciales 
         // const credentials={
@@ -71,6 +72,13 @@ export class SingupComponent implements OnInit {
             sessionStorage.setItem('credentials',JSON.stringify(credentials))
             this.router.navigate(nav(RouterNavigate.LOGIN));
           });
+        }else{
+          Swal.fire({
+            title: 'Error!',
+            text: res.responseStatus.codigoRespuesta,
+            icon: 'error',
+            confirmButtonText: 'Aceptar',
+          })
         }
       } catch (e) {}
     }

@@ -16,19 +16,21 @@
                aria-describedby="basic-addon1">
 
         <div class="mt-2"
-             *ngFor="let card of cardRes;">
+             *ngFor="let opc of quiz.preguntas[currectQuestion].opciones;let i = index">
           <div class="input-group mb-2 mt-2"
-               style="width: 700px;">
+               style="width: 675px;">
             <span class="input-group-text"
                   id="basic-addon1"
-                  [textContent]="'Respuesta '+card.resNum+': '"></span>
+                  [textContent]="'Respuesta '+i+1+': '">
+                <span type="text" *ngIf="opc.esRespuesta"> (Correcta)</span>
+                </span>
             <input type="text"
                    class="form-control"
                    placeholder=""
                    aria-label="Username"
-                   formControlName="{{card.answerName}}"
+                   formControlName="{{opc.controlName}}"
                    aria-describedby="basic-addon1">
-            <div *ngIf="card.isCorrect">
+            <div *ngIf="opc.esRespuesta">
               <span class="input-group-text"
                     id="basic-addon1"
                     [textContent]="'Puntos: '"></span>
@@ -41,17 +43,17 @@
             </div>
           </div>
         </div>
-        <div *ngIf="numRes<4"
+        <div *ngIf="quiz.preguntas[currectQuestion]?.opciones.length<4"
              class="me-2">
           <button type="button"
                   class="btn btn-dark"
-                  (click)="addCardRes()">Agregar otra respuesta</button>
+                  (click)="addAnswer()">Agregar otra respuesta</button>
         </div>
-        <div *ngIf="numRes>2"
+        <div *ngIf="quiz.preguntas[currectQuestion]?.opciones.length>2"
              class="me-2">
           <button type="button"
                   class="btn btn-warning"
-                  (click)="delCardRes()">Quitar una respuesta</button>
+                  (click)="delAnswer()">Quitar una respuesta</button>
         </div>
         <div class="me-2">
           <button type="button"
@@ -63,16 +65,17 @@
       <nav aria-label="Page navigation example">
         <ul class="pagination">
           <li class="page-item"><button class="page-link">Anterior</button></li>
-          <div *ngFor="let question of listShowQuestions">
+          <div *ngFor="let question of quiz.preguntas">
             <li class="page-item"><button class="page-link"
-                      (click)="onNavBar(question)">{{question.page}}</button></li>
+                      (click)="onNavBar(question.page)">{{question.page}}</button></li>
           </div>
           <li class="page-item"><button class="page-link">Siguiente</button></li>
         </ul>
       </nav>
       <div class="me-2">
         <button type="button"
-                class="btn btn-primary">Finalizar Formulario</button>
+                class="btn btn-primary"
+                (click)="onSubmitQuiz()">Finalizar Formulario</button>
       </div>
       <div class="me-2">
         <button type="button"

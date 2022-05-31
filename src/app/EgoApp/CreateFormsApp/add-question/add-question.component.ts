@@ -1,9 +1,12 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
-import { IPregunta, IQuiz, IShowQuestion } from 'src/app/Common/interfaces';
+import {
+  FormControl,
+  FormGroup,
+  Validators,
+} from '@angular/forms';
+import { defaultQuestion } from 'src/app/Common/constants/default-question.constants';
+import { IOpciones, IPregunta, IQuiz } from 'src/app/Common/interfaces';
 import { CuestionarioService } from 'src/app/Service/cuestionario.service';
-import { CARD_RES_INIT } from './constants/card-res.cosntants';
-import { IRespuestaCard } from './interfaces/respuesta-card.interface';
 
 @Component({
   selector: 'app-add-question',
@@ -12,92 +15,159 @@ import { IRespuestaCard } from './interfaces/respuesta-card.interface';
   providers: [],
 })
 export class AddQuestionComponent implements OnInit {
-  public cardRes: Array<IRespuestaCard>;
-  public numRes: number;
   public form: FormGroup;
   public quizName: string;
-  private quiz: IQuiz;
-  public listShowQuestions: Array<IShowQuestion>;
-  private currectQuestion: IShowQuestion;
-  constructor(
-    private cuestionarioService:CuestionarioService,
-  ) {}
+  public quiz: IQuiz;
+  public currectQuestion: number;
+  constructor(private cuestionarioService: CuestionarioService) {}
 
   // eslint-disable-next-line @angular-eslint/no-empty-lifecycle-method
   ngOnInit(): void {
     this.initParameters();
-    // const temp=this.cuestionarioService.createQuiz();
+
+    // sessionStorage.setItem('quiz',JSON.stringify(tempQuiz));
+    // const temp=this.cuestionarioService.createQuiz(this.quiz);
     // console.log("ngOnInit ~ temp", temp);
   }
 
   public initParameters() {
-    this.createForm();
-    this.initQuizName();
     this.initQuiz();
-    this.listShowQuestions=[];
-    this.cardRes = new Array<IRespuestaCard>();
-    this.numRes = 0;
-    this.cardRes = CARD_RES_INIT();
-    this.actualizarNumRes();
   }
-  public initQuizName(){
-    const quizNameInCache= sessionStorage.getItem('quizname');
-    if(quizNameInCache){
-      this.quizName=quizNameInCache;
-    }else{
-      this.quizName='Not found';
+
+  public initQuizName() {
+    const quizNameInCache = sessionStorage.getItem('quizname');
+    if (quizNameInCache) {
+      this.quizName = quizNameInCache;
+    } else {
+      this.quizName = 'Not found';
     }
   }
-  public initQuiz(){
-    const uuiUser=sessionStorage.getItem('iduser');
-    this.quiz={
-      nombreCuestionario:this.quizName,
-      usuario:uuiUser,
-      preguntas: []
+  public initQuiz() {
+    const quizInCache = JSON.parse(sessionStorage.getItem('quiz'));
+    console.log('initQuiz ~ quizInCache', quizInCache);
+    if (quizInCache) {
+      this.parseQuiz(quizInCache);
+    } else {
+      this.initQuizName();
+      const uuiUser = JSON.parse(sessionStorage.getItem('userid'));
+      this.quiz = {
+        nombreCuestionario: this.quizName,
+        usuario: uuiUser,
+        preguntas: [defaultQuestion('answer')],
+      } as IQuiz;
+      this.createForm();
     }
+  }
+  
+  public parseQuiz(obj: any) {
+    let count = 0;
+    const questions = Object.keys(obj.preguntas).map((val: any) => {
+      const ques = obj.preguntas[val];
+      const opcions = Object.keys(ques).map((k) => {
+        return ques[k] as IOpciones;
+      });
+      count++;
+      return {
+        descripcionPregunta: val.descripcionPregunta,
+        opciones: opcions,
+        page: count,
+      } as IPregunta;
+    });
+    this.quiz = {
+      nombreCuestionario: obj.nombreCuestionario,
+      usuario: obj.usuario,
+      preguntas: questions,
+    } as IQuiz;
   }
   public createForm() {
+    // ! this.currectQuestion es la pagina, pero esto te devuelve la pregunta en la posicion de currectQuestion
+    const values= this.quiz.preguntas[this.currectQuestion];
+    this.form=new FormGroup({
+      question: new FormControl(values.descripcionPregunta, Validators.minLength(5)),
+    })
     this.form = new FormGroup({
-      question: new FormControl('',Validators.minLength(5)),
-      answer1: new FormControl('',Validators.minLength(5)),
-      answer2: new FormControl('',Validators.minLength(5)),
-      points: new FormControl('',Validators.pattern('[0-9]*')),
+      answer1: new FormControl('', Validators.minLength(5)),
+      answer2: new FormControl('', Validators.minLength(5)),
+      points: new FormControl('', Validators.pattern('[0-9]*')),
     });
   }
-  public addCardRes() {
-    if (this.numRes < 4) {
-      this.cardRes.push({
-        resNum: this.numRes + 1,
-        isCorrect: false,
-        answerName: 'answer' + (this.numRes + 1).toString(),
-        
-      });
-      this.form.addControl('answer' + (this.numRes + 1),new FormControl(''));
 
+  public onNewQuestion() {
+    const isSave = this.saveNewQuestion();
+    if (isSave) {
+      this.resetAll();
     }
-    this.actualizarNumRes();
   }
-  public delCardRes() {
-    if (this.cardRes.length > 2) {
-      this.form.removeControl('answer' + (this.numRes).toString());
-      this.cardRes.pop();
+  public saveNewQuestion() {
+    if (!this.form.valid) {
+      console.log('saveNewQuestion ~ this.form.valid', this.form.valid);
+      // TODO: agregar mensaje indicando los errores en la pregunta
+      return false;
     }
-    this.actualizarNumRes();
+    const values = this.form.value;
+    console.log('saveNewQuestion ~ values', values);
+
+    let respuestas = [];
+    Object.keys(values).map((key) => {
+      if (key.includes('answer')) {
+        respuestas.push(values[key]);
+      }
+    });
+    console.log('respuestas ~ respuestas', respuestas);
+    const opciones = respuestas.map((opc, index) => {
+      const points = index === 0 ? values.points : 0;
+      const isCorrectOpc = index === 0 ? true : false;
+      return {
+        descripcion: opc,
+        esRespuesta: isCorrectOpc,
+        valorDePuntaje: points,
+      };
+    });
+    const question = {
+      descripcionPregunta: this.form.value.question,
+      opciones: opciones,
+      page: this.quiz.preguntas.length + 1,
+    } as IPregunta;
+    this.quiz.preguntas.push(question);
+    console.log('saveNewQuestion ~ this.quiz', this.quiz);
+    return true;
   }
-  public actualizarNumRes() {
-    this.numRes = this.cardRes.length;
+  public onSubmitQuiz() {
+    this.saveNewQuestion();
   }
-  public onNewQuestion(){
+
+  public resetAll() {
+    this.form = new FormGroup({});
+  }
+  public onNavBar(showQuestion: number) {
+    this.currectQuestion = showQuestion;
+    this.displayCurrentCuestion();
+  }
+  // TODO: tomar el currectQuestiony mostrarlo en display
+  public displayCurrentCuestion() {
     this.resetAll();
+    try {
+      let question: IPregunta = undefined;
+      this.quiz.preguntas.map((res) => {
+        if (res.page && res.page === this.currectQuestion) {
+          question = res;
+        }
+      });
+      if (question) {
+        this.form.addControl(
+          'question',
+          new FormControl(question.descripcionPregunta)
+        );
+        question.opciones.forEach((opc: IOpciones) => {});
+        const values = {};
+        this.form.setValue(values);
+      } else {
+        //TODO: mensaje de seleccion incorrecta
+      }
+    } catch (e) {
+      console.log('displayCurrentCuestion ~ e', e);
+    }
   }
-
-  public resetAll(){
-    this.cardRes = CARD_RES_INIT();
-    this.createForm();
-    this.actualizarNumRes();
-  }
-  public onNavBar(showQuestion:IShowQuestion){
-    this.currectQuestion=showQuestion;
-    
-  }
+  public addAnswer() {}
+  public delAnswer() {}
 }
