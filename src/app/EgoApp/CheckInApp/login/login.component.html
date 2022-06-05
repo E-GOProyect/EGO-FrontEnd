@@ -1,19 +1,22 @@
+<app-loading-page *ngIf="isLoading"></app-loading-page>
 <div class="inicio Sesión">
-  <form class="custom-form">
+  <form class="custom-form" [formGroup]="form">
     <h1>Iniciar Sesión</h1>
     <input
-      type="user"
+      type="text"
       name="usuario"
       placeholder="USUARIO"
       required="required"
+      formControlName="user"
     />
     <input
-      type="contraseña"
+      type="password"
       name="password"
       placeholder="CONTRASEÑA"
+      formControlName="pass"
       required="required"
     />
-    <button type="submit">ingresar</button>
+    <button type="submit" (click)="onLogIn()">ingresar</button>
     <p>REGISTRARSE</p>
   </form>
 </div>
