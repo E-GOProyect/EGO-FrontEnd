@@ -30,7 +30,10 @@ export class CheckInComponent implements OnInit {
   public onLogin(){
     this.router.navigate(nav(RouterNavigate.LOGIN));
   }
-
+  public onSubmitId(){
+    console.log("Click en submit");
+    this.router.navigate(nav(RouterNavigate.GUEST_USERNAME));
+  }
   // eslint-disable-next-line @angular-eslint/no-empty-lifecycle-method
   ngOnInit(): void {
     //
