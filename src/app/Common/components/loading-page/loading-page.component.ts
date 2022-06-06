@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 
 @Component({
   selector: 'app-loading-page',
@@ -7,6 +7,7 @@ import { Component, OnInit } from '@angular/core';
 })
 export class LoadingPageComponent implements OnInit {
 
+  @Input() isLoading:boolean;
   constructor() { }
 
   // eslint-disable-next-line @angular-eslint/no-empty-lifecycle-method

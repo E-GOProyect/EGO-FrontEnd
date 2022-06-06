@@ -11,6 +11,7 @@ export class UserService{
     private Url=URLS.API+'usuario';
     private subUrlRegistro='/register';
     private subUrlLogin='/login';
+    private subUrlCreateGuest='/crear-invitado';
 
     constructor(private http:HttpClient){
 
@@ -28,6 +29,16 @@ export class UserService{
     public async loginUser(credenciales:IUserCredentials): Promise<any>{
         return new Promise<any>((resolve)=>{
             this.http.post<any>(this.Url+this.subUrlLogin,credenciales,{headers})
+            .pipe()
+            .subscribe((res)=>{
+                resolve(res);
+            })
+        })
+    }
+
+    public async registerGuest(nickname:string): Promise<any>{
+        return new Promise<any>((resolve)=>{
+            this.http.post<any>(this.Url+this.subUrlCreateGuest,nickname)
             .pipe()
             .subscribe((res)=>{
                 resolve(res);
