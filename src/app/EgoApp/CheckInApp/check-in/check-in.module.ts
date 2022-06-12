@@ -4,6 +4,8 @@ import { CommonModule } from '@angular/common';
 import { CheckInRoutingModule } from './check-in-routing.module';
 import { CheckInComponent } from './check-in.component';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { HttpClientModule } from '@angular/common/http';
 
 
 @NgModule({
@@ -13,7 +15,10 @@ import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
   imports: [
     CommonModule,
     CheckInRoutingModule,
-    FontAwesomeModule
+    HttpClientModule,
+    FontAwesomeModule,
+    FormsModule,
+    ReactiveFormsModule,
   ]
 })
 export class CheckInModule { }
