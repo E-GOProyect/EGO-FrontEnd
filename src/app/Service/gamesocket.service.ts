@@ -11,8 +11,8 @@ import { ActivatedRoute } from "@angular/router";
 })
 export class StompService{
     socket = new SockJS(URLS.API);
-    stompClient = Stomp.over(this.socket,'game');
-    private socketPrefixDestination = "socket";
+    stompClient = Stomp.over(this.socket,'/game');
+    private socketPrefixDestination = "/socket";
     private codigo:string;
     constructor(
         private activatedRoute: ActivatedRoute

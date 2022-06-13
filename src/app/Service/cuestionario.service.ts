@@ -13,11 +13,11 @@ export class CuestionarioService{
      * ? Para revisar todos los cuentionarios revisar el siguiente LINK:
      * * https://ego-forms-backend.herokuapp.com/api/v1.0.0/egoforms/cuestionario 
      */
-    private urlQuiz=URLS.API+'cuestionario';
+    private urlQuiz=URLS.API+'/cuestionario';
     private urlCrearQuiz=this.urlQuiz+'/crear';
     private urlEditar=this.urlQuiz+'/editar';
-    private urlCreateLounge=URLS.API+'sala-cuestionario/crear-sala';
-    private urlValidCodeLounge=URLS.API+'sala-cuestionario/validar-codigo';
+    private urlCreateLounge=URLS.API+'/sala-cuestionario/crear-sala';
+    private urlValidCodeLounge=URLS.API+'/sala-cuestionario/validar-codigo';
 
     constructor(private http:HttpClient){
 

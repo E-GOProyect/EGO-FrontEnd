@@ -8,7 +8,7 @@ import { IUserCredentials, IUserRegister } from '../Common/interfaces';
     providedIn: 'root'
 })
 export class UserService{
-    private Url=URLS.API+'usuario';
+    private Url=URLS.API+'/usuario';
     private subUrlRegistro='/register';
     private subUrlLogin='/login';
     private subUrlCreateGuest='/crear-invitado';
@@ -38,7 +38,7 @@ export class UserService{
 
     public async registerGuest(nickname:string): Promise<any>{
         return new Promise<any>((resolve)=>{
-            this.http.post<any>(this.Url+this.subUrlCreateGuest,nickname)
+            this.http.post<any>(this.Url+this.subUrlCreateGuest,{username:nickname})
             .pipe()
             .subscribe((res)=>{
                 resolve(res);

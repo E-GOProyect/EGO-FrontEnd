@@ -7,14 +7,16 @@ import {
   faRightToBracket,
   faSquare,
 } from '@fortawesome/free-solid-svg-icons';
+import { Alert } from 'src/app/Common/Class/alert.class';
 import { nav } from 'src/app/Common/constants';
-import { RouterNavigate } from 'src/app/Common/enums';
+import { CodeGameState, RouterNavigate } from 'src/app/Common/enums';
 import { CuestionarioService } from 'src/app/Service/cuestionario.service';
 
 @Component({
   selector: 'app-check-in',
   templateUrl: './check-in.component.html',
   styleUrls: ['./check-in.component.scss'],
+  providers:[Alert]
 })
 export class CheckInComponent implements OnInit {
   public form: FormGroup;
@@ -22,7 +24,8 @@ export class CheckInComponent implements OnInit {
   public constructor(
     public library: FaIconLibrary,
     private router: Router,
-    private cuestionarioService: CuestionarioService
+    private cuestionarioService: CuestionarioService,
+    private alert:Alert
   ) {
     library.addIcons(faSquare, faDoorOpen, faRightToBracket);
   }
@@ -45,11 +48,21 @@ export class CheckInComponent implements OnInit {
           this.form.value.codeId
         );
         console.log('Respuestas:', res);
-      } catch (e) {
-        console.log(e);
+        if(res){
+          if(res.responseData.estado===CodeGameState.SUCCESS){
+            //TODO: Guardar datos relevantes en session storage 
+            this.router.navigate(nav(RouterNavigate.GUEST_USERNAME));
+
+          }else{
+            this.alert.alertError('Hubo un error','Estado del codigo ingresado: '+res.responseData.estado);
+
+          }
+        }
+      } catch (error) {
+        this.alert.alertError('Error-400',error.message);
+        console.log("Error",error);
       }
     }
-    // this.router.navigate(nav(RouterNavigate.GUEST_USERNAME));
   }
   // eslint-disable-next-line @angular-eslint/no-empty-lifecycle-method
   ngOnInit(): void {
