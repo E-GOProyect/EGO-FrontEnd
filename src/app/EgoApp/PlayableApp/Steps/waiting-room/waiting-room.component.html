@@ -24,13 +24,13 @@
       <table class="table table-info table-striped">
         <thead>
           <tr class="">
-            <th scope="col">Total: </th>
-            <th scope="col">{{participantList.length}} Participantes</th>
+            <th scope="col">Total: {{participantList.length}}</th>
+            <th scope="col">Participantes</th>
           </tr>
         </thead>
         <tbody>
           <tr *ngFor="let participant of participantList; let i=index">
-            <th scope="row">{{i}}</th>
+            <th scope="row">{{i+1}}</th>
             <td>{{participant}}</td>
           </tr>
         </tbody>

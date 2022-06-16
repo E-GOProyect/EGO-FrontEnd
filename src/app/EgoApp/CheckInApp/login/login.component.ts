@@ -77,7 +77,7 @@ export class LoginComponent implements OnInit {
       this.isLoading=true;
       const res = await this.registerUsersService.loginUser(this.credentials);
       console.log(res);
-      if (res.responseStatus.codigoRespuesta === CodeType.SUCCESS) {
+      if (res.responseStatus['codigoRespuesta'] === CodeType.SUCCESS) {
         const data = res.responseData as IUserData;
         sessionStorage.setItem('userdata', JSON.stringify(data));
         sessionStorage.setItem('iduser', data.idUsuario);
@@ -93,7 +93,7 @@ export class LoginComponent implements OnInit {
         console.log('loginUser ~ data', temp);
         this.router.navigate(nav(RouterNavigate.FORM_NAME));
       }else{
-        this.alert.alertError('Oh no...!',res.responseStatus.mensajeRespuesta);
+        this.alert.alertError('Oh no...!',res.responseStatus['mensajeRespuesta']);
       }
 
     } catch (e) {

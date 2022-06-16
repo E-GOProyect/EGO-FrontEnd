@@ -9,7 +9,7 @@ import {
 } from '@fortawesome/free-solid-svg-icons';
 import { Alert } from 'src/app/Common/Class/alert.class';
 import { nav } from 'src/app/Common/constants';
-import { CodeGameState, RouterNavigate } from 'src/app/Common/enums';
+import { CodeGameState, ParamStorage, RouterNavigate } from 'src/app/Common/enums';
 import { CuestionarioService } from 'src/app/Service/cuestionario.service';
 
 @Component({
@@ -49,7 +49,8 @@ export class CheckInComponent implements OnInit {
         );
         console.log('Respuestas:', res);
         if(res){
-          if(res.responseData.estado===CodeGameState.SUCCESS){
+          if(res.responseData.estado===CodeGameState.SUCCESS || res.responseData.estado===CodeGameState.ACTIVE){
+            sessionStorage.setItem(ParamStorage.gameCode,this.form.value.codeId);
             //TODO: Guardar datos relevantes en session storage 
             this.router.navigate(nav(RouterNavigate.GUEST_USERNAME));
 

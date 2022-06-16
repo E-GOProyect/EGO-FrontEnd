@@ -1,67 +1,63 @@
-import { Injectable } from "@angular/core";
+import { Injectable } from '@angular/core';
 import * as SockJS from 'sockjs-client';
-import { URLS } from "../Common/enums";
-import Stomp from "stompjs";
-import { ActivatedRoute } from "@angular/router";
-
-
+import { URLS } from '../Common/enums';
+import Stomp from 'stompjs';
+// import { Socket } from 'ngx-socket-io';
 
 @Injectable({
-    providedIn: 'root',
+  providedIn: 'root',
 })
-export class StompService{
-    socket = new SockJS(URLS.API);
-    stompClient = Stomp.over(this.socket,'/game');
-    private socketPrefixDestination = "/socket";
-    private codigo:string;
-    constructor(
-        private activatedRoute: ActivatedRoute
-    ) { }
-    
-    public async startSesion(
-        userId:string,
-        onError:(err: any)=>void,
-        onMessageReceived?:(payload: any)=>void, 
-        onJoinPlayer?:(payload: any)=>void,
-        onLoungeStatus?:(payload: any)=>void,
-        onQuestion?:(payload: any)=>void,
-        ){
-        this.activatedRoute.queryParams.subscribe(
-            (res) => this.codigo = res['codigo']
-        );
-        this.stompClient.connect(
-            {}, // ? {}=>Headers 
-            this.onConnect( // ? Durante la coneccion 
-                userId,
-                onMessageReceived,
-                onJoinPlayer,
-                onLoungeStatus,
-                onQuestion
-            ), 
-            onError
-        );
-    }
+export class GameSockectService {
+  socket:any;
+  stompClient:any;
+  private userId:string;
+  private socketPrefixDestination = '/socket';
+  private codigo: string;
+  
+  constructor(){
+  }
 
-    
-    // subscribe(topic: string, callback: any):  void {
-    //     const connect: boolean = this.stompClient.connected;
-    //     if(connect){
-    //         this.subscribeToTopic(topic,callback);
-    //     }
-    // }
+  public async startSesion(
+    userId: string,
+    onError?: (err: any) => void,
+  ) {
+    this.stompClient = Stomp.over(new SockJS(URLS.API), '/game');
+    await this.stompClient.connect(
+      {}, // ? {}=>Headers
+      this.connectSocket(
+        // ? Durante la coneccion
+        userId
+      ),
+      onError
+    );
+  }
 
-    private onConnect = ( 
-        userId:string,
-        onMessageReceived?:(payload: any)=>void, 
-        onJoinPlayer?:(payload: any)=>void,
-        onLoungeStatus?:(payload: any)=>void,
-        onQuestion?:(payload: any)=>void,
-    ) => {
-        this.stompClient.subscribe("chat/"+this.codigo, onMessageReceived)
-        this.stompClient.subscribe("join-player/"+this.codigo, onJoinPlayer);
-        this.stompClient.subscribe("estado-sala/"+this.codigo, onLoungeStatus);
-        this.stompClient.subscribe("pregunta/"+this.codigo, onQuestion);
-        this.stompClient.send(this.socketPrefixDestination + "/join/" + this.codigo, {}, userId)
-    }
+  public setCode(code: string) {
+    this.codigo = code;
+  }
+
+  private connectSocket (
+    userId: string
+  ) {
+    this.stompClient.send(
+        this.socketPrefixDestination + '/join/' + this.codigo,
+        {},
+        userId
+    );
+    this.stompClient.subscribe('/chat/' + this.codigo, (payload: any) =>{});
+    this.stompClient.subscribe('/join-player/' + this.codigo, (payload: any) =>{});
+    this.stompClient.subscribe('/estado-sala/' + this.codigo, (payload: any) =>{});
+    this.stompClient.subscribe('/pregunta/' + this.codigo, (payload: any) =>{});
     
+  };
+  public getInRoom(userId: string){
+    this.stompClient.send(
+        this.socketPrefixDestination + '/join/' + this.codigo,
+        {},
+        userId
+    );
+  }
+  public setUserId(userId: string){
+    this.userId=userId;
+  }
 }

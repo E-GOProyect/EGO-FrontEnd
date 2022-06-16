@@ -2,7 +2,7 @@ import { headers } from './../Common/constants/allow-header-request.constants';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from "@angular/core";
 import { URLS } from "../Common/enums";
-import { IUserCredentials, IUserRegister } from '../Common/interfaces';
+import { IResponse, IUserCredentials, IUserRegister } from '../Common/interfaces';
 
 @Injectable({
     providedIn: 'root'
@@ -17,8 +17,8 @@ export class UserService{
 
     }
     
-    public async registerUser(user:IUserRegister): Promise<any>{
-        return new Promise<any>((resolve)=>{
+    public async registerUser(user:IUserRegister): Promise<IResponse>{
+        return new Promise<IResponse>((resolve)=>{
             this.http.post<any>(this.Url+this.subUrlRegistro,user)
             .pipe()
             .subscribe((res)=>{
@@ -26,8 +26,8 @@ export class UserService{
             })
         })
     }
-    public async loginUser(credenciales:IUserCredentials): Promise<any>{
-        return new Promise<any>((resolve)=>{
+    public async loginUser(credenciales:IUserCredentials): Promise<IResponse>{
+        return new Promise<IResponse>((resolve)=>{
             this.http.post<any>(this.Url+this.subUrlLogin,credenciales,{headers})
             .pipe()
             .subscribe((res)=>{
@@ -36,8 +36,8 @@ export class UserService{
         })
     }
 
-    public async registerGuest(nickname:string): Promise<any>{
-        return new Promise<any>((resolve)=>{
+    public async registerGuest(nickname:string): Promise<IResponse>{
+        return new Promise<IResponse>((resolve)=>{
             this.http.post<any>(this.Url+this.subUrlCreateGuest,{username:nickname})
             .pipe()
             .subscribe((res)=>{
