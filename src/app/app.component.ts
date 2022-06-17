@@ -13,7 +13,7 @@ export class AppComponent {
   constructor(
     private router:Router
   ){
-    this.router.navigate(nav(RouterNavigate.LOGIN));
+    this.router.navigate(nav(RouterNavigate.CHECK_IN));
     sessionStorage.clear();
     localStorage.clear();
   }

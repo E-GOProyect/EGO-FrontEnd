@@ -1,38 +1,47 @@
-<div class="background">
-    <div class="card">
-        <div class="buttonCard gap-2 justify-content-end padding-left">
-            <button type="button" class="btn btn-secondary" data-bs-toggle="button">
-                <span>
-                    <fa-icon [icon]="['fas','door-open']" [styles]="{'color': 'white'}"></fa-icon>
-                    Singup
-                </span>
-            </button>
-            <button type="button" class="btn btn-secondary" data-bs-toggle="button">
-                <span>
-                    <fa-icon [icon]="['fas','right-to-bracket']" [styles]="{'color': 'white'}"></fa-icon>
-                    Login
-                </span>
-            </button>
-        </div>
-        <section class="container-fluid align-items-center centerContainer gap-2">
-            <div class="row row-cols-lg-2 row-cols-1 justify-content-center align-items-center setAllWidth" >
-                <div class="col title-box">
-                    <div class="title text-center" [textContent]="'E-GO'"></div>
+<form [formGroup]="form">
+    <div class="buttonCard gap-2 justify-content-end padding-left">
+        <button type="button"
+                class="btn btn-secondary"
+                data-bs-toggle="button"
+                (click)="onSingUp()">
+            <span>
+                <fa-icon [icon]="['fas','door-open']"
+                         [styles]="{'color': 'white'}"></fa-icon>
+                Singup
+            </span>
+        </button>
+        <button type="button"
+                class="btn btn-secondary"
+                data-bs-toggle="button"
+                (click)="onLogin()">
+            <span>
+                <fa-icon [icon]="['fas','right-to-bracket']"
+                         [styles]="{'color': 'white'}"></fa-icon>
+                Login
+            </span>
+        </button>
+    </div>
+    <section class="container-fluid align-items-center centerContainer setAllWidth">
+        <div class="row row-cols-lg-2 row-cols-1 justify-content-center align-items-center" style="width: 100%;">
+            <div class="">
+                <h1 class="title text-center">E-GO</h1>
+            </div>
+            <div class="textBox">
+                <div class="input-group mb-3">
+                    <input type="text"
+                           class="form-control"
+                           placeholder="ID PARTIDA"
+                           formControlName="codeId"
+                           aria-label="Recipient's username"
+                           aria-describedby="basic-addon2">
                 </div>
-                <div class="col textBox">
-                    <div class="input-group mb-3">
-                        <input 
-                            type="text" 
-                            class="form-control" 
-                            placeholder="ID PARTIDA" 
-                            aria-label="Recipient's username"
-                            aria-describedby="basic-addon2"> 
-                    </div>
-                    <div class="d-grid gap-2">
-                        <input type="button" class="btn btn-secondary" value="Ingresar">
-                    </div>
+                <div class="d-grid gap-2">
+                    <input type="button"
+                           class="btn btn-secondary"
+                           value="Ingresar"
+                           (click)="onSubmitId()">
                 </div>
             </div>
-        </section>
-    </div>
-</div>
+        </div>
+    </section>
+</form>

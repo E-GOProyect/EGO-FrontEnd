@@ -1,4 +1,9 @@
-
+  .title{
+    font-size: 5em;
+    @media (max-width: 575.98px){
+      font-size: 2em;
+    }
+  }
   .SalaEspera {
     display: flex;
     flex: 1 1 0%;
@@ -10,6 +15,13 @@
     padding: 15px ;
     text-align: center;
     justify-content: center;
+  }
+  .page{
+    margin: 8em auto;
+    @media (max-width: 575.98px){
+      margin: 5em;
+      
+    }
   }
   .mensajeEspera {
     margin: auto;

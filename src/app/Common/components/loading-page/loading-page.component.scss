@@ -1,0 +1,66 @@
+:root{
+    height: 100%;
+    width: 100%;
+    display: flex;
+    position: relative;
+    justify-content: center;
+    align-items: center;
+}
+.background{
+    height: 100%;
+    width: 100%;
+    top: 0%;
+    position:absolute;
+    background: rgba(143, 235, 163, 0.8);
+    opacity: 1.0;
+    justify-content: center;
+    align-items: center;
+}
+.imgbox{
+    width: 150px;
+    height: 150px !important;
+    top: 42%;
+    left: 42%;
+    position: absolute;
+    display: block;
+    // background: rgb(255, 255, 255);
+}
+.bongocat{
+    width: 150px;
+    height: 150px !important;
+    top: 39%;
+    left: 39%;
+    background: url(../../imgs/gifs/bongo-cat.gif) 0 0;
+    background-position: 10%;
+    background-repeat: no-repeat;
+    background-color: white;
+    background-size: 139px;
+    border-radius: 50%;
+    padding-top: 10em;
+    padding: 0;
+    // display: block;
+    // position: absolute;
+}
+.spinner {
+    border: 2px solid rgba(0, 0, 0, 0.1);
+    width: 150px;
+    height: 150px;
+    position: absolute;
+    top: 42.01%;
+    left: 42%;
+    margin: 0 auto;
+    border-radius: 50%;
+    border-left-color: rgb(45, 45, 45);
+    animation: spin 1.2s ease infinite;
+}
+
+@keyframes spin {
+    0% {
+        transform: rotate(0deg);
+    }
+
+    100% {
+        transform: rotate(360deg);
+    }
+}
+

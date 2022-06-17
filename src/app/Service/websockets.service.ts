@@ -1,25 +1,36 @@
 import { Injectable } from "@angular/core";
-import * as SockJS from 'sockjs-client';
-import * as Stomp from 'stompjs';
-import { URLS } from "../Common/enums";
+import * as Rx from "rxjs/";
 
-@Injectable({
-    providedIn: 'root',
-})
-export class StompService{
-    socket = new SockJS(URLS.WEBSOCKET_CHATROOM);
-    stompClient = Stomp.over(this.socket);
+@Injectable()
+export class WebsocketService {
+  constructor() {}
 
-    subscribe(topic: string, callback: any):  void {
-        const connect: boolean = this.stompClient.connected;
-        if(connect){
-            this.subscribeToTopic(topic,callback);
+  private subject: Rx.Subject<MessageEvent>;
+
+  public connect(url): Rx.Subject<MessageEvent> {
+    if (!this.subject) {
+      this.subject = this.create(url);
+      console.log("Successfully connected: " + url);
+    }
+    return this.subject;
+  }
+
+  private create(url): Rx.Subject<MessageEvent> {
+    let ws = new WebSocket(url);
+
+    let observable = Rx.Observable.create((obs: Rx.Observer<MessageEvent>) => {
+      ws.onmessage = obs.next.bind(obs);
+      ws.onerror = obs.error.bind(obs);
+      ws.onclose = obs.complete.bind(obs);
+      return ws.close.bind(ws);
+    });
+    let observer = {
+      next: (data: Object) => {
+        if (ws.readyState === WebSocket.OPEN) {
+          ws.send(JSON.stringify(data));
         }
-    }
-
-    private subscribeToTopic(topic:string,callback:any):void {
-        this.stompClient.subscribe(topic,(): any => {
-            callback();
-        })
-    }
+      }
+    };
+    return Rx.Subject.create(observer, observable);
+  }
 }

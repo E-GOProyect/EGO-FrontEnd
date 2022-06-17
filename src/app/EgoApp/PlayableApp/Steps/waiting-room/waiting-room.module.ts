@@ -3,6 +3,8 @@ import { CommonModule } from '@angular/common';
 
 import { WaitingRoomRoutingModule } from './waiting-room-routing.module';
 import { WaitingRoomComponent } from './waiting-room.component';
+import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
+import { HttpClientModule } from '@angular/common/http';
 
 
 @NgModule({
@@ -11,7 +13,10 @@ import { WaitingRoomComponent } from './waiting-room.component';
   ],
   imports: [
     CommonModule,
-    WaitingRoomRoutingModule
+    WaitingRoomRoutingModule,
+    FontAwesomeModule,
+    HttpClientModule,
+
   ]
 })
 export class WaitingRoomModule { }
