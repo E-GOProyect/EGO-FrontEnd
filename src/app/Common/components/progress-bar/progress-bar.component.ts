@@ -1,56 +1,78 @@
-import { Component, OnInit, SimpleChanges, OnChanges } from '@angular/core';
-import { timer } from 'rxjs';
+import { Component, OnInit, Input, Output, OnDestroy } from '@angular/core';
+import { timer, Subject } from 'rxjs';
 
 @Component({
   selector: 'app-progress-bar',
   templateUrl: './progress-bar.component.html',
   styleUrls: ['./progress-bar.component.scss'],
 })
-export class ProgressBarComponent implements OnInit, OnChanges {
-
-  public time:number;
-  public timeLeft:number;
+export class ProgressBarComponent implements OnInit, OnDestroy {
+  @Input() public isLoading:Subject<boolean>;
+  @Input() public startTime: Subject<boolean>;
+  @Input() public resetTime: Subject<boolean>;
+  @Input() public time:number = 10;
+  @Output() public isFinish: Subject<boolean>;
+  @Output() public timeLeft: Subject<number>;
+  public tl:number;
+  private interval;
   public progress:number;
-  public progressBar: HTMLElement;
+  public contador: HTMLElement;
+  public spinner: HTMLElement;
+  private iterationCount:number;
   constructor() { 
-    
-    const actualDate= Date.now();
-    this.time=10;
-    this.timeLeft=this.time;
+    this.isFinish= new Subject();
+    // this.isLoading= new Subject();
+    this.timeLeft= new Subject();
+    this.startTime= new Subject();
+    // this.reset= new Subject();
+    this.tl=this.time;
+    this.iterationCount=1;
+  }
+  ngOnDestroy(): void {
+    this.isLoading.unsubscribe();
   }
 
-  // eslint-disable-next-line @angular-eslint/no-empty-lifecycle-method
   ngOnInit(): void {
-    this.progressBar=document.getElementById('progressBar');
+    this.contador=document.getElementById('count');
+    this.spinner=document.getElementById('spinner');
+    this.spinner.style.animationPlayState='pause';
+    // this.initProgressBar();
     this.startTimer();
+    this.subscribeToIsLoading();
+    this.subscribeToReset();
   }
 
-  // eslint-disable-next-line @angular-eslint/no-empty-lifecycle-method
-  ngOnChanges(changes: SimpleChanges): void {
-    // this.updateProgress();
-  }
-  public updateProgress(){
-    this.progress = ((this.time-this.timeLeft)*100.0)/this.time;
-    this.progressBar.style.width=this.progress.toString()+'%';
-    console.log('porcentaje',this.progress);
-    
-    // console.log("tiempo restante",leftTime);
-    // const progress= (leftTime*100)/this.time;
-    // console.log("tiempo restante",progress);
-
-  }
   public startTimer() {
-    setInterval(() => {
-      if(this.timeLeft >= 0) {
-        console.log('time',this.timeLeft);
-        this.updateProgress();
-        this.timeLeft-=0.1;
+    this.interval=setInterval(() => {
+      if(this.tl >= 0) {
+        this.spinner.style.animationPlayState='running';
+        this.tl=parseFloat(this.tl.toFixed(1));
+        // this.timeLeft.next(this.tl);
+        console.log(this.tl);
+        this.contador.textContent=this.tl.toString();
+        this.tl-=1;
       }else{
-        this.timeLeft-=0.1;
+        this.spinner.style.animationPlayState='paused';
+        clearInterval(this.interval);
       }
-    },100);
+    },1000);
   }
-  public subscribeOnDate(){
+  public subscribeToIsLoading(){
+    this.isLoading.subscribe((val)=>{
+      if(val){
+        // this.startTimer();
+        // this.loadProgress();
+        console.log("time start");
+      }
+    });
+  }
+  public subscribeToReset(){
+    this.resetTime.subscribe((val)=>{
+      console.log("reset time");
+      if(val){
+        // this.resetProgressBar();
+      }
+    });
   }
 
 }

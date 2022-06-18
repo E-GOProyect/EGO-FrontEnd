@@ -1,28 +1,34 @@
 <div class="container">
-    <div>
+    <div class="col mt-5">
         <h1>
-            <p><strong><label for="inputParticipantes"
-                           class="col-form-label">Quiz: </label></strong></p>
+            <p>Quiz:<strong><label for="inputParticipantes"
+                           class="col-form-label"> </label></strong></p>
         </h1>
     </div>
-    <div>
+    <div class="col">
         <button type="button"
-                class="btn btn-secondary">Siguiente Pregunta</button>
+                class="btn btn-secondary me-2 mt-2"
+                (click)="onResetTime()">
+            <i class="fa-solid fa-angle-right"></i> Siguiente Pregunta</button>
         <button type="button"
-                class="btn btn-secondary">Finalizar Quiz</button>
+                class="btn btn-secondary me-2 mt-2"><i class="fa-solid fa-flag-checkered"></i> Finalizar Quiz</button>
         <button type="button"
-                class="btn btn-secondary">Siguiente Pregunta</button>
+                class="btn btn-secondary  mt-2"
+                (click)="comenzarPregunta()"> <i class="fa-solid fa-play"></i> ComenzarPregunta</button>
     </div>
-    <div> 
-        <app-progress-bar></app-progress-bar>
-    </div>
-    <div>
+    <div class="col mt-3">
         <h2>
-            <p><strong><label for="inputParticipantes"
-                           class="col-form-label">Pregunta Actual: </label></strong></p>
+            <p>Pregunta #:<strong><label for="inputParticipantes"
+                           class="col-form-label"> </label></strong></p>
         </h2>
     </div>
-    <div class="col-auto">
+    <div class="col mt-3">
+        <app-progress-bar [isLoading]="startTime"
+                          [time]="15"
+                          [resetTime]="resetTime"></app-progress-bar>
+    </div>
+
+    <div class="col-auto mt-3">
 
         <table class="table table-info table-striped">
             <thead>

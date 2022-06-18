@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Alert } from 'src/app/Common/Class/alert.class';
 import { ParamStorage } from 'src/app/Common/enums';
@@ -11,7 +11,7 @@ import { StompService } from 'src/app/Service/stomp.service';
   styleUrls: ['./waiting-room.component.scss'],
   providers:[Alert]
 })
-export class WaitingRoomComponent implements OnInit {
+export class WaitingRoomComponent implements OnInit,OnDestroy {
 
   public participantList: Array<string>;
   public isLoading:boolean;
@@ -30,6 +30,9 @@ export class WaitingRoomComponent implements OnInit {
     this.participantList = [];
     this.formName = 'FormName';
     this.isLoading=true;
+  }
+  ngOnDestroy(): void {
+    this.stompService.isConnected$.unsubscribe();
   }
 
   public getUserId() {
