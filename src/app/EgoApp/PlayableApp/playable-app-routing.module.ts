@@ -44,6 +44,11 @@ const routes: Routes = [
         loadChildren: () =>
           import('./chat-room/chat-room.module').then((m) => m.ChatRoomModule),
       },
+      {
+        path: RouterNavigate.MASTER_ROOM,
+        loadChildren: () =>
+          import('./Steps/master-room/master-room.module').then((m) => m.MasterRoomModule),
+      },
     ],
   },
 ];

@@ -1,1 +1,2 @@
-export * from './loading-page/loading-page.module';
+export * from './loading-page';
+export * from './progress-bar';

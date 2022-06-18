@@ -1,0 +1,43 @@
+<div class="container">
+    <div>
+        <h1>
+            <p><strong><label for="inputParticipantes"
+                           class="col-form-label">Quiz: </label></strong></p>
+        </h1>
+    </div>
+    <div>
+        <button type="button"
+                class="btn btn-secondary">Siguiente Pregunta</button>
+        <button type="button"
+                class="btn btn-secondary">Finalizar Quiz</button>
+        <button type="button"
+                class="btn btn-secondary">Siguiente Pregunta</button>
+    </div>
+    <div> 
+        <app-progress-bar></app-progress-bar>
+    </div>
+    <div>
+        <h2>
+            <p><strong><label for="inputParticipantes"
+                           class="col-form-label">Pregunta Actual: </label></strong></p>
+        </h2>
+    </div>
+    <div class="col-auto">
+
+        <table class="table table-info table-striped">
+            <thead>
+                <tr class="col-10">
+                    <th scope="col-1">#</th>
+                    <th scope="col-5">Participantes</th>
+                    <th scope="col-4">Puntaje</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- <tr *ngFor="let participant of participantList; let i=index">
+              <th scope="row">{{i+1}}</th>
+              <td>{{participant}}</td>
+            </tr> -->
+            </tbody>
+        </table>
+    </div>
+</div>

@@ -14,5 +14,6 @@ export enum RouterNavigate{
     RESULT='result',
     WAITING_ROOM='waiting_room',
     CHATROOM='chat_room',
-    FINAL_STEP= 'final'
+    FINAL_STEP= 'final',
+    MASTER_ROOM= 'master-room',
 }
