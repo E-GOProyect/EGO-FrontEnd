@@ -1,10 +1,18 @@
-<div class="container">
+<app-loading-page [isLoading]="isLoading"></app-loading-page>
+
+<div class="container" *ngIf="!isLoading">
     <div class="col mt-5">
         <h1>
-            <p>Quiz:<strong><label for="inputParticipantes"
-                           class="col-form-label"> </label></strong></p>
+            <p>Quiz: <strong><label for="inputParticipantes"
+                           class="col-form-label">{{formName}} </label></strong></p>
         </h1>
     </div>
+    <div style="padding: 30px">
+        <button type="submit"
+              class="btn btn-secondary">Regresar</button>
+        <button type="button"
+              class="btn btn-secondary">Empezar Cuestionario</button>
+      </div>
     <div class="col">
         <button type="button"
                 class="btn btn-secondary me-2 mt-2"
@@ -22,28 +30,31 @@
                            class="col-form-label"> </label></strong></p>
         </h2>
     </div>
-    <div class="col mt-3">
+    <!-- <div class="col mt-3">
         <app-progress-bar [isLoading]="startTime"
                           [time]="15"
                           [resetTime]="resetTime"></app-progress-bar>
-    </div>
-
-    <div class="col-auto mt-3">
-
+    </div> -->
+    <div class="col-auto mt-5">
         <table class="table table-info table-striped">
-            <thead>
-                <tr class="col-10">
-                    <th scope="col-1">#</th>
-                    <th scope="col-5">Participantes</th>
-                    <th scope="col-4">Puntaje</th>
-                </tr>
-            </thead>
-            <tbody>
-                <!-- <tr *ngFor="let participant of participantList; let i=index">
+          <thead>
+            <tr class="">
+              <th scope="col">Total: {{participantList.length}}</th>
+              <th scope="col">Participantes</th>
+              <th scope="col"><i class="fa-solid fa-users"></i> Clase</th>
+              <th scope="col"><i class="fa-brands fa-bitcoin"></i> Bitcoins</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let participant of participantList; let i=index">
               <th scope="row">{{i+1}}</th>
-              <td>{{participant}}</td>
-            </tr> -->
-            </tbody>
+              <td>{{participant.userName}}</td>
+              <td *ngIf="participant?.typePlayer==='M'"><i class="fa-solid fa-crown"></i> Master</td>
+              <td *ngIf="participant?.typePlayer==='P'"><i class="fa-solid fa-frog"></i> Usuario</td>
+              <td *ngIf="participant?.typePlayer==='I'"><i class="fa-solid fa-circle-question"></i> Invitado</td>
+              <th scope="col"><i class="fa-brands fa-bitcoin"></i> Bitcoins</th>
+            </tr>
+          </tbody>
         </table>
-    </div>
+      </div>
 </div>

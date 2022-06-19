@@ -1,13 +1,6 @@
 <app-loading-page [isLoading]="isLoading"></app-loading-page>
 <div *ngIf="!isLoading">
   <form>
-    <div style="padding: 30px">
-      <button type="submit"
-            class="btn btn-secondary">Regresar</button>
-      <button type="button"
-            class="btn btn-secondary">Empezar Cuestionario</button>
-    </div>
-      
     <div class="d-grid gap-2 col-2 mx-auto page" style="width: 80%;">
       <div class="mx-auto">
         <h3 class="title">
@@ -31,12 +24,16 @@
             <tr class="">
               <th scope="col">Total: {{participantList.length}}</th>
               <th scope="col">Participantes</th>
+              <th scope="col"><i class="fa-solid fa-users"></i></th>
             </tr>
           </thead>
           <tbody>
             <tr *ngFor="let participant of participantList; let i=index">
               <th scope="row">{{i+1}}</th>
-              <td>{{participant}}</td>
+              <td>{{participant.userName}}</td>
+              <td *ngIf="participant?.typePlayer==='M'"><i class="fa-solid fa-crown"></i> Master</td>
+              <td *ngIf="participant?.typePlayer==='P'"><i class="fa-solid fa-frog"></i> Usuario</td>
+              <td *ngIf="participant?.typePlayer==='I'"><i class="fa-solid fa-circle-question"></i> Invitado</td>
             </tr>
           </tbody>
         </table>

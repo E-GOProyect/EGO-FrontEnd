@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, HostListener } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Alert } from 'src/app/Common/Class/alert.class';
 import { ParamStorage } from 'src/app/Common/enums';
@@ -13,7 +13,7 @@ import { StompService } from 'src/app/Service/stomp.service';
 })
 export class WaitingRoomComponent implements OnInit,OnDestroy {
 
-  public participantList: Array<string>;
+  public participantList: Array<{userName:string, typePlayer:string}>;
   public isLoading:boolean;
   public formName: string;
 
@@ -32,7 +32,8 @@ export class WaitingRoomComponent implements OnInit,OnDestroy {
     this.isLoading=true;
   }
   ngOnDestroy(): void {
-    this.stompService.isConnected$.unsubscribe();
+    this.onCloseWindow(null);
+    // this.stompService.isConnected$.unsubscribe();
   }
 
   public getUserId() {
@@ -49,23 +50,26 @@ export class WaitingRoomComponent implements OnInit,OnDestroy {
       this.alert.alertError('Error', 'credenciales no encontradas');
     }
   }
-  public mockParticipants() {
-    this.participantList.push('Daniel');
-    this.participantList.push('Arturo');
-    this.participantList.push('Reushe');
+  @HostListener('window:beforeunload', ['$event'])
+  onCloseWindow(event: any): void {
+    // this.stompClient.send(this.socketPrefixDestination + "/chat/"+this.codigo, {}, JSON.stringify(message))
+    this.stompService.stompClient.send("/socket/leave/"+this.codeGame, {}, this.userid);
   }
  
   private loadParticipants(){
     this.participantList.splice(0);
     this.participantList= this.quiz.jugadores.map((player)=>{
-      return player.username;
+      return {
+        userName: player.username,
+        typePlayer:player.tipoJugador,
+      };
     });
+    console.log('Participants',this.participantList);
   }
 
   // eslint-disable-next-line @angular-eslint/no-empty-lifecycle-method
   ngOnInit(): void {
     this.getUserId();
-    this.mockParticipants();
     this.subscribeToJoinPlayer();
     this.subscribeToLoungeStatus();
     this.subscribeToChat();
@@ -89,7 +93,7 @@ export class WaitingRoomComponent implements OnInit,OnDestroy {
   }
 
   private subscribeToJoinPlayer(){
-    this.stompService.subscribe('/join-player/'+this.codeGame,(payload: any)=>{
+    this.stompService.subscribe('/list-players/'+this.codeGame,(payload: any)=>{
       console.log('PlayerLogin: ', JSON.parse(payload.body));
       if(this.quiz){
         this.quiz.jugadores=(JSON.parse(payload.body) as IQuizResponse).jugadores;

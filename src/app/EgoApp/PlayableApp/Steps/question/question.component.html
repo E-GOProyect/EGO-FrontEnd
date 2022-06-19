@@ -3,7 +3,7 @@
     <div class="mx-auto">
       <h4>
         <p><strong><label for="inputFormname"
-                   class="display-150">FORM NAME</label></strong></p>
+                   class="display-150">{{quizName}}</label></strong></p>
       </h4>
       <div class="card-body">
         <h3>
@@ -15,10 +15,16 @@
       <div class="card text-white bg-danger mx-auto"
            style="max-width: 10rem;">
         <div class="card-body">
-          <h5 class="card-title">PREGUNTA 1</h5>
+          <h5 class="card-title">PREGUNTA : {{quizQuestion?.descripcionPregunta}}</h5>
         </div>
       </div>
-      <div class="d-grid gap-1 col-7 mx-auto">
+      <div class="mt-2"
+           *ngFor="let opcion of quizQuestion?.opciones; let i=index">
+        <button type="button"
+                class="btn btn-secondary btn-lg"
+                (click)="onChooseAnswered(opcion.idOpcion)">{{parseNumberToLetter(i)}}) {{opcion.descripcion}}</button>
+      </div>
+      <div class="d-grid gap-1 col-7 mx-auto mt-3">
         <button type="submit"
                 class="btn btn-primary">Skip</button>
       </div>
