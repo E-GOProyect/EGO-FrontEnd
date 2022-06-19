@@ -11,7 +11,7 @@ import { StompService } from 'src/app/Service/stomp.service';
   selector: 'app-master-room',
   templateUrl: './master-room.component.html',
   styleUrls: ['./master-room.component.scss'],
-  providers:[Alert],
+  providers:[Alert, StompService],
 
 })
 export class MasterRoomComponent implements OnInit, OnDestroy {
@@ -19,6 +19,7 @@ export class MasterRoomComponent implements OnInit, OnDestroy {
   public participantList: Array<{userName:string, typePlayer:string}>;
   protected quiz: IQuizResponse;
   public isLoading:boolean;
+  private unsubscribe$: Subject<void>;
 
   public startTime: Subject<boolean>;
   public resetTime: Subject<boolean>;
@@ -36,6 +37,7 @@ export class MasterRoomComponent implements OnInit, OnDestroy {
     this.isLoading=true;
     this.startTime=new Subject();
     this.resetTime=new Subject();
+    this.unsubscribe$=new Subject;
     this.participantList = [];
     this.formName = 'FormName';
 
@@ -78,6 +80,7 @@ export class MasterRoomComponent implements OnInit, OnDestroy {
   onCloseWindow(event: any): void {
     // this.stompClient.send(this.socketPrefixDestination + "/chat/"+this.codigo, {}, JSON.stringify(message))
     this.stompService.stompClient.send("/socket/leave/"+this.codeGame, {}, this.userid);
+    this.unsubscribe$.next();
   }
   public verifyCredentials(){
     this.quiz.jugadores.map((player)=>{
@@ -120,7 +123,7 @@ export class MasterRoomComponent implements OnInit, OnDestroy {
   private subscribeToLoungeStatus(){
     this.stompService.subscribe('/room-status/'+this.codeGame,(payload: any)=>{
       console.log('Lounge Status: ', payload);
-    });
+    },this.unsubscribe$);
   }
   public startQuiz(){
     this.stompService.stompClient.send('/socket/room-status/' + this.codeGame, {}, JSON.stringify('S'));
@@ -143,7 +146,7 @@ export class MasterRoomComponent implements OnInit, OnDestroy {
         this.verifyCredentials();
       }
       this.loadParticipants();
-    });
+    },this.unsubscribe$);
   }
   private singUpLounge(){
     this.stompService.stompClient.send(

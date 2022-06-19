@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { CountdownConfig } from 'ngx-countdown';
+import { Subject } from 'rxjs';
 import { ParamStorage } from 'src/app/Common/enums';
 import { IAnswered } from 'src/app/Common/interfaces';
 import { IQuestionResponse } from 'src/app/Common/interfaces/question-response.interface';
@@ -20,12 +21,16 @@ export class QuestionComponent implements OnInit {
   private codeGame: string;
   public quizQuestion: IQuestionResponse;
   private chosenOption: number;
+  private unsubscribe$: Subject<void>;
 
   constructor(
     public stompService:StompService,
     public cuestionarioService: CuestionarioService,
     private activatedRoute: ActivatedRoute
-  ) { }
+  ) {
+    this.unsubscribe$=new Subject();
+
+   }
 
   // eslint-disable-next-line @angular-eslint/no-empty-lifecycle-method
   ngOnInit(): void {
@@ -40,7 +45,7 @@ export class QuestionComponent implements OnInit {
       this.quizQuestion= JSON.parse(payload.body);
       console.log('ActualQuestion: ',this.quizQuestion);
 
-    });
+    },this.unsubscribe$);
   }
   public onChooseAnswered(idOpcion:number){
     console.log('respuesta: ',idOpcion);

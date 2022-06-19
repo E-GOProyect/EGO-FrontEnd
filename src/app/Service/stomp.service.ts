@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Observable, of, Subject } from 'rxjs';
+import { Observable, of, Subject, takeUntil } from 'rxjs';
 import * as SockJS from 'sockjs-client';
 import * as Stomp from 'stompjs';
 import { URLS } from '../Common/enums';
@@ -10,6 +10,7 @@ import { URLS } from '../Common/enums';
 export class StompService {
   private connecting: boolean = false;
   private topicQueue: any[] = [];
+  private listQueue: any[] = [];
   public isConnected$: Subject<boolean>;
   socket = new SockJS(URLS.API + '/game');
   stompClient = Stomp.over(this.socket);
@@ -19,12 +20,13 @@ export class StompService {
     this.isConnected$.next(false);
   }
 
-  subscribe(topic: string, callback: any): void {
+  subscribe(topic: string, callback: any, unsubscribe:Subject<any>): void {
     // If stomp client is currently connecting add the topic to the queue
     if (this.connecting) {
       this.topicQueue.push({
         topic,
         callback,
+        unsubscribe
       });
       return;
     }
@@ -33,18 +35,18 @@ export class StompService {
     if (connected) {
       // Once we are connected set connecting flag to false
       this.connecting = false;
-      this.subscribeToTopic(topic, callback);
+      this.subscribeToTopic(topic, callback,unsubscribe);
       return;
     }
 
     // If stomp client is not connected connect and subscribe to topic
     this.connecting = true;
     this.stompClient.connect({}, (): any => {
-      this.subscribeToTopic(topic, callback);
+      this.subscribeToTopic(topic, callback, unsubscribe);
 
       // Once we are connected loop the queue and subscribe to remaining topics from it
       this.topicQueue.forEach((item: any) => {
-        this.subscribeToTopic(item.topic, item.callback);
+        this.subscribeToTopic(item.topic, item.callback,item.unsubscribe);
       });
 
       this.isConnected$.next(true);
@@ -53,10 +55,25 @@ export class StompService {
       this.topicQueue = [];
     });
   }
-
-  private subscribeToTopic(topic: string, callback: any): void {
-    this.stompClient.subscribe(topic, (response?: string): any => {
+  unSubscribeAll(unsubscribe:Subject<any>){
+    unsubscribe.subscribe(()=>{
+      this.listQueue.forEach((topic)=>{ 
+        this.stompClient.unsubscribe(topic);
+      })
+      unsubscribe.unsubscribe();
+    })
+  }
+  private subscribeToTopic(topic: string, callback: any, unsubscribe:Subject<any>): void {
+    this.listQueue.push({
+      topic
+    });
+    this.stompClient
+    .subscribe(topic, (response?: string): any => {
       callback(response);
     });
+    unsubscribe.subscribe(()=>{
+      this.stompClient.unsubscribe(topic);
+    })
   }
+
 }

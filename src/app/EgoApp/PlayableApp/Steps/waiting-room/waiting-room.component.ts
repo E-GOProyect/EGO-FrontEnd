@@ -1,5 +1,6 @@
 import { Component, OnInit, OnDestroy, HostListener } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
+import { takeUntil, Subject } from 'rxjs';
 import { Alert } from 'src/app/Common/Class/alert.class';
 import { ParamStorage } from 'src/app/Common/enums';
 import { IQuizResponse } from 'src/app/Common/interfaces/quiz-response.interface';
@@ -9,14 +10,14 @@ import { StompService } from 'src/app/Service/stomp.service';
   selector: 'app-waiting-room',
   templateUrl: './waiting-room.component.html',
   styleUrls: ['./waiting-room.component.scss'],
-  providers:[Alert]
+  providers:[Alert, StompService]
 })
 export class WaitingRoomComponent implements OnInit,OnDestroy {
 
   public participantList: Array<{userName:string, typePlayer:string}>;
   public isLoading:boolean;
   public formName: string;
-
+  private unsubscribe$: Subject<void>;
   private codeGame: string;
 
   protected quiz: IQuizResponse;
@@ -27,6 +28,7 @@ export class WaitingRoomComponent implements OnInit,OnDestroy {
     private activatedRoute:ActivatedRoute,
     private alert: Alert,
   ) {
+    this.unsubscribe$=new Subject;
     this.participantList = [];
     this.formName = 'FormName';
     this.isLoading=true;
@@ -54,6 +56,8 @@ export class WaitingRoomComponent implements OnInit,OnDestroy {
   onCloseWindow(event: any): void {
     // this.stompClient.send(this.socketPrefixDestination + "/chat/"+this.codigo, {}, JSON.stringify(message))
     this.stompService.stompClient.send("/socket/leave/"+this.codeGame, {}, this.userid);
+    this.unsubscribe$.next();
+    this.unsubscribe$.complete();
   }
  
   private loadParticipants(){
@@ -86,14 +90,17 @@ export class WaitingRoomComponent implements OnInit,OnDestroy {
   }
 
   private subscribeToisConneted(){
-    this.stompService.isConnected$.subscribe((res)=>{
+    this.stompService.isConnected$
+    .pipe(takeUntil(this.unsubscribe$))
+    .subscribe((res)=>{
       console.log('Is conected', res);
       this.singUpLounge();
     });
   }
 
   private subscribeToJoinPlayer(){
-    this.stompService.subscribe('/list-players/'+this.codeGame,(payload: any)=>{
+    this.stompService
+    .subscribe('/list-players/'+this.codeGame,(payload: any)=>{
       console.log('PlayerLogin: ', JSON.parse(payload.body));
       if(this.quiz){
         this.quiz.jugadores=(JSON.parse(payload.body) as IQuizResponse).jugadores;
@@ -104,17 +111,19 @@ export class WaitingRoomComponent implements OnInit,OnDestroy {
         this.isLoading=false;
       }
       this.loadParticipants();
-    });
+    },this.unsubscribe$);
   }
   private subscribeToLoungeStatus(){
     this.stompService.subscribe('/room-status/'+this.codeGame,(payload: any)=>{
       console.log('Lounge Status: ', payload);
-    });
+    },this.unsubscribe$);
   }
   private subscribeToChat(){
     this.stompService.subscribe('/chat/'+this.codeGame,(payload: any)=>{
       console.log('ChatConnected: ', payload);
-    });
+    },
+    this.unsubscribe$
+    );
   }
   
   private singUpLounge(){
