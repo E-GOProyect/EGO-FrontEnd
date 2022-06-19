@@ -1,8 +1,10 @@
 import { Component, OnInit, OnDestroy, HostListener } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { takeUntil, Subject } from 'rxjs';
 import { Alert } from 'src/app/Common/Class/alert.class';
-import { ParamStorage } from 'src/app/Common/enums';
+import { nav, PLAYER_TYPE } from 'src/app/Common/constants';
+import { ParamStorage, RouterNavigate } from 'src/app/Common/enums';
+import { PlayerType } from 'src/app/Common/enums/player-type.enum';
 import { IQuizResponse } from 'src/app/Common/interfaces/quiz-response.interface';
 import { StompService } from 'src/app/Service/stomp.service';
 
@@ -18,7 +20,7 @@ export class WaitingRoomComponent implements OnInit,OnDestroy {
   public isLoading:boolean;
   public formName: string;
   private unsubscribe$: Subject<void>;
-  private codeGame: string;
+  public codeGame: string;
 
   protected quiz: IQuizResponse;
   protected userid: string;
@@ -27,6 +29,8 @@ export class WaitingRoomComponent implements OnInit,OnDestroy {
     public stompService:StompService,
     private activatedRoute:ActivatedRoute,
     private alert: Alert,
+    private router:Router
+
   ) {
     this.unsubscribe$=new Subject;
     this.participantList = [];
@@ -79,6 +83,18 @@ export class WaitingRoomComponent implements OnInit,OnDestroy {
     this.subscribeToChat();
     this.subscribeToisConneted();
   }
+  private checkMaster(){
+    console.log("buscando master");
+    this.quiz.jugadores.map((player)=>{
+      if(player.tipoJugador === PlayerType.MASTER){
+        console.log("masterEncontrado");
+        if(this.userid === player.idUsuario){
+          console.log("Direccionado");
+          this.router.navigate(nav(RouterNavigate.MASTER_ROOM),{queryParams: {codigo: this.codeGame}});
+        }
+      }
+    })
+  }
 
   public startQuiz(){
     this.stompService.stompClient.send('/socket/room-status/' + this.codeGame, {}, JSON.stringify('S'));
@@ -110,6 +126,7 @@ export class WaitingRoomComponent implements OnInit,OnDestroy {
         this.formName=this.quiz.tituloCuestionario;
         this.isLoading=false;
       }
+      this.checkMaster();
       this.loadParticipants();
     },this.unsubscribe$);
   }
