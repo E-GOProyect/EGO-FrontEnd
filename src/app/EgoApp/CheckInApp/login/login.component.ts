@@ -3,7 +3,7 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { CookieService } from 'ngx-cookie-service';
 import { nav } from 'src/app/Common/constants';
-import { CodeType, RouterNavigate } from 'src/app/Common/enums';
+import { CodeType, ParamStorage, RouterNavigate } from 'src/app/Common/enums';
 import { IUserCredentials } from 'src/app/Common/interfaces';
 import { IUserData } from 'src/app/Common/interfaces/user-data.interface';
 import { UserService } from 'src/app/Service/user.service';
@@ -79,8 +79,8 @@ export class LoginComponent implements OnInit {
       console.log(res);
       if (res.responseStatus['codigoRespuesta'] === CodeType.SUCCESS) {
         const data = res.responseData as IUserData;
-        sessionStorage.setItem('userdata', JSON.stringify(data));
-        sessionStorage.setItem('iduser', data.idUsuario);
+        sessionStorage.setItem(ParamStorage.userData, JSON.stringify(data));
+        sessionStorage.setItem(ParamStorage.userId, data.idUsuario);
         const temp = JSON.parse(
           sessionStorage.getItem('userdata'),
           (key, val) => {
@@ -91,7 +91,7 @@ export class LoginComponent implements OnInit {
           }
         ) as IUserData;
         console.log('loginUser ~ data', temp);
-        this.router.navigate(nav(RouterNavigate.FORM_NAME));
+        this.router.navigate(nav(RouterNavigate.CHECK_IN));
       }else{
         this.alert.alertError('Oh no...!',res.responseStatus['mensajeRespuesta']);
       }
