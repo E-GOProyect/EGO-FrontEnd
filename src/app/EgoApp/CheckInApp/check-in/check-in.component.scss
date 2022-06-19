@@ -13,8 +13,10 @@
     }
 }
 .textBox{
-    max-width: 20em;
+    width: 18em;
+    min-width: 15em;
     @media (min-width: 576px) {
+        width: 30em;
         max-width: 30em;
     }
 }

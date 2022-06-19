@@ -29,7 +29,6 @@ export class SingupComponent implements OnInit {
     private alert: Alert
   ) {}
 
-  // eslint-disable-next-line @angular-eslint/no-empty-lifecycle-method
   ngOnInit(): void {
     this.createForm();
   }
@@ -45,6 +44,7 @@ export class SingupComponent implements OnInit {
     });
     console.log(this.form.valid);
   }
+  
   public async onSubmitForm() {
     if (this.form.valid) {
       const userRegister = this.form.value as IUserRegister;
