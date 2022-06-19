@@ -10,7 +10,8 @@
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
     "lint": "ng lint",
-    "update-version": "node --experimental-json-modules --trace-warnings scripts/version-update.js"
+    "update-version": "node --experimental-json-modules --trace-warnings scripts/version-update.js",
+    "deploy": "ng build --prod && firebase deploy"
   },
   "private": true,
   "type": "module",
