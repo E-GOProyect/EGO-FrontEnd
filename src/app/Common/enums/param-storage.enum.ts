@@ -3,4 +3,6 @@ export enum ParamStorage{
     gameCode='gameCode',
     credentials='credentials',
     userData='userData',
+    currectQuestion='currentQuestion',
+    
 }

@@ -43,6 +43,12 @@ export class CheckInComponent implements OnInit {
   public onLogin() {
     this.router.navigate(nav(RouterNavigate.LOGIN));
   }
+  public onCreateQuiz(){
+    this.router.navigate(nav(RouterNavigate.FORM_NAME));
+  }
+  public onInitQuiz(){
+    this.router.navigate(nav(RouterNavigate.REVIEW_FORM));
+  }
   public async onSubmitId() {
     console.log(this.form.value);
     if (this.form.valid) {

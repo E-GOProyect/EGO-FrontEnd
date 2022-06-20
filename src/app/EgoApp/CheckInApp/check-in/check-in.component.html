@@ -36,11 +36,11 @@
         </div>
         <div class="container">
             <div class="col-4 col-sm-7 col-md-11 row justify-content-center"
-            style="margin-top: 9em;">
+                 style="margin-top: 9em;">
                 <div class="col-4 col">
                     <div class="col align-self-center">
                         <h1 class="title text-center"
-                        style="inline-size: max-content;">E-GO</h1>
+                            style="inline-size: max-content;">E-GO</h1>
                     </div>
                     <div class="col-2 textBox">
                         <div class="input-group mb-3">
@@ -56,6 +56,21 @@
                                    class="btn btn-secondary"
                                    value="INGRESAR"
                                    (click)="onSubmitId()">
+                        </div>
+                    </div>
+                    <div class="col-2 textBox mt-2"
+                         *ngIf="isLogin">
+                        <div class="d-grid gap-2">
+                            <button type="button"
+                                    class="btn btn-secondary"
+                                    (click)="onCreateQuiz()">
+                                CREAR CUESTIONARIO
+                            </button>
+                            <button type="button"
+                                    class="btn btn-secondary"
+                                    (click)="onInitQuiz()">
+                                INICIAR CUESTIONARIO
+                            </button>
                         </div>
                     </div>
                 </div>

@@ -3,8 +3,10 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { Subject } from 'rxjs';
 import { Alert } from 'src/app/Common/Class/alert.class';
 import { nav } from 'src/app/Common/constants';
-import { ParamStorage, RouterNavigate } from 'src/app/Common/enums';
+import { LoungeStatus, ParamStorage, RouterNavigate } from 'src/app/Common/enums';
+import { PlayerType } from 'src/app/Common/enums/player-type.enum';
 import { IQuizResponse } from 'src/app/Common/interfaces';
+import { IQuestionResponse } from 'src/app/Common/interfaces/question-response.interface';
 import { StompService } from 'src/app/Service/stomp.service';
 
 @Component({
@@ -16,16 +18,23 @@ import { StompService } from 'src/app/Service/stomp.service';
 })
 export class MasterRoomComponent implements OnInit, OnDestroy {
 
-  public participantList: Array<{userName:string, typePlayer:string}>;
-  protected quiz: IQuizResponse;
+  public loungeStatus:string= 'A';
   public isLoading:boolean;
-  private unsubscribe$: Subject<void>;
+  public formName: string;
+  public curretQuestion: IQuestionResponse;
+  public stateStarted: LoungeStatus = LoungeStatus.STARTED;
+
+  public participantList: Array<{userName:string, typePlayer:string}>;
 
   public startTime: Subject<boolean>;
   public resetTime: Subject<boolean>;
-  private codeGame: string;
+
+  public codeGame: string;
+  private unsubscribe$: Subject<void>;
+
+  protected quiz: IQuizResponse;
   protected userid: string;
-  public formName: string;
+
 
   constructor(
     public stompService:StompService,
@@ -50,11 +59,11 @@ export class MasterRoomComponent implements OnInit, OnDestroy {
   // eslint-disable-next-line @angular-eslint/no-empty-lifecycle-method
   ngOnInit(): void {
     this.startTime.next(false);
-    // this.userid='67dccb00-698e-4038-b37e-8762cc7ef739';
     this.getAccess();
     this.subscribeToisConneted();
     this.subscribeToLoungeStatus();
     this.subscribeToJoinPlayer();
+    this.subscribeToCurrectQuestion();
   }
   public getAccess(){
     this.activatedRoute.queryParams.subscribe(
@@ -66,6 +75,8 @@ export class MasterRoomComponent implements OnInit, OnDestroy {
       });
     }
     this.userid = sessionStorage.getItem(ParamStorage.userId);
+    // this.userid='67dccb00-698e-4038-b37e-8762cc7ef739';
+
     if(!this.userid){
       this.alert.alertError('Oh No!', 'Hubo un error en las credenciales, regresando a checkIn',()=>{
         this.onReturnCheckIn()
@@ -78,13 +89,12 @@ export class MasterRoomComponent implements OnInit, OnDestroy {
   }
   @HostListener('window:beforeunload', ['$event'])
   onCloseWindow(event: any): void {
-    // this.stompClient.send(this.socketPrefixDestination + "/chat/"+this.codigo, {}, JSON.stringify(message))
     this.stompService.stompClient.send("/socket/leave/"+this.codeGame, {}, this.userid);
     this.unsubscribe$.next();
   }
   public verifyCredentials(){
     this.quiz.jugadores.map((player)=>{
-      if(player.tipoJugador==='M'){
+      if(player.tipoJugador===PlayerType.MASTER){
         if(this.userid!==player.idUsuario){
           this.alert.alertError(
             'Error de Credenciales!', 
@@ -122,16 +132,24 @@ export class MasterRoomComponent implements OnInit, OnDestroy {
   }
   private subscribeToLoungeStatus(){
     this.stompService.subscribe('/room-status/'+this.codeGame,(payload: any)=>{
-      console.log('Lounge Status: ', payload);
+      console.log('Lounge Status: ', JSON.parse(payload.body));
+      this.loungeStatus=JSON.parse(payload.body);
     },this.unsubscribe$);
   }
   public startQuiz(){
-    this.stompService.stompClient.send('/socket/room-status/' + this.codeGame, {}, JSON.stringify('S'));
+    this.stompService.stompClient.send('/socket/room-status/' + this.codeGame, {}, JSON.stringify(LoungeStatus.STARTED));
     this.nextQuestion();
     // this.salaJuego.estadoSala = 'S';
   }
   public nextQuestion(){
     this.stompService.stompClient.send('/socket/manage-questions/' + this.codeGame, {});
+  }
+  private subscribeToCurrectQuestion(){
+    this.stompService
+    .subscribe('/questions/'+this.codeGame,(payload: any)=>{
+      console.log('Questions: ', JSON.parse(payload.body));
+      this.curretQuestion=JSON.parse(payload.body) as IQuestionResponse;
+    },this.unsubscribe$);
   }
   private subscribeToJoinPlayer(){
     this.stompService.subscribe('/list-players/'+this.codeGame,(payload: any)=>{

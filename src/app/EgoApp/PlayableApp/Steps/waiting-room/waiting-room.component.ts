@@ -5,6 +5,7 @@ import { Alert } from 'src/app/Common/Class/alert.class';
 import { nav, PLAYER_TYPE } from 'src/app/Common/constants';
 import { ParamStorage, RouterNavigate } from 'src/app/Common/enums';
 import { PlayerType } from 'src/app/Common/enums/player-type.enum';
+import { IQuestionResponse } from 'src/app/Common/interfaces/question-response.interface';
 import { IQuizResponse } from 'src/app/Common/interfaces/quiz-response.interface';
 import { StompService } from 'src/app/Service/stomp.service';
 
@@ -16,11 +17,14 @@ import { StompService } from 'src/app/Service/stomp.service';
 })
 export class WaitingRoomComponent implements OnInit,OnDestroy {
 
-  public participantList: Array<{userName:string, typePlayer:string}>;
   public isLoading:boolean;
   public formName: string;
-  private unsubscribe$: Subject<void>;
   public codeGame: string;
+  public curretQuestion: IQuestionResponse;
+
+  public participantList: Array<{userName:string, typePlayer:string}>;
+
+  private unsubscribe$: Subject<void>;
 
   protected quiz: IQuizResponse;
   protected userid: string;
@@ -82,6 +86,7 @@ export class WaitingRoomComponent implements OnInit,OnDestroy {
     this.subscribeToLoungeStatus();
     this.subscribeToChat();
     this.subscribeToisConneted();
+    this.subscribeToCurrectQuestion();
   }
   private checkMaster(){
     console.log("buscando master");
@@ -113,7 +118,15 @@ export class WaitingRoomComponent implements OnInit,OnDestroy {
       this.singUpLounge();
     });
   }
-
+  private subscribeToCurrectQuestion(){
+    this.stompService
+    .subscribe('/questions/'+this.codeGame,(payload: any)=>{
+      console.log('Questions: ', JSON.parse(payload.body));
+      this.curretQuestion=JSON.parse(payload.body) as IQuestionResponse;
+      localStorage.setItem(ParamStorage.currectQuestion,payload.body);
+      this.router.navigate(nav(RouterNavigate.QUESTION_STEP),{queryParams: {codigo: this.codeGame}});
+    },this.unsubscribe$);
+  }
   private subscribeToJoinPlayer(){
     this.stompService
     .subscribe('/list-players/'+this.codeGame,(payload: any)=>{

@@ -18,7 +18,7 @@ export class CuestionarioService{
     private urlEditar=this.urlQuiz+'/editar';
     private urlCreateLounge=URLS.API+'/sala-cuestionario/crear-sala';
     private urlValidCodeLounge=URLS.API+'/sala-cuestionario/validar-codigo';
-    private urlSendAnswered= URLS.API+'/question-answered/'
+    private urlSendAnswered= URLS.API+'/question-answered/';
 
     constructor(private http:HttpClient){
 
@@ -61,6 +61,17 @@ export class CuestionarioService{
             .pipe()
             .subscribe((res)=>{
                 console.log(".sendAnswered ~ res", res);
+                resolve(res);
+            })
+        })
+    }
+    public async getQuizs(uuid:string): Promise<any>{
+        return new Promise<any>((resolve)=>{
+            this.http.get<any>(this.urlQuiz)
+            .pipe()
+            .subscribe((res)=>{
+                console.log(".sendAnswered ~ res", res);
+                console.log(".sendAnswered ~ uuid", uuid);
                 resolve(res);
             })
         })

@@ -1,8 +1,10 @@
-import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { Component, OnInit, OnDestroy, HostListener } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
 import { CountdownConfig } from 'ngx-countdown';
 import { Subject } from 'rxjs';
-import { ParamStorage } from 'src/app/Common/enums';
+import { Alert } from 'src/app/Common/Class/alert.class';
+import { nav } from 'src/app/Common/constants';
+import { ParamStorage, RouterNavigate } from 'src/app/Common/enums';
 import { IAnswered } from 'src/app/Common/interfaces';
 import { IQuestionResponse } from 'src/app/Common/interfaces/question-response.interface';
 import { CuestionarioService } from 'src/app/Service/cuestionario.service';
@@ -12,9 +14,9 @@ import { StompService } from 'src/app/Service/stomp.service';
   selector: 'app-question',
   templateUrl: './question.component.html',
   styleUrls: ['./question.component.scss'],
-  providers: [StompService]
+  providers: [StompService,Alert]
 })
-export class QuestionComponent implements OnInit {
+export class QuestionComponent implements OnInit,OnDestroy {
   public quizName: string;
   public countdownConfig:CountdownConfig;
   public questionName: string;
@@ -22,29 +24,51 @@ export class QuestionComponent implements OnInit {
   public quizQuestion: IQuestionResponse;
   private chosenOption: number;
   private unsubscribe$: Subject<void>;
+  protected userid: string;
 
   constructor(
     public stompService:StompService,
     public cuestionarioService: CuestionarioService,
-    private activatedRoute: ActivatedRoute
+    private activatedRoute: ActivatedRoute,
+    private alert: Alert,
+    private router:Router
   ) {
     this.unsubscribe$=new Subject();
 
    }
-
+  ngOnDestroy(): void {
+    this.onCloseWindow(null);
+  }
+  @HostListener('window:beforeunload', ['$event'])
+  onCloseWindow(event: any): void {
+    this.unsubscribe$.next();
+  }
   // eslint-disable-next-line @angular-eslint/no-empty-lifecycle-method
   ngOnInit(): void {
     this.activatedRoute.queryParams.subscribe(
       res => this.codeGame = res['codigo']
     );
+    this.userid = sessionStorage.getItem(ParamStorage.userId);
+    if(!this.userid){
+      this.alert.alertError('Oh No!', 'Hubo un error en las credenciales, regresando a checkIn',()=>{
+        this.onReturnCheckIn()
+      });
+    }
     this.subscribeToQuestion();
   }
-  
+  public onReturnCheckIn(){
+    this.router.navigate(nav(RouterNavigate.CHECK_IN));
+  }
+  public reloadQuestion(){
+    this.quizQuestion=JSON.parse(localStorage.getItem(ParamStorage.currectQuestion));
+    if(this.quizQuestion){
+
+    }
+  }
   private subscribeToQuestion(){
     this.stompService.subscribe('/question/'+this.codeGame,(payload: any)=>{
-      this.quizQuestion= JSON.parse(payload.body);
-      console.log('ActualQuestion: ',this.quizQuestion);
-
+      console.log('ActualQuestion: ',JSON.parse(payload.body));
+      localStorage.setItem(ParamStorage.currectQuestion,payload.body);
     },this.unsubscribe$);
   }
   public onChooseAnswered(idOpcion:number){

@@ -14,7 +14,7 @@ export class AppComponent {
     private router:Router
   ){
     // codigo de prueba HZXETM ,{queryParams: {codigo: 'HZXETM'}}
-    this.router.navigate(nav(RouterNavigate.CHECK_IN));
+    this.router.navigate(nav(RouterNavigate.REVIEW_FORM),{queryParams: {codigo: 'HZXETM'}});
     sessionStorage.clear();
     localStorage.clear();
   }

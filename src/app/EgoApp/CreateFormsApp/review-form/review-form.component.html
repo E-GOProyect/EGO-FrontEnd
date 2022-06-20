@@ -1,1 +1,23 @@
-<p>review-form works!</p>
+<app-loading-page [isLoading]="isLoading"></app-loading-page>
+<div class="container"
+     *ngIf="!isLoading">
+     <section class="align-items-center mt-5">
+        <div class="container">
+            <select class="form-select select-css">
+                <option *ngFor="let item of quizList; let i=index;"
+                        [value]="i+1"
+                        (click)="onSelectQuiz(item?.idCuestionario)">
+                    {{item.nombreCuestionario}}
+                </option>
+            </select>
+            <div class="textBox mt-2">
+                <button type="button"
+                        class="btn btn-secondary"
+                        (click)="onCreateLobby()">
+                    CREAR LOBBY
+                </button>
+            </div>
+        </div>
+        
+    </section>
+</div>
