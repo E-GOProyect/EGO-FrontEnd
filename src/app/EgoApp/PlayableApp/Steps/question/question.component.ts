@@ -4,7 +4,7 @@ import { CountdownConfig } from 'ngx-countdown';
 import { Subject } from 'rxjs';
 import { Alert } from 'src/app/Common/Class/alert.class';
 import { nav } from 'src/app/Common/constants';
-import { ParamStorage, RouterNavigate } from 'src/app/Common/enums';
+import { LoungeStatus, ParamStorage, RouterNavigate } from 'src/app/Common/enums';
 import { IAnswered } from 'src/app/Common/interfaces';
 import { IQuestionResponse } from 'src/app/Common/interfaces/question-response.interface';
 import { CuestionarioService } from 'src/app/Service/cuestionario.service';
@@ -20,6 +20,11 @@ export class QuestionComponent implements OnInit,OnDestroy {
   public quizName: string;
   public countdownConfig:CountdownConfig;
   public questionName: string;
+  public isLoading: boolean;
+  public isAwaiting:boolean;
+  public currentQuestionNumber:number;
+  public loungeStatus: string;
+
   private codeGame: string;
   public quizQuestion: IQuestionResponse;
   private chosenOption: number;
@@ -34,7 +39,8 @@ export class QuestionComponent implements OnInit,OnDestroy {
     private router:Router
   ) {
     this.unsubscribe$=new Subject();
-
+    this.isLoading=true;
+    this.isAwaiting=false;
    }
   ngOnDestroy(): void {
     this.onCloseWindow(null);
@@ -48,33 +54,52 @@ export class QuestionComponent implements OnInit,OnDestroy {
     this.activatedRoute.queryParams.subscribe(
       res => this.codeGame = res['codigo']
     );
+    if(!this.codeGame){
+      this.alert.alertError('Oh No!', 'No se encontro el codigo de juego, regresando a checkIn',()=>{
+        this.onReturnCheckIn()
+      });
+    }
     this.userid = sessionStorage.getItem(ParamStorage.userId);
     if(!this.userid){
       this.alert.alertError('Oh No!', 'Hubo un error en las credenciales, regresando a checkIn',()=>{
         this.onReturnCheckIn()
       });
     }
+    this.currentQuestionNumber= JSON.parse(sessionStorage.getItem(ParamStorage.currentQuestionNumber));
+    this.reloadQuestion();
     this.subscribeToQuestion();
+    this.subscribeToLoungeStatus();
   }
   public onReturnCheckIn(){
     this.router.navigate(nav(RouterNavigate.CHECK_IN));
   }
   public reloadQuestion(){
-    this.quizQuestion=JSON.parse(localStorage.getItem(ParamStorage.currectQuestion));
-    if(this.quizQuestion){
 
-    }
+    this.quizQuestion=JSON.parse(localStorage.getItem(ParamStorage.currectQuestion));
+    // if(!this.quizQuestion){
+    //   this.alert.alertError('Oops!', 'Ocurrio un error al momento de cargar la pregunta, regresando a checkIn',()=>{
+    //     this.onReturnCheckIn()
+    //   });
+    // }
+    this.isLoading=false;
   }
   private subscribeToQuestion(){
     this.stompService.subscribe('/question/'+this.codeGame,(payload: any)=>{
       console.log('ActualQuestion: ',JSON.parse(payload.body));
       localStorage.setItem(ParamStorage.currectQuestion,payload.body);
+      this.reloadQuestion();
+      this.isAwaiting=false;
+      this.currentQuestionNumber++;
     },this.unsubscribe$);
   }
   public onChooseAnswered(idOpcion:number){
     console.log('respuesta: ',idOpcion);
     this.chosenOption=idOpcion;
     this.sendAnswered();
+    this.isAwaiting=true;
+  }
+  public onSkipQuestion(){
+    this.isAwaiting=true;
   }
   public parseNumberToLetter(num:number): string{
     switch(num){
@@ -85,23 +110,26 @@ export class QuestionComponent implements OnInit,OnDestroy {
     }
     return '';
   }
-  public sendAnswered(){
-    const uuId= sessionStorage.getItem(ParamStorage.userId);
-    if(!uuId){
-      // TODO: agregar Alert
-      return null;
-    }
-    if(this.codeGame){
-      // TODO: agregar Alert
-      return null;
-    }
-
+  public async sendAnswered(){
     const answered= {
-      idJugador: uuId,
+      idJugador: this.userid,
       idOpcion: this.chosenOption,
-      tiempoDemoradoMS: 4, // TODO: campo por cambiar
+      tiempoDemoradoMS: 1000, // TODO: en milisegundos 1000 es 1s 
     }as IAnswered;
-    this.cuestionarioService.sendAnswered(answered,this.codeGame);
+    const res= await this.cuestionarioService.sendAnswered(answered,this.codeGame);
+    console.log('response de anwserd:',res);
+  }
+  private onFinishedQuiz(){
+    console.log('Quiz finalizado');
+  }
+  private subscribeToLoungeStatus(){
+    this.stompService.subscribe('/room-status/'+this.codeGame,(payload: any)=>{
+      console.log('Lounge Status: ', JSON.parse(payload.body));
+      this.loungeStatus=JSON.parse(payload.body);
+      if(this.loungeStatus===LoungeStatus.FINISHED){
+        this.onFinishedQuiz();
+      }
+    },this.unsubscribe$);
   }
 
 }

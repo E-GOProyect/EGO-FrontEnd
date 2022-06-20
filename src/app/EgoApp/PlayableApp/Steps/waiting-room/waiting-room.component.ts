@@ -20,10 +20,11 @@ export class WaitingRoomComponent implements OnInit,OnDestroy {
   public isLoading:boolean;
   public formName: string;
   public codeGame: string;
-  public curretQuestion: IQuestionResponse;
+  public currentQuestion: IQuestionResponse;
 
   public participantList: Array<{userName:string, typePlayer:string}>;
 
+  private isInGame:boolean;
   private unsubscribe$: Subject<void>;
 
   protected quiz: IQuizResponse;
@@ -34,12 +35,13 @@ export class WaitingRoomComponent implements OnInit,OnDestroy {
     private activatedRoute:ActivatedRoute,
     private alert: Alert,
     private router:Router
-
   ) {
     this.unsubscribe$=new Subject;
     this.participantList = [];
     this.formName = 'FormName';
+    this.isInGame=false;
     this.isLoading=true;
+    
   }
   ngOnDestroy(): void {
     this.onCloseWindow(null);
@@ -56,14 +58,17 @@ export class WaitingRoomComponent implements OnInit,OnDestroy {
       console.log('getUserId ~ this.codeGame', this.codeGame);
 
     } else {
-      this.userid='67dccb00-698e-4038-b37e-8762cc7ef739';
-      this.alert.alertError('Error', 'credenciales no encontradas');
+      // this.userid='67dccb00-698e-4038-b37e-8762cc7ef739';
+      this.alert.alertError('Error', 'credenciales no encontradas',()=>{
+        this.router.navigate(nav(RouterNavigate.CHECK_IN));
+      });
     }
   }
   @HostListener('window:beforeunload', ['$event'])
   onCloseWindow(event: any): void {
-    // this.stompClient.send(this.socketPrefixDestination + "/chat/"+this.codigo, {}, JSON.stringify(message))
-    this.stompService.stompClient.send("/socket/leave/"+this.codeGame, {}, this.userid);
+    if(!this.isInGame){ // ? si la accion NO es redireccionar a la parte de preguntas, el sistema ejecuta un leave 
+      this.stompService.stompClient.send("/socket/leave/"+this.codeGame, {}, this.userid);
+    }
     this.unsubscribe$.next();
     this.unsubscribe$.complete();
   }
@@ -89,11 +94,10 @@ export class WaitingRoomComponent implements OnInit,OnDestroy {
     this.subscribeToCurrectQuestion();
   }
   private checkMaster(){
-    console.log("buscando master");
     this.quiz.jugadores.map((player)=>{
       if(player.tipoJugador === PlayerType.MASTER){
-        console.log("masterEncontrado");
         if(this.userid === player.idUsuario){
+          console.log("MasterDetectado");
           console.log("Direccionado");
           this.router.navigate(nav(RouterNavigate.MASTER_ROOM),{queryParams: {codigo: this.codeGame}});
         }
@@ -122,8 +126,9 @@ export class WaitingRoomComponent implements OnInit,OnDestroy {
     this.stompService
     .subscribe('/questions/'+this.codeGame,(payload: any)=>{
       console.log('Questions: ', JSON.parse(payload.body));
-      this.curretQuestion=JSON.parse(payload.body) as IQuestionResponse;
+      this.currentQuestion=JSON.parse(payload.body) as IQuestionResponse;
       localStorage.setItem(ParamStorage.currectQuestion,payload.body);
+      this.isInGame=true;
       this.router.navigate(nav(RouterNavigate.QUESTION_STEP),{queryParams: {codigo: this.codeGame}});
     },this.unsubscribe$);
   }
@@ -135,6 +140,8 @@ export class WaitingRoomComponent implements OnInit,OnDestroy {
         this.quiz.jugadores=(JSON.parse(payload.body) as IQuizResponse).jugadores;
       }else{
         this.quiz=JSON.parse(payload.body);
+        sessionStorage.setItem(ParamStorage.questionsNumber,this.quiz.numeroDePreguntas.toString());
+        sessionStorage.setItem(ParamStorage.currectQuestion,'1');
         console.log("quiz",this.quiz)
         this.formName=this.quiz.tituloCuestionario;
         this.isLoading=false;

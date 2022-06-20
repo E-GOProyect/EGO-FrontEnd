@@ -23,6 +23,8 @@ export class MasterRoomComponent implements OnInit, OnDestroy {
   public formName: string;
   public curretQuestion: IQuestionResponse;
   public stateStarted: LoungeStatus = LoungeStatus.STARTED;
+  public currentNumberQuestion: number;
+  public numberQuestions: number;
 
   public participantList: Array<{userName:string, typePlayer:string}>;
 
@@ -49,7 +51,7 @@ export class MasterRoomComponent implements OnInit, OnDestroy {
     this.unsubscribe$=new Subject;
     this.participantList = [];
     this.formName = 'FormName';
-
+    this.currentNumberQuestion=1;
   }
   ngOnDestroy(): void {
     this.onCloseWindow(null);
@@ -91,6 +93,10 @@ export class MasterRoomComponent implements OnInit, OnDestroy {
   onCloseWindow(event: any): void {
     this.stompService.stompClient.send("/socket/leave/"+this.codeGame, {}, this.userid);
     this.unsubscribe$.next();
+  }
+  private onFinishedQuiz(){
+    this.stompService.stompClient.send('/socket/room-status/' + this.codeGame, {}, JSON.stringify(LoungeStatus.FINISHED));
+    this.loungeStatus='F';
   }
   public verifyCredentials(){
     this.quiz.jugadores.map((player)=>{
@@ -143,6 +149,10 @@ export class MasterRoomComponent implements OnInit, OnDestroy {
   }
   public nextQuestion(){
     this.stompService.stompClient.send('/socket/manage-questions/' + this.codeGame, {});
+    console.log('Pasando pregunta');
+    this.currentNumberQuestion++;
+    sessionStorage.setItem(ParamStorage.currectQuestion,this.currentNumberQuestion.toString());
+
   }
   private subscribeToCurrectQuestion(){
     this.stompService
@@ -159,6 +169,9 @@ export class MasterRoomComponent implements OnInit, OnDestroy {
       }else{
         this.quiz=JSON.parse(payload.body);
         console.log("quiz",this.quiz)
+        sessionStorage.setItem(ParamStorage.questionsNumber,this.quiz.numeroDePreguntas.toString());
+        sessionStorage.setItem(ParamStorage.currectQuestion,'1');
+        this.numberQuestions=this.quiz.numeroDePreguntas;
         this.formName=this.quiz.tituloCuestionario;
         this.isLoading=false;
         this.verifyCredentials();

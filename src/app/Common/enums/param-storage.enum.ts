@@ -4,5 +4,7 @@ export enum ParamStorage{
     credentials='credentials',
     userData='userData',
     currectQuestion='currentQuestion',
-    
+    questionsNumber='cuestionNumber',
+    currentQuestionNumber='currectQuestionNumber',
+    loungeStatus='loungeStatus',
 }
