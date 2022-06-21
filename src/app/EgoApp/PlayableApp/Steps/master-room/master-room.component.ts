@@ -24,8 +24,8 @@ export class MasterRoomComponent implements OnInit, OnDestroy {
   public stateStarted: LoungeStatus = LoungeStatus.STARTED;
   public currentNumberQuestion: number;
   public numberQuestions: number;
+  public isInQuestion:boolean;
   public scoreTable:Array<IScorePlayerResponse>;
-
   public participantList: Array<{userName:string, typePlayer:string}>;
 
   public startTime: Subject<boolean>;
@@ -52,6 +52,7 @@ export class MasterRoomComponent implements OnInit, OnDestroy {
     this.participantList = [];
     this.formName = 'FormName';
     this.currentNumberQuestion=0;
+    this.isInQuestion=false;
   }
   ngOnDestroy(): void {
     this.onCloseWindow(null);
@@ -86,6 +87,14 @@ export class MasterRoomComponent implements OnInit, OnDestroy {
       });
     }
     
+  }
+  public onTimeLeft($event){
+
+  }
+  public onTimeOut($event){
+    if($event){
+      this.isInQuestion=false;
+    }
   }
   public onReturnCheckIn(){
     this.router.navigate(nav(RouterNavigate.CHECK_IN));
@@ -125,7 +134,7 @@ export class MasterRoomComponent implements OnInit, OnDestroy {
         if(valA.cantidadPuntos===valB.cantidadPuntos){
           return 0;
         }
-        return valA.cantidadPuntos<valB.cantidadPuntos? -1:1;
+        return valA.cantidadPuntos<valB.cantidadPuntos? 1:-1;
       });
     },this.unsubscribe$);
   }
@@ -174,7 +183,8 @@ export class MasterRoomComponent implements OnInit, OnDestroy {
     console.log('Pasando pregunta');
     this.currentNumberQuestion++;
     sessionStorage.setItem(ParamStorage.currectQuestion,this.currentNumberQuestion.toString());
-
+    this.resetTime.next(true);
+    this.isInQuestion=true;
   }
   private subscribeToCurrectQuestion(){
     this.stompService
