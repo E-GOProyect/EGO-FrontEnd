@@ -12,6 +12,8 @@ import { QuestionAwaitComponent } from './question-await.component';
   imports: [
     CommonModule,
     QuestionAwaitRoutingModule
+  ],exports: [
+    QuestionAwaitComponent
   ]
 })
 export class QuestionAwaitModule { }

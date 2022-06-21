@@ -16,7 +16,7 @@ import {CountdownModule} from 'ngx-countdown';
     AppRoutingModule,
     HttpClientModule,
     ChatRoomModule,
-    CountdownModule
+    CountdownModule,
   ],
   providers: [],
   bootstrap: [AppComponent]

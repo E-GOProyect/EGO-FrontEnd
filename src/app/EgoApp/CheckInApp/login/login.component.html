@@ -1,19 +1,29 @@
+<app-loading-page [isLoading]="isLoading"></app-loading-page>
 <div class="inicio Sesión">
-  <form class="custom-form">
-    <h1>Iniciar Sesión</h1>
+  <form class="custom-form" [formGroup]="form">
+    <h1>INICIA SESION</h1>
     <input
-      type="user"
+      type="text"
       name="usuario"
       placeholder="USUARIO"
       required="required"
+      formControlName="user"
     />
     <input
-      type="contraseña"
+      type="password"
       name="password"
       placeholder="CONTRASEÑA"
+      formControlName="pass"
       required="required"
     />
-    <button type="submit">ingresar</button>
-    <p>REGISTRARSE</p>
+    <div class="col">
+      <button type="submit" (click)="onLogIn()">ingresar</button>
+      <div class="center">
+        <a routerLink="/authentication/singup"
+           routerLinkActive="active"
+           class="text-decoration-none">O REGISTRATE AQUÍ</a>
+      </div>
+    </div>
+    
   </form>
 </div>

@@ -1,12 +1,23 @@
-<form>
-    <button type="submit" class="btn btn-primary">Regresar</button>
-    <div class="d-grid gap-2 col-2 mx-auto">
-      <div class="col-auto">
-        <h5><p><strong><label for="inputFormname" class="display-150">Ingrese su nickname:</label></strong></p></h5>
+<form [formGroup]="form">
+  <button type="submit"
+          class="btn btn-primary" 
+          (click)="onBackCheckIn()">Regresar</button>
+  <div class="d-grid gap-2 col-2 mx-auto">
+    <div class="col-auto">
+      <h5>
+        <p><strong><label for="inputFormname"
+                   class="display-150">Ingrese su nickname:</label></strong></p>
+      </h5>
     </div>
     <div class="mb-2">
-      <input class="form-control form-control-lg" type="text" placeholder="Ej: Rafa39" aria-label=".form-control-lg example">
+      <input class="form-control form-control-lg"
+             type="text"
+             placeholder="Ej: Rafa39"
+             aria-label=".form-control-lg example"
+             formControlName="username">
     </div>
-    <button type="submit" class="btn btn-primary">Entrar</button>
-    </div>
-  </form> 
+    <button type="submit"
+            class="btn btn-primary"
+            (click)="onSubmitUserName()">Entrar</button>
+  </div>
+</form>

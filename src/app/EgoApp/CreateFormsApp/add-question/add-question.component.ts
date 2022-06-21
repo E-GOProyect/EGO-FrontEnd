@@ -1,10 +1,13 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { Router } from '@angular/router';
 import { Alert } from 'src/app/Common/Class/alert.class';
+import { nav } from 'src/app/Common/constants';
 import {
   defaultOpcion,
   defaultQuestion,
 } from 'src/app/Common/constants/default-question.constants';
+import { RouterNavigate } from 'src/app/Common/enums';
 import { IOpciones, IPregunta, IQuiz } from 'src/app/Common/interfaces';
 import { CuestionarioService } from 'src/app/Service/cuestionario.service';
 
@@ -22,6 +25,7 @@ export class AddQuestionComponent implements OnInit {
   constructor(
     private cuestionarioService: CuestionarioService,
     private alert: Alert,
+    private router:Router,
     ) {}
 
   ngOnInit(): void {
@@ -171,6 +175,9 @@ export class AddQuestionComponent implements OnInit {
         this.alert.alertSuccess(
           'Excelente',
           'Tu cuestionario a sido registrado :D',
+          ()=>{
+            this.router.navigate(nav(RouterNavigate.CHECK_IN));
+          }
         );
       }else{
         this.alert.alertError(

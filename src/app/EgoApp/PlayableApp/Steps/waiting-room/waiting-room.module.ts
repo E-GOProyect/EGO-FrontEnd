@@ -3,15 +3,21 @@ import { CommonModule } from '@angular/common';
 
 import { WaitingRoomRoutingModule } from './waiting-room-routing.module';
 import { WaitingRoomComponent } from './waiting-room.component';
+import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
+import { HttpClientModule } from '@angular/common/http';
+import { LoadingPageModule } from 'src/app/Common/components/loading-page';
 
 
 @NgModule({
   declarations: [
-    WaitingRoomComponent,
+    WaitingRoomComponent
   ],
   imports: [
     CommonModule,
-    WaitingRoomRoutingModule
+    WaitingRoomRoutingModule,
+    FontAwesomeModule,
+    HttpClientModule,
+    LoadingPageModule
   ]
 })
 export class WaitingRoomModule { }

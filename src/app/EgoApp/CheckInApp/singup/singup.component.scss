@@ -1,8 +1,37 @@
-.Registro {
-    background-color: #fafafa;
-    margin: 1rem;
-    padding: 1rem;
-    border: 2px solid #ccc;
-    /* IMPORTANTE */
-    text-align: center;
+title {
+  height: 100%;
+  width: 100%;
+  
+}
+.font{
+  margin-left: 1rem;
+  padding-left: 1rem;
+  font-family: RifficFree; 
+  font-size: 4em;
+  color:white;
+  @media (min-width: 576px) {
+      font-size: 5em;
   }
+}
+input[type="date"]::-webkit-inner-spin-button,
+input[type="date"]::-webkit-calendar-picker-indicator {
+    display: none;
+    -webkit-appearance: none;
+}
+.backgroud {
+  top: 0%;
+  height: 100%;
+  width: 100%;
+  background: #8feba3;
+  position: absolute;
+  display: block;
+}
+
+.Registro {
+  background-color: #8feba3;
+  margin: 1rem;
+  padding: 1rem;
+  border: 2px solid #ccc;
+  /* IMPORTANTE */
+  text-align: center;
+}

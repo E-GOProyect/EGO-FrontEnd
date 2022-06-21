@@ -29,7 +29,6 @@ export class SingupComponent implements OnInit {
     private alert: Alert
   ) {}
 
-  // eslint-disable-next-line @angular-eslint/no-empty-lifecycle-method
   ngOnInit(): void {
     this.createForm();
   }
@@ -45,6 +44,7 @@ export class SingupComponent implements OnInit {
     });
     console.log(this.form.valid);
   }
+  
   public async onSubmitForm() {
     if (this.form.valid) {
       const userRegister = this.form.value as IUserRegister;
@@ -53,7 +53,7 @@ export class SingupComponent implements OnInit {
         console.log("onSubmitForm ~ res", res);
 
         // ? Descomentar solo para probar las credenciales 
-        if (res.responseStatus.codigoRespuesta === CodeType.SUCCESS) {
+        if (res.responseStatus['codigoRespuesta'] === CodeType.SUCCESS) {
           // TODO: mejorar esto, las password no se deben almacenar indefinidamente en cookies
           this.alert.alertSuccess(
             'Genial',
@@ -71,7 +71,7 @@ export class SingupComponent implements OnInit {
         }else{
           this.alert.alertError(
             'Error!',
-            res.responseStatus.codigoRespuesta,
+            res.responseStatus['codigoRespuesta'],
           );
         }
       } catch (e) {

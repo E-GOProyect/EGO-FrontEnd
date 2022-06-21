@@ -1,0 +1,91 @@
+<app-loading-page [isLoading]="isLoading"></app-loading-page>
+
+<div class="container"
+     *ngIf="!isLoading">
+  <div class="col mt-5">
+    <h1>
+      <p>Quiz: <strong><label for="inputParticipantes"
+                 class="col-form-label">{{formName}} </label></strong></p>
+    </h1>
+    <h2>
+      <p>Codigo de juego: <strong><label for="inputParticipantes"
+                 class="col-form-label">{{codeGame}} </label></strong></p>
+    </h2>
+  </div>
+  <div class="col" *ngIf="loungeStatus==='A'">
+    <button type="submit"
+            class="btn btn-secondary me-2">Regresar</button>
+    <button type="button"
+            class="btn btn-secondary"
+            (click)="startQuiz()">Empezar Cuestionario</button>
+  </div>
+  <div class="col" *ngIf="loungeStatus==='S' || currentNumberQuestion===numberQuestions">
+    <button type="button"
+            class="btn btn-danger me-2 mt-2"
+            (click)="onFinishedQuiz()"><i class="fa-solid fa-flag-checkered"></i> Finalizar Quiz</button>
+  </div>
+  <div class="col" *ngIf="loungeStatus==='S' && currentNumberQuestion!==numberQuestions">
+    <button type="button"
+            class="btn btn-secondary me-2 mt-2"
+            (click)="nextQuestion()">
+      <i class="fa-solid fa-angle-right"></i> Siguiente Pregunta</button>
+  </div>
+  <div class="col mt-3" *ngIf="loungeStatus==='S'">
+    <h2>
+      <p>Pregunta {{currentNumberQuestion}} de {{numberQuestions}} :<strong><label for="inputParticipantes"
+                 class="col-form-label">{{curretQuestion?.descripcionPregunta}}</label> </strong></p>
+    </h2>
+  </div>
+  <div class="col mt-3" *ngIf="loungeStatus==='A'">
+    <h2>
+      <p><strong><label for="inputParticipantes"
+                 class="col-form-label">Esperando a los PARTICIPANTES</label> </strong></p>
+    </h2>
+  </div>
+  <!-- <div class="col mt-3">
+        <app-progress-bar [isLoading]="startTime"
+                          [time]="20"
+                          [resetTime]="resetTime"></app-progress-bar>
+    </div> -->
+  <div class="col-auto mt-5">
+    <table class="table table-info table-striped" *ngIf="loungeStatus==='A'">
+      <thead>
+        <tr class="">
+          <th scope="col">Total: {{participantList.length}}</th>
+          <th scope="col">Participantes</th>
+          <th scope="col"><i class="fa-solid fa-users"></i> Clase</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let participant of participantList; let i=index">
+          <th scope="row">{{i+1}}</th>
+          <td>{{participant.userName}}</td>
+          <td *ngIf="participant?.typePlayer==='M'"><i class="fa-solid fa-crown"></i> Master</td>
+          <td *ngIf="participant?.typePlayer==='P'"><i class="fa-solid fa-frog"></i> Usuario</td>
+          <td *ngIf="participant?.typePlayer==='I'"><i class="fa-solid fa-circle-question"></i> Invitado</td>
+        </tr>
+      </tbody>
+    </table>
+    
+    <table class="table table-info table-striped" *ngIf="loungeStatus==='S'">
+      <thead>
+        <tr>
+          <th scope="col">#</th>
+          <th scope="col">NickName</th>
+          <th scope="col">Clase</th>
+          <th scope="col">Puntaje</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let participant of scoreTable; index as i ">
+          <th scope="row">{{i+1}}</th>
+          <td>{{participant.username}}</td>
+          <td *ngIf="participant?.tipoJugador==='M'"><i class="fa-solid fa-crown"></i> Master</td>
+        <td *ngIf="participant?.tipoJugador==='P'"><i class="fa-solid fa-frog"></i> Usuario</td>
+        <td *ngIf="participant?.tipoJugador==='I'"><i class="fa-solid fa-circle-question"></i> Invitado</td>
+          <td>{{participant.cantidadPuntos}}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>

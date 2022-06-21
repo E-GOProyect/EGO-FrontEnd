@@ -3,6 +3,9 @@ import { CommonModule } from '@angular/common';
 import { CountdownModule } from 'ngx-countdown';
 import { QuestionRoutingModule } from './question-routing.module';
 import { QuestionComponent } from './question.component';
+import { QuestionAwaitModule } from '../question-await/question-await.module';
+import { LoadingPageModule, ProgressBarModule } from 'src/app/Common/components';
+import { ResultModule } from '../result/result.module';
 
 
 @NgModule({
@@ -12,7 +15,11 @@ import { QuestionComponent } from './question.component';
   imports: [
     CommonModule,
     QuestionRoutingModule,
-    CountdownModule
+    CountdownModule,
+    QuestionAwaitModule,
+    LoadingPageModule,
+    ResultModule,
+    ProgressBarModule,
   ]
 })
 export class QuestionModule { }

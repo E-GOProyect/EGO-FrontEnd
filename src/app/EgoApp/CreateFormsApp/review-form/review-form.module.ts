@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 
 import { ReviewFormRoutingModule } from './review-form-routing.module';
 import { ReviewFormComponent } from './review-form.component';
+import { LoadingPageModule } from 'src/app/Common/components';
 
 
 @NgModule({
@@ -11,7 +12,8 @@ import { ReviewFormComponent } from './review-form.component';
   ],
   imports: [
     CommonModule,
-    ReviewFormRoutingModule
+    ReviewFormRoutingModule,
+    LoadingPageModule
   ]
 })
 export class ReviewFormModule { }

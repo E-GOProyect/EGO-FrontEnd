@@ -1,0 +1,55 @@
+.count{
+    font-size: 3em;
+    font-family: RifficFree; 
+    color:white;
+    width: inherit;
+    height: inherit;
+    text-align: center;
+    padding-top: 15px;
+}
+.block{
+    width: inherit;
+    height: inherit;
+}
+.spinner {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border: 2px solid rgba(0, 0, 0, 0.1);
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    border-left-color: rgb(131, 131, 131);
+    animation: spin 1.0s ease infinite;
+    animation-play-state: paused;
+}
+.counter{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 3em;
+    color: white;
+    margin: auto;
+    width: inherit;
+    height: inherit;
+    inline-size: max-content;
+    animation: antispin 1.0s ease infinite;
+    animation-play-state: paused;
+
+}
+@keyframes antispin{
+    0% {
+        transform: rotate(360deg);
+    }
+    100% {
+        transform: rotate(0deg);
+    }
+}
+@keyframes spin {
+    0% {
+        transform: rotate(0deg);
+    }
+    100% {
+        transform: rotate(360deg);
+    }
+}
