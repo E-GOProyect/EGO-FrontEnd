@@ -1,44 +1,57 @@
-<div class="NombreFormulario">
-  <form class="custom-form">
-   <table class="table">
-     <thead>
-       <tr>
-         <th scope="col">#</th>
-         <th scope="col">Pregunta</th>
-         <th scope="col">respuesta Correcta</th>
-         <th scope="col">respuesta Incorrecta</th>
-       </tr>
-     </thead>
-     <tbody>
-       <tr *ngFor="let participante of concursantes; index as i ">
-        <th scope="row">{{i+1}}</th>
-        <td> {{participante.pregunta}} </td>
-        <td> {{participante.respuestaCorrecta}} </td>
-        <td> {{participante.respuestaIncorrecta}} </td>
-       </tr>
-     </tbody>
-   </table>
-  </form>
-  </div>
-  <div class="NombreFormulario">
-    <form class="custom-form">
-      <table class="table">
+<div class="container">
+  <div class="mt-5">
+      <!-- <table class="table table-info table-striped">
         <thead>
           <tr>
             <th scope="col">#</th>
-            <th scope="col">Nombre</th>
-            <th scope="col">Total de Preguntas</th>
-            <th scope="col">Puntajes</th>
+            <th scope="col">Pregunta</th>
+            <th scope="col">respuesta Correcta</th>
+            <th scope="col">respuesta Incorrecta</th>
           </tr>
         </thead>
         <tbody>
           <tr *ngFor="let participante of concursantes; index as i ">
-           <th scope="row">{{i+1}}</th>
-           <td></td>
-           <td></td>
-           <td></td>
+            <th scope="row">{{i+1}}</th>
+            <td> {{participante.pregunta}} </td>
+            <td> {{participante.respuestaCorrecta}} </td>
+            <td> {{participante.respuestaIncorrecta}} </td>
+          </tr>
+        </tbody>
+      </table> -->
+      <div class="col mt-5">
+        <h1>
+          <strong><label for="inputParticipantes"
+                     class="col-form-label">HAS LLEGADO AL FINAL</label></strong>
+        </h1>
+        <h2>
+          <p><strong><label for="inputParticipantes"
+                     class="col-form-label">Gracias por participar!!</label></strong></p>
+        </h2>
+      </div>
+      <table class="table table-info table-striped">
+        <thead>
+          <tr>
+            <th scope="col">#</th>
+            <th scope="col">NickName</th>
+            <th scope="col">Clase</th>
+            <th scope="col">Puntaje</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let participant of ScorePlayer; index as i ">
+            <th scope="row">{{i+1}}</th>
+            <td>{{participant.username}}</td>
+            <td *ngIf="participant?.tipoJugador==='M'"><i class="fa-solid fa-crown"></i> Master</td>
+          <td *ngIf="participant?.tipoJugador==='P'"><i class="fa-solid fa-frog"></i> Usuario</td>
+          <td *ngIf="participant?.tipoJugador==='I'"><i class="fa-solid fa-circle-question"></i> Invitado</td>
+            <td>{{participant.cantidadPuntos}}</td>
           </tr>
         </tbody>
       </table>
-     </form>
- </div>
+      <div class="col">
+        <button type="button"
+                class="btn btn-secondary me-2 mt-2"
+                (click)="onGoToCheckIn()"> Regresar al Inicio <i class="fa-solid fa-angles-right"></i></button>
+      </div>
+  </div>
+</div>

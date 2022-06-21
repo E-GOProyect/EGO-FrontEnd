@@ -2,7 +2,7 @@ import { HttpClient } from "@angular/common/http";
 import { Injectable } from "@angular/core";
 import { getQuizForm } from "../Common/constants/quiz-form.constants";
 import { URLS } from "../Common/enums";
-import { IQuiz } from "../Common/interfaces";
+import { IAnswered, IQuiz } from "../Common/interfaces";
 import { CreateLounge } from "../Common/interfaces/crear-lounge.interface";
 
 @Injectable({
@@ -18,6 +18,7 @@ export class CuestionarioService{
     private urlEditar=this.urlQuiz+'/editar';
     private urlCreateLounge=URLS.API+'/sala-cuestionario/crear-sala';
     private urlValidCodeLounge=URLS.API+'/sala-cuestionario/validar-codigo';
+    private urlSendAnswered= URLS.API+'/question-answered/';
 
     constructor(private http:HttpClient){
 
@@ -50,6 +51,27 @@ export class CuestionarioService{
             .pipe()
             .subscribe((res)=>{
                 console.log(".createLounge ~ res", res);
+                resolve(res);
+            })
+        })
+    }
+    public async sendAnswered(answered: IAnswered, code:string): Promise<any>{
+        return new Promise<any>((resolve)=>{
+            this.http.post<any>(this.urlSendAnswered+code,answered)
+            .pipe()
+            .subscribe((res)=>{
+                console.log(".sendAnswered ~ res", res);
+                resolve(res);
+            })
+        })
+    }
+    public async getQuizs(uuid:string): Promise<any>{
+        return new Promise<any>((resolve)=>{
+            this.http.get<any>(this.urlQuiz)
+            .pipe()
+            .subscribe((res)=>{
+                console.log(".sendAnswered ~ res", res);
+                console.log(".sendAnswered ~ uuid", uuid);
                 resolve(res);
             })
         })

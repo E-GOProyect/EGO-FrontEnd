@@ -14,7 +14,8 @@ export const ParalelicRoutes:{[key:string]:any} = {
     'result':'RESULT',
     'waiting_room':'WAITING_ROOM',
     'chat_room':'CHATROOM',
-    'final': 'FINAL_STEP'
+    'final': 'FINAL_STEP',
+    'master-room': 'MASTER_ROOM',
 };
 
 /***

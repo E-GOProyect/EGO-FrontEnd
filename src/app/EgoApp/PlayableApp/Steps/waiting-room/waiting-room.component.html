@@ -1,40 +1,43 @@
-<form>
-  <div style="padding: 30px">
-    <button type="submit"
-          class="btn btn-secondary">Regresar</button>
-  </div>
-  <div class="d-grid gap-2 col-2 mx-auto page" style="width: 80%;">
-    <div class="mx-auto">
-      <h3 class="title">
-        <p>Bienvenidos a <strong><label for="inputFormname"
-                   class="display-150">{{formName}}</label></strong></p>
-      </h3>
-    </div>
-    <div class="card text-black bg-warning mb-1">
-      <div class="card-body col-sm-12 col-md-8 row justify-content-center align-items-center">
-        <i class="fa-regular fa-clock col-2" style="font-size: 30px;"></i>
-        <h5 class="card-title col-10 col-sm-6 col-md-8">El juego comenzará en breve</h5>
+<app-loading-page [isLoading]="isLoading"></app-loading-page>
+<div *ngIf="!isLoading">
+  <form>
+    <div class="d-grid gap-2 col-2 mx-auto page" style="width: 80%;">
+      <div class="mx-auto">
+        <h3 class="title">
+          <p>Bienvenidos a <strong><label for="inputFormname"
+                     class="display-150">{{formName}}</label></strong></p>
+        </h3>
+      </div>
+      <div class="card text-black bg-warning mb-1">
+        <div class="card-body text-wrap row">
+          <i class="fa-regular fa-clock col-2" style="font-size: 20px;"></i>
+          <p class="card-title col text-break">El juego comenzará en breve, recuerda invitar a tu amigos con el codigo de sala ;)</p>
+        </div>
+      </div>
+      <div class="col-auto">
+        <h5>
+          <p><strong><label for="inputParticipantes"
+                     class="col-form-label">Codigo de sala: <label style="color: gray;">{{codeGame}}</label></label></strong></p>
+        </h5>
+        <table class="table table-info table-striped">
+          <thead>
+            <tr class="">
+              <th scope="col">Total: {{participantList.length}}</th>
+              <th scope="col">Participantes</th>
+              <th scope="col"><i class="fa-solid fa-users"></i> Clase</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let participant of participantList; let i=index">
+              <th scope="row">{{i+1}}</th>
+              <td>{{participant.userName}}</td>
+              <td *ngIf="participant?.typePlayer==='M'"><i class="fa-solid fa-crown"></i> Master</td>
+              <td *ngIf="participant?.typePlayer==='P'"><i class="fa-solid fa-frog"></i> Usuario</td>
+              <td *ngIf="participant?.typePlayer==='I'"><i class="fa-solid fa-circle-question"></i> Invitado</td>
+            </tr>
+          </tbody>
+        </table>
       </div>
     </div>
-    <div class="col-auto">
-      <h5>
-        <p><strong><label for="inputParticipantes"
-                   class="col-form-label">Participantes:</label></strong></p>
-      </h5>
-      <table class="table table-info table-striped">
-        <thead>
-          <tr class="">
-            <th scope="col">Total: {{participantList.length}}</th>
-            <th scope="col">Participantes</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr *ngFor="let participant of participantList; let i=index">
-            <th scope="row">{{i+1}}</th>
-            <td>{{participant}}</td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
-  </div>
-</form>
+  </form>
+</div>

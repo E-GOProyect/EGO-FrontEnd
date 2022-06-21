@@ -13,6 +13,7 @@ export const SUB_ROUTING:{[key:string]:any} = {
   REVIEW_FORM: 'form',
   QUESTION_STEP: 'game',
   QUESTION_AWAIT_STEP: 'game',
+  MASTER_ROOM: 'game',
   RESULT: 'game',
   WAITING_ROOM: 'game',
   CHATROOM: 'game',

@@ -1,47 +1,82 @@
 <form [formGroup]="form">
-    <div class="buttonCard gap-2 justify-content-end padding-left">
-        <button type="button"
-                class="btn btn-secondary"
-                data-bs-toggle="button"
-                (click)="onSingUp()">
-            <span>
-                <fa-icon [icon]="['fas','door-open']"
-                         [styles]="{'color': 'white'}"></fa-icon>
-                Singup
-            </span>
-        </button>
-        <button type="button"
-                class="btn btn-secondary"
-                data-bs-toggle="button"
-                (click)="onLogin()">
-            <span>
-                <fa-icon [icon]="['fas','right-to-bracket']"
-                         [styles]="{'color': 'white'}"></fa-icon>
-                Login
-            </span>
-        </button>
-    </div>
-    <section class="container-fluid align-items-center centerContainer setAllWidth">
-        <div class="row row-cols-lg-2 row-cols-1 justify-content-center align-items-center" style="width: 100%;">
-            <div class="">
-                <h1 class="title text-center">E-GO</h1>
-            </div>
-            <div class="textBox">
-                <div class="input-group mb-3">
-                    <input type="text"
-                           class="form-control"
-                           placeholder="ID PARTIDA"
-                           formControlName="codeId"
-                           aria-label="Recipient's username"
-                           aria-describedby="basic-addon2">
-                </div>
-                <div class="d-grid gap-2">
-                    <input type="button"
-                           class="btn btn-secondary"
-                           value="Ingresar"
-                           (click)="onSubmitId()">
+    <section class="align-items-center mt-5">
+        <div class=" buttonCard gap-2 justify-content-end"
+             style="width: 100%;"
+             *ngIf="!isLogin">
+            <button type="button"
+                    class="btn btn-secondary"
+                    data-bs-toggle="button"
+                    (click)="onSingUp()">
+                <span>
+                    <fa-icon [icon]="['fas','door-open']"
+                             [styles]="{'color': 'white'}"></fa-icon>
+                    REGISTRATE
+                </span>
+            </button>
+            <button type="button"
+                    class="btn btn-secondary me-4"
+                    data-bs-toggle="button"
+                    (click)="onLogin()">
+                <span>
+                    <fa-icon [icon]="['fas','right-to-bracket']"
+                             [styles]="{'color': 'white'}"></fa-icon>
+                    INICIA SESIÓN
+                </span>
+            </button>
+        </div>
+        <div class="buttonCard gap-2 justify-content-end padding-left"
+             *ngIf="isLogin">
+            <div class="alert alert-light"
+                 role="alert">
+                <div class="grid">
+                    <span class="me-3">Bienvenido: </span>
+                    <i class="fa-solid fa-user"></i> {{userData?.username}}
                 </div>
             </div>
+        </div>
+        <div class="container">
+            <div class="col-4 col-sm-7 col-md-11 row justify-content-center"
+                 style="margin-top: 9em;">
+                <div class="col-4 col">
+                    <div class="col align-self-center">
+                        <h1 class="title text-center"
+                            style="inline-size: max-content;">E-GO</h1>
+                    </div>
+                    <div class="col-2 textBox">
+                        <div class="input-group mb-3">
+                            <input type="text"
+                                   class="form-control"
+                                   placeholder="ID PARTIDA"
+                                   formControlName="codeId"
+                                   aria-label="Recipient's username"
+                                   aria-describedby="basic-addon2">
+                        </div>
+                        <div class="d-grid gap-2">
+                            <input type="button"
+                                   class="btn btn-secondary"
+                                   value="INGRESAR"
+                                   (click)="onSubmitId()">
+                        </div>
+                    </div>
+                    <div class="col-2 textBox mt-2"
+                         *ngIf="isLogin">
+                        <div class="d-grid gap-2">
+                            <button type="button"
+                                    class="btn btn-secondary"
+                                    (click)="onCreateQuiz()">
+                                CREAR CUESTIONARIO
+                            </button>
+                            <button type="button"
+                                    class="btn btn-secondary"
+                                    (click)="onInitQuiz()">
+                                INICIAR CUESTIONARIO
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
         </div>
     </section>
 </form>

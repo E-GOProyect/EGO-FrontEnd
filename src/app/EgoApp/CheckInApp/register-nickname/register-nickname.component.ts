@@ -36,7 +36,7 @@ export class RegisterNicknameComponent implements OnInit {
     if(this.form.valid){
       const username= this.form.value.username;
       const res= await this.userService.registerGuest(username);
-      console.log(res);
+      console.log('response',res);
       if(res.responseStatus['codigoRespuesta'] === '0'){
         sessionStorage.setItem(ParamStorage.userId,res.responseData['id']);
         const codeGame= sessionStorage.getItem(ParamStorage.gameCode);

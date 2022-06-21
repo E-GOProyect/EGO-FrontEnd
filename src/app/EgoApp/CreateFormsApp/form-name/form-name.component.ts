@@ -36,6 +36,7 @@ export class FormNameComponent implements OnInit {
     }
   }
   public onCancel() {
+    this.router.navigate(nav(RouterNavigate.CHECK_IN));
     //
   }
 }

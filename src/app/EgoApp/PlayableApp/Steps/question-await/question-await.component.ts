@@ -1,4 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
+import { IScorePlayerResponse } from 'src/app/Common/interfaces';
 
 @Component({
   selector: 'app-question-await',
@@ -6,6 +7,7 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./question-await.component.scss']
 })
 export class QuestionAwaitComponent implements OnInit {
+  @Input() ScorePlayer:Array<IScorePlayerResponse>;
 
   constructor() { }
 

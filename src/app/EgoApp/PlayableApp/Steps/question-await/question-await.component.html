@@ -1,1 +1,43 @@
-<p>question-await works!</p>
+<div class="container">
+    <div class="mt-5">
+        <div class="col mt-5">
+          <h1>
+            <strong><label for="inputParticipantes"
+                       class="col-form-label">ESPERANDO POR LA PROXIMA PREGUNTA</label></strong>
+          </h1>
+          
+          <h2 class="col-6 col-sm-10 row align-items-center" style="width: 100%;">
+            <div class="col-1">
+                <div class="spinner-border ms-0 ms-sm-2" role="status">
+                    <span class="visually-hidden">Loading...</span>
+                  </div>
+            </div>
+            <div class="col-5 col-sm-8 ms-4">
+                <label for="inputParticipantes"
+                    class="col-form-label"> Esperando al Quiz Master...!!</label>
+            </div>
+            
+          </h2>
+        </div>
+        <table class="table table-info table-striped">
+          <thead>
+            <tr>
+              <th scope="col">#</th>
+              <th scope="col">NickName</th>
+              <th scope="col">Clase</th>
+              <th scope="col">Puntaje</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let participant of ScorePlayer; index as i ">
+              <th scope="row">{{i+1}}</th>
+              <td>{{participant.username}}</td>
+              <td *ngIf="participant?.tipoJugador==='M'"><i class="fa-solid fa-crown"></i> Master</td>
+            <td *ngIf="participant?.tipoJugador==='P'"><i class="fa-solid fa-frog"></i> Usuario</td>
+            <td *ngIf="participant?.tipoJugador==='I'"><i class="fa-solid fa-circle-question"></i> Invitado</td>
+              <td>{{participant.cantidadPuntos}}</td>
+            </tr>
+          </tbody>
+        </table>
+    </div>
+  </div>
