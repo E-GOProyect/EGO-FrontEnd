@@ -4,7 +4,7 @@ import { CountdownModule } from 'ngx-countdown';
 import { QuestionRoutingModule } from './question-routing.module';
 import { QuestionComponent } from './question.component';
 import { QuestionAwaitModule } from '../question-await/question-await.module';
-import { LoadingPageModule } from 'src/app/Common/components';
+import { LoadingPageModule, ProgressBarModule } from 'src/app/Common/components';
 import { ResultModule } from '../result/result.module';
 
 
@@ -19,6 +19,7 @@ import { ResultModule } from '../result/result.module';
     QuestionAwaitModule,
     LoadingPageModule,
     ResultModule,
+    ProgressBarModule,
   ]
 })
 export class QuestionModule { }

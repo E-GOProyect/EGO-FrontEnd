@@ -17,7 +17,6 @@ import { StompService } from 'src/app/Service/stomp.service';
   providers: [StompService,Alert]
 })
 export class QuestionComponent implements OnInit,OnDestroy {
-  public quizName: string;
   public countdownConfig:CountdownConfig;
   public questionName: string;
   public isLoading: boolean;
@@ -25,6 +24,11 @@ export class QuestionComponent implements OnInit,OnDestroy {
   public currentQuestionNumber:number;
   public loungeStatus: string;
   public scoreTable:Array<IScorePlayerResponse>;
+  public timeLeft:number;
+  public maxTime: number;
+
+  public startTimer: Subject<boolean>;
+  public resetTime: Subject<boolean>;
 
   private codeGame: string;
   public quizQuestion: IQuestionResponse;
@@ -40,6 +44,8 @@ export class QuestionComponent implements OnInit,OnDestroy {
     private router:Router,
   ) {
     this.unsubscribe$=new Subject();
+    this.startTimer=new Subject();
+    this.resetTime=new Subject();
     this.isLoading=true;
     this.isAwaiting=false;
    }
@@ -66,24 +72,36 @@ export class QuestionComponent implements OnInit,OnDestroy {
         this.onReturnCheckIn()
       });
     }
+    this.resetTime.next(true);
     this.currentQuestionNumber= JSON.parse(sessionStorage.getItem(ParamStorage.currentQuestionNumber));
+    if(this.currentQuestionNumber){
+      this.currentQuestionNumber=1;
+    }
     this.reloadQuestion();
     this.subscribeToQuestion();
     this.subscribeToLoungeStatus();
     this.subscribeToPlayerScore();
   }
+  
   public onReturnCheckIn(){
     this.router.navigate(nav(RouterNavigate.CHECK_IN));
+  }
+  public onTimeLeft(timeLeft:number){
+    console.log(timeLeft);
+    this.timeLeft=20-timeLeft;
   }
   public reloadQuestion(){
 
     this.quizQuestion=JSON.parse(localStorage.getItem(ParamStorage.currectQuestion));
-    // if(!this.quizQuestion){
-    //   this.alert.alertError('Oops!', 'Ocurrio un error al momento de cargar la pregunta, regresando a checkIn',()=>{
-    //     this.onReturnCheckIn()
-    //   });
-    // }
+    if(!this.quizQuestion){
+      this.alert.alertError('Oops!', 'Ocurrio un error al momento de cargar la pregunta, regresando a checkIn',()=>{
+        this.onReturnCheckIn()
+      });
+    }
     this.isLoading=false;
+    this.timeLeft=0;
+    console.log('resetSend');
+    this.resetTime.next(true);
   }
   private subscribeToQuestion(){
     this.stompService
@@ -104,6 +122,13 @@ export class QuestionComponent implements OnInit,OnDestroy {
   }
   public onSkipQuestion(){
     this.isAwaiting=true;
+  }
+  public onTimeOut(isTimeOut:boolean){
+    console.log('tiemout',isTimeOut);
+    this.isAwaiting=true;
+  }
+  public reset(){
+    this.resetTime.next(true);
   }
   public parseNumberToLetter(num:number): string{
     switch(num){
@@ -132,11 +157,10 @@ export class QuestionComponent implements OnInit,OnDestroy {
     const answered= {
       idJugador: this.userid,
       idOpcion: this.chosenOption,
-      tiempoDemoradoMS: 1000, // TODO: en milisegundos 1000 es 1s 
+      tiempoDemoradoMS: this.timeLeft*1000, // TODO: en milisegundos 1000 es 1s 
     }as IAnswered;
-    // const res= await this.cuestionarioService.sendAnswered(answered,this.codeGame);
     this.stompService.stompClient.send('/socket/question-answered/'+this.codeGame,{},JSON.stringify(answered));
-    console.log('response de anwserd');
+    console.log('response de anwserd', answered);
   }
   private onFinishedQuiz(){
     sessionStorage.setItem(ParamStorage.scoreTable,JSON.stringify(this.scoreTable));

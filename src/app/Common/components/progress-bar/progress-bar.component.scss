@@ -23,7 +23,28 @@
     animation: spin 1.0s ease infinite;
     animation-play-state: paused;
 }
+.counter{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 3em;
+    color: white;
+    margin: auto;
+    width: inherit;
+    height: inherit;
+    inline-size: max-content;
+    animation: antispin 1.0s ease infinite;
+    animation-play-state: paused;
 
+}
+@keyframes antispin{
+    0% {
+        transform: rotate(360deg);
+    }
+    100% {
+        transform: rotate(0deg);
+    }
+}
 @keyframes spin {
     0% {
         transform: rotate(0deg);
