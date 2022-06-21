@@ -3,7 +3,7 @@
      *ngIf="!isLoading">
      <section class="align-items-center mt-5">
         <div class="container">
-            <select class="form-select select-css">
+            <select (change)="fun($event.target)" class="form-select select-css">
                 <option *ngFor="let item of quizList; let i=index;"
                         [value]="i+1"
                         (click)="onSelectQuiz(item?.idCuestionario)">

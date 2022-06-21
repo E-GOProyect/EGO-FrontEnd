@@ -38,6 +38,9 @@ export class ReviewFormComponent implements OnInit {
       })
     }
   }
+  public fun(id:any){
+    console.log('dsadasd',id);
+  }
   private async listQuiz(){
     const res = await this.cuestionarioService.getQuizs('hola');
     console.log("quizsList", res);
