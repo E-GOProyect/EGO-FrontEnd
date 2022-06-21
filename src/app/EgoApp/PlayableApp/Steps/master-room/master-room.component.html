@@ -19,20 +19,18 @@
             class="btn btn-secondary"
             (click)="startQuiz()">Empezar Cuestionario</button>
   </div>
-  <div class="col" *ngIf="loungeStatus==='S'">
+  <div class="col" *ngIf="loungeStatus==='S' && currentNumberQuestion!==numberQuestions">
+    <button type="button"
+            class="btn btn-danger me-2 mt-2"
+            (click)="onFinishedQuiz()"><i class="fa-solid fa-flag-checkered"></i> Finalizar Quiz</button>
     <button type="button"
             class="btn btn-secondary me-2 mt-2"
             (click)="nextQuestion()">
       <i class="fa-solid fa-angle-right"></i> Siguiente Pregunta</button>
-    <button type="button"
-            class="btn btn-secondary me-2 mt-2"><i class="fa-solid fa-flag-checkered"></i> Finalizar Quiz</button>
-    <button type="button"
-            class="btn btn-secondary  mt-2"
-            (click)="comenzarPregunta()"> <i class="fa-solid fa-play"></i> ComenzarPregunta</button>
   </div>
   <div class="col mt-3" *ngIf="loungeStatus==='S'">
     <h2>
-      <p>Pregunta {{currentNumberQuestion}} de {{numberQuestions}}:<strong><label for="inputParticipantes"
+      <p>Pregunta {{currentNumberQuestion}} de {{numberQuestions}} :<strong><label for="inputParticipantes"
                  class="col-form-label">{{curretQuestion?.descripcionPregunta}}</label> </strong></p>
     </h2>
   </div>

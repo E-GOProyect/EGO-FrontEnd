@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, HostListener } from '@angular/core';
+import { Component, OnInit, OnDestroy, HostListener, NgZone } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { CountdownConfig } from 'ngx-countdown';
 import { Subject } from 'rxjs';
@@ -36,7 +36,8 @@ export class QuestionComponent implements OnInit,OnDestroy {
     public cuestionarioService: CuestionarioService,
     private activatedRoute: ActivatedRoute,
     private alert: Alert,
-    private router:Router
+    private router:Router,
+    private _ngZone: NgZone
   ) {
     this.unsubscribe$=new Subject();
     this.isLoading=true;
@@ -84,13 +85,15 @@ export class QuestionComponent implements OnInit,OnDestroy {
     this.isLoading=false;
   }
   private subscribeToQuestion(){
-    this.stompService.subscribe('/question/'+this.codeGame,(payload: any)=>{
+    this.stompService
+    .subscribe('/questions/'+this.codeGame,(payload: any)=>{
       console.log('ActualQuestion: ',JSON.parse(payload.body));
       localStorage.setItem(ParamStorage.currectQuestion,payload.body);
       this.reloadQuestion();
       this.isAwaiting=false;
       this.currentQuestionNumber++;
     },this.unsubscribe$);
+    
   }
   public onChooseAnswered(idOpcion:number){
     console.log('respuesta: ',idOpcion);
@@ -116,8 +119,9 @@ export class QuestionComponent implements OnInit,OnDestroy {
       idOpcion: this.chosenOption,
       tiempoDemoradoMS: 1000, // TODO: en milisegundos 1000 es 1s 
     }as IAnswered;
-    const res= await this.cuestionarioService.sendAnswered(answered,this.codeGame);
-    console.log('response de anwserd:',res);
+    // const res= await this.cuestionarioService.sendAnswered(answered,this.codeGame);
+    this.stompService.stompClient.send('/socket/question-answered/'+this.codeGame,{},answered)
+    console.log('response de anwserd');
   }
   private onFinishedQuiz(){
     console.log('Quiz finalizado');

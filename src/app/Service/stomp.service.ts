@@ -57,22 +57,25 @@ export class StompService {
   }
   unSubscribeAll(unsubscribe:Subject<any>){
     unsubscribe.subscribe(()=>{
-      this.listQueue.forEach((topic)=>{ 
-        this.stompClient.unsubscribe(topic);
+      this.listQueue.forEach((subscription)=>{ 
+        subscription.unsubscribe();
       })
+      this.listQueue=[];
       unsubscribe.unsubscribe();
     })
   }
   private subscribeToTopic(topic: string, callback: any, unsubscribe:Subject<any>): void {
-    this.listQueue.push({
-      topic
-    });
-    this.stompClient
+    
+    const subscription= this.stompClient
     .subscribe(topic, (response?: string): any => {
       callback(response);
     });
+    this.listQueue.push({
+      subscription
+    });
     unsubscribe.subscribe(()=>{
       this.stompClient.unsubscribe(topic);
+      subscription.unsubscribe();
     })
   }
 

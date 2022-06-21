@@ -5,7 +5,7 @@ import { Alert } from 'src/app/Common/Class/alert.class';
 import { nav } from 'src/app/Common/constants';
 import { LoungeStatus, ParamStorage, RouterNavigate } from 'src/app/Common/enums';
 import { PlayerType } from 'src/app/Common/enums/player-type.enum';
-import { IQuizResponse } from 'src/app/Common/interfaces';
+import { IQuizResponse, IScorePlayerResponse } from 'src/app/Common/interfaces';
 import { IQuestionResponse } from 'src/app/Common/interfaces/question-response.interface';
 import { StompService } from 'src/app/Service/stomp.service';
 
@@ -14,7 +14,6 @@ import { StompService } from 'src/app/Service/stomp.service';
   templateUrl: './master-room.component.html',
   styleUrls: ['./master-room.component.scss'],
   providers:[Alert, StompService],
-
 })
 export class MasterRoomComponent implements OnInit, OnDestroy {
 
@@ -25,6 +24,7 @@ export class MasterRoomComponent implements OnInit, OnDestroy {
   public stateStarted: LoungeStatus = LoungeStatus.STARTED;
   public currentNumberQuestion: number;
   public numberQuestions: number;
+  public scoreTable:IScorePlayerResponse;
 
   public participantList: Array<{userName:string, typePlayer:string}>;
 
@@ -51,7 +51,7 @@ export class MasterRoomComponent implements OnInit, OnDestroy {
     this.unsubscribe$=new Subject;
     this.participantList = [];
     this.formName = 'FormName';
-    this.currentNumberQuestion=1;
+    this.currentNumberQuestion=0;
   }
   ngOnDestroy(): void {
     this.onCloseWindow(null);
@@ -66,6 +66,7 @@ export class MasterRoomComponent implements OnInit, OnDestroy {
     this.subscribeToLoungeStatus();
     this.subscribeToJoinPlayer();
     this.subscribeToCurrectQuestion();
+    this.subscribeToPlayerScore();
   }
   public getAccess(){
     this.activatedRoute.queryParams.subscribe(
@@ -94,7 +95,7 @@ export class MasterRoomComponent implements OnInit, OnDestroy {
     this.stompService.stompClient.send("/socket/leave/"+this.codeGame, {}, this.userid);
     this.unsubscribe$.next();
   }
-  private onFinishedQuiz(){
+  public onFinishedQuiz(){
     this.stompService.stompClient.send('/socket/room-status/' + this.codeGame, {}, JSON.stringify(LoungeStatus.FINISHED));
     this.loungeStatus='F';
   }
@@ -140,6 +141,12 @@ export class MasterRoomComponent implements OnInit, OnDestroy {
     this.stompService.subscribe('/room-status/'+this.codeGame,(payload: any)=>{
       console.log('Lounge Status: ', JSON.parse(payload.body));
       this.loungeStatus=JSON.parse(payload.body);
+    },this.unsubscribe$);
+  }
+  private subscribeToPlayerScore(){
+    this.stompService.subscribe('/answered/'+this.codeGame,(payload: any)=>{
+      console.log('Lounge Status: ', JSON.parse(payload.body));
+      this.scoreTable=JSON.parse(payload.body);
     },this.unsubscribe$);
   }
   public startQuiz(){

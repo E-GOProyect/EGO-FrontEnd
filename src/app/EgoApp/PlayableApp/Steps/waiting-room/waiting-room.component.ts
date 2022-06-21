@@ -70,7 +70,6 @@ export class WaitingRoomComponent implements OnInit,OnDestroy {
       this.stompService.stompClient.send("/socket/leave/"+this.codeGame, {}, this.userid);
     }
     this.unsubscribe$.next();
-    this.unsubscribe$.complete();
   }
  
   private loadParticipants(){
