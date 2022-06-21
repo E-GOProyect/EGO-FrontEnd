@@ -5,6 +5,7 @@ import { QuestionRoutingModule } from './question-routing.module';
 import { QuestionComponent } from './question.component';
 import { QuestionAwaitModule } from '../question-await/question-await.module';
 import { LoadingPageModule } from 'src/app/Common/components';
+import { ResultModule } from '../result/result.module';
 
 
 @NgModule({
@@ -16,7 +17,8 @@ import { LoadingPageModule } from 'src/app/Common/components';
     QuestionRoutingModule,
     CountdownModule,
     QuestionAwaitModule,
-    LoadingPageModule
+    LoadingPageModule,
+    ResultModule,
   ]
 })
 export class QuestionModule { }

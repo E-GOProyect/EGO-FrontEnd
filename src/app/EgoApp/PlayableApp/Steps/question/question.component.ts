@@ -5,7 +5,7 @@ import { Subject } from 'rxjs';
 import { Alert } from 'src/app/Common/Class/alert.class';
 import { nav } from 'src/app/Common/constants';
 import { LoungeStatus, ParamStorage, RouterNavigate } from 'src/app/Common/enums';
-import { IAnswered } from 'src/app/Common/interfaces';
+import { IAnswered, IScorePlayerResponse } from 'src/app/Common/interfaces';
 import { IQuestionResponse } from 'src/app/Common/interfaces/question-response.interface';
 import { CuestionarioService } from 'src/app/Service/cuestionario.service';
 import { StompService } from 'src/app/Service/stomp.service';
@@ -24,6 +24,7 @@ export class QuestionComponent implements OnInit,OnDestroy {
   public isAwaiting:boolean;
   public currentQuestionNumber:number;
   public loungeStatus: string;
+  public scoreTable:Array<IScorePlayerResponse>;
 
   private codeGame: string;
   public quizQuestion: IQuestionResponse;
@@ -37,7 +38,6 @@ export class QuestionComponent implements OnInit,OnDestroy {
     private activatedRoute: ActivatedRoute,
     private alert: Alert,
     private router:Router,
-    private _ngZone: NgZone
   ) {
     this.unsubscribe$=new Subject();
     this.isLoading=true;
@@ -70,6 +70,7 @@ export class QuestionComponent implements OnInit,OnDestroy {
     this.reloadQuestion();
     this.subscribeToQuestion();
     this.subscribeToLoungeStatus();
+    this.subscribeToPlayerScore();
   }
   public onReturnCheckIn(){
     this.router.navigate(nav(RouterNavigate.CHECK_IN));
@@ -113,6 +114,20 @@ export class QuestionComponent implements OnInit,OnDestroy {
     }
     return '';
   }
+  private subscribeToPlayerScore(){
+    this.stompService.subscribe('/answered/'+this.codeGame,(payload: any)=>{
+      console.log('answered: ', JSON.parse(payload.body));
+      this.scoreTable=JSON.parse(payload.body).filter((player)=>{
+        return player.tipoJugador!=='M';
+      });
+      this.scoreTable.sort((valA,valB)=>{
+        if(valA.cantidadPuntos===valB.cantidadPuntos){
+          return 0;
+        }
+        return valA.cantidadPuntos<valB.cantidadPuntos? -1:1;
+      });
+    },this.unsubscribe$);
+  }
   public async sendAnswered(){
     const answered= {
       idJugador: this.userid,
@@ -120,11 +135,14 @@ export class QuestionComponent implements OnInit,OnDestroy {
       tiempoDemoradoMS: 1000, // TODO: en milisegundos 1000 es 1s 
     }as IAnswered;
     // const res= await this.cuestionarioService.sendAnswered(answered,this.codeGame);
-    this.stompService.stompClient.send('/socket/question-answered/'+this.codeGame,{},answered)
+    this.stompService.stompClient.send('/socket/question-answered/'+this.codeGame,{},JSON.stringify(answered));
     console.log('response de anwserd');
   }
   private onFinishedQuiz(){
+    sessionStorage.setItem(ParamStorage.scoreTable,JSON.stringify(this.scoreTable));
     console.log('Quiz finalizado');
+    this.router.navigate(nav(RouterNavigate.RESULT));
+
   }
   private subscribeToLoungeStatus(){
     this.stompService.subscribe('/room-status/'+this.codeGame,(payload: any)=>{

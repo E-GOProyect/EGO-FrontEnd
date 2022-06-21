@@ -24,7 +24,7 @@ export class MasterRoomComponent implements OnInit, OnDestroy {
   public stateStarted: LoungeStatus = LoungeStatus.STARTED;
   public currentNumberQuestion: number;
   public numberQuestions: number;
-  public scoreTable:IScorePlayerResponse;
+  public scoreTable:Array<IScorePlayerResponse>;
 
   public participantList: Array<{userName:string, typePlayer:string}>;
 
@@ -97,7 +97,10 @@ export class MasterRoomComponent implements OnInit, OnDestroy {
   }
   public onFinishedQuiz(){
     this.stompService.stompClient.send('/socket/room-status/' + this.codeGame, {}, JSON.stringify(LoungeStatus.FINISHED));
+    sessionStorage.setItem(ParamStorage.scoreTable,JSON.stringify(this.scoreTable));
     this.loungeStatus='F';
+    console.log('Quiz finalizado');
+    this.router.navigate(nav(RouterNavigate.RESULT));
   }
   public verifyCredentials(){
     this.quiz.jugadores.map((player)=>{
@@ -111,6 +114,20 @@ export class MasterRoomComponent implements OnInit, OnDestroy {
         }
       }
     });
+  }
+  private subscribeToPlayerScore(){
+    this.stompService.subscribe('/answered/'+this.codeGame,(payload: any)=>{
+      console.log('answered: ', JSON.parse(payload.body));
+      this.scoreTable=JSON.parse(payload.body).filter((player)=>{
+        return player.tipoJugador!=='M';
+      });
+      this.scoreTable.sort((valA,valB)=>{
+        if(valA.cantidadPuntos===valB.cantidadPuntos){
+          return 0;
+        }
+        return valA.cantidadPuntos<valB.cantidadPuntos? -1:1;
+      });
+    },this.unsubscribe$);
   }
   private loadParticipants(){
     this.participantList.splice(0);
@@ -143,16 +160,14 @@ export class MasterRoomComponent implements OnInit, OnDestroy {
       this.loungeStatus=JSON.parse(payload.body);
     },this.unsubscribe$);
   }
-  private subscribeToPlayerScore(){
-    this.stompService.subscribe('/answered/'+this.codeGame,(payload: any)=>{
-      console.log('Lounge Status: ', JSON.parse(payload.body));
-      this.scoreTable=JSON.parse(payload.body);
-    },this.unsubscribe$);
-  }
+  
   public startQuiz(){
     this.stompService.stompClient.send('/socket/room-status/' + this.codeGame, {}, JSON.stringify(LoungeStatus.STARTED));
     this.nextQuestion();
     // this.salaJuego.estadoSala = 'S';
+  }
+  public onGoToCheckIn(){
+
   }
   public nextQuestion(){
     this.stompService.stompClient.send('/socket/manage-questions/' + this.codeGame, {});

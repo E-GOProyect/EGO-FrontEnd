@@ -12,6 +12,7 @@ import { ResultComponent } from './result.component';
   imports: [
     CommonModule,
     ResultRoutingModule
-  ]
+  ],
+  exports:[ResultComponent]
 })
 export class ResultModule { }

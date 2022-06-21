@@ -7,4 +7,5 @@ export enum ParamStorage{
     questionsNumber='cuestionNumber',
     currentQuestionNumber='currectQuestionNumber',
     loungeStatus='loungeStatus',
+    scoreTable='scoreTable',
 }
