@@ -134,7 +134,7 @@ export class MasterRoomComponent implements OnInit, OnDestroy {
         if(valA.cantidadPuntos===valB.cantidadPuntos){
           return 0;
         }
-        return valA.cantidadPuntos<valB.cantidadPuntos? -1:1;
+        return valA.cantidadPuntos<valB.cantidadPuntos? 1:-1;
       });
     },this.unsubscribe$);
   }

@@ -73,10 +73,7 @@ export class QuestionComponent implements OnInit,OnDestroy {
       });
     }
     this.resetTime.next(true);
-    this.currentQuestionNumber= JSON.parse(sessionStorage.getItem(ParamStorage.currentQuestionNumber));
-    if(this.currentQuestionNumber){
-      this.currentQuestionNumber=1;
-    }
+    this.currentQuestionNumber=1;
     this.reloadQuestion();
     this.subscribeToQuestion();
     this.subscribeToLoungeStatus();
@@ -98,6 +95,7 @@ export class QuestionComponent implements OnInit,OnDestroy {
         this.onReturnCheckIn()
       });
     }
+    this.quizQuestion.opciones=this.quizQuestion.opciones.sort(()=>{return Math.random()-0.5});
     this.isLoading=false;
     this.timeLeft=0;
     console.log('resetSend');
