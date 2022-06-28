@@ -73,6 +73,9 @@ export class ReviewFormComponent implements OnInit {
     console.log('this quiz selected:', this.form);
     console.log('this quiz selected:', this.form.valid);
   }
+  public onBackToCheckIn(){
+    this.router.navigate(nav(RouterNavigate.CHECK_IN));
+  }
   public async onCreateLobby(){
     try{
       const lounge={

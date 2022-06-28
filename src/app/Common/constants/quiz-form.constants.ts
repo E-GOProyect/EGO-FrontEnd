@@ -5,6 +5,7 @@ export const getQuizForm= (quiz: IQuiz)=>{
         return {
             descripcionPregunta: ques.descripcionPregunta,
             opciones: ques.opciones,
+            valorPregunta: ques.valorPregunta,
         }
     })
     return{

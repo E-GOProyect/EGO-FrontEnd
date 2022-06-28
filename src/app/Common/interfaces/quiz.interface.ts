@@ -6,9 +6,9 @@ export interface IQuiz{
 
 export interface IPregunta{
     descripcionPregunta: string;
+    valorPregunta:number;
     opciones: Array<IOpciones>;
     page?: number;
-    valorPregunta:number;
 }
 
 export interface IOpciones{
