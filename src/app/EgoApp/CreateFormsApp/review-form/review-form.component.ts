@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { Alert } from 'src/app/Common/Class/alert.class';
 import { nav } from 'src/app/Common/constants';
@@ -15,8 +16,9 @@ import { CuestionarioService } from 'src/app/Service/cuestionario.service';
 export class ReviewFormComponent implements OnInit {
   public quizList:any;
   protected uuid:string;
-  private quizSelected:number;
+  private quizSelected:string;
   public isLoading:boolean;
+  public form: FormGroup;
   constructor(
     private cuestionarioService:CuestionarioService,
     private alert:Alert,
@@ -28,6 +30,7 @@ export class ReviewFormComponent implements OnInit {
 
   // eslint-disable-next-line @angular-eslint/no-empty-lifecycle-method
   ngOnInit(): void {
+    this.initForm();
     this.listQuiz();
     this.uuid = sessionStorage.getItem(ParamStorage.userId);
     if(!this.uuid){
@@ -38,8 +41,11 @@ export class ReviewFormComponent implements OnInit {
       })
     }
   }
-  public fun(id:any){
-    console.log('dsadasd',id);
+  public initForm(){
+    this.form=new FormGroup({
+      // ValidatorFN.pattern('/[\d]{3}/')
+      quizSelect: new FormControl('-1',Validators.minLength(3)),
+    });
   }
   private async listQuiz(){
     const res = await this.cuestionarioService.getQuizs('hola');
@@ -54,14 +60,23 @@ export class ReviewFormComponent implements OnInit {
     this.isLoading=false;
   }
 
-  public onSelectQuiz(idQuiz:number){
-    this.quizSelected=idQuiz;
-    console.log('this quiz selected:', this.quizSelected);
+  public onSelectQuiz(){
+    // this.quizSelected=idQuiz;
+    if(this.form.valid){
+      this.quizSelected=this.form.value.quizSelect;
+      this.onCreateLobby();
+    }else{
+      this.alert.alertError(
+        'No se ha seleccionado una Quiz', 
+        'Por favor, selecciona uno antes de continuar');
+    }
+    console.log('this quiz selected:', this.form);
+    console.log('this quiz selected:', this.form.valid);
   }
   public async onCreateLobby(){
     try{
       const lounge={
-        idCuestionario: this.quizSelected.toString(),
+        idCuestionario: this.quizSelected,
         idUsuario: this.uuid,
       } as CreateLounge;
       const res = await this.cuestionarioService.createLounge(lounge);

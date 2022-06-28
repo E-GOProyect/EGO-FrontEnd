@@ -101,6 +101,9 @@ export class AddQuestionComponent implements OnInit {
       this.form.addControl(opc.controlName, new FormControl(opc.descripcion));
     });
   }
+  public onBackToCheckIn(){
+
+  }
   public getQuestion(pageNumber: number) {
     let question: IPregunta;
     this.quiz.preguntas.map((val) => {

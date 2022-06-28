@@ -4,84 +4,95 @@
        style="max-width: 700px;">
     <div class="row justify-content-center"
          style="--bs-columns:2;">
-      <p class="fs-4">Ingresa tus preguntas para {{quizName}} !!!</p>
-      <div class="input-group mb-3">
-        <span class="input-group-text"
-              id="basic-addon1">Pregunta: </span>
-        <input type="text"
-               class="form-control"
-               formControlName="question"
-               placeholder=""
-               aria-label="Username"
-               aria-describedby="basic-addon1">
-
-        <div class="mt-2"
+      <h1 class="mb-5" style="font-size: 3em;">Ingresa tus preguntas para {{quizName}} !!!</h1>
+      <div class="col">
+        <div class="input-group mb-3">
+          <span class="input-group-text"
+                id="basic-addon1">Pregunta: </span>
+          <input type="text"
+                 class="form-control"
+                 formControlName="question"
+                 placeholder=""
+                 aria-label="Username"
+                 aria-describedby="basic-addon1">
+        </div>
+        <div class="input-group mb-3"
              *ngFor="let opc of getQuestion(currectQuestion).opciones;let i = index">
-          <div class="input-group mb-2 mt-2"
-               style="width: 675px;">
+          <span class="input-group-text"
+                id="basic-addon1"
+                [textContent]="'Respuesta '+(i+1)+': '">
+            <span type="text"
+                  *ngIf="opc.esRespuesta"> (Correcta)</span>
+          </span>
+          <input type="text"
+                 class="form-control"
+                 placeholder=""
+                 aria-label="Username"
+                 formControlName="{{opc.controlName}}"
+                 aria-describedby="basic-addon1">
+          <div class="input-group"
+               *ngIf="opc.esRespuesta">
             <span class="input-group-text"
                   id="basic-addon1"
-                  [textContent]="'Respuesta '+(i+1)+': '">
-                <span type="text" *ngIf="opc.esRespuesta"> (Correcta)</span>
-                </span>
+                  [textContent]="'Puntos: '"></span>
             <input type="text"
                    class="form-control"
                    placeholder=""
                    aria-label="Username"
-                   formControlName="{{opc.controlName}}"
+                   formControlName="points"
                    aria-describedby="basic-addon1">
-            <div *ngIf="opc.esRespuesta">
-              <span class="input-group-text"
-                    id="basic-addon1"
-                    [textContent]="'Puntos: '"></span>
-              <input type="text"
-                     class="form-control"
-                     placeholder=""
-                     aria-label="Username"
-                     formControlName="points"
-                     aria-describedby="basic-addon1">
-            </div>
+          </div>
+          <!-- <div class="input-group mb-2 mt-2"
+               style="width: 675px;">
+            
+          </div> -->
+        </div>
+        <div class="input-group mb-3">
+          <div *ngIf="getQuestion(currectQuestion).opciones.length>2"
+               class="me-2">
+            <button type="button"
+                    class="btn btn-warning"
+                    (click)="delAnswer()"><i class="fa-solid fa-minus"></i> Respuesta</button>
+          </div>
+          <div *ngIf="getQuestion(currectQuestion).opciones.length<4"
+               class="me-2">
+            <button type="button"
+                    class="btn btn-dark"
+                    (click)="addAnswer()"><i class="fa-solid fa-plus"></i> Respuesta</button>
           </div>
         </div>
-        <div *ngIf="getQuestion(currectQuestion).opciones.length<4"
-             class="me-2">
-          <button type="button"
-                  class="btn btn-dark"
-                  
-                  (click)="addAnswer()">Agregar otra respuesta</button>
-        </div>
-        <div *ngIf="getQuestion(currectQuestion).opciones.length>2"
-             class="me-2">
-          <button type="button"
-                  class="btn btn-warning"
-                  (click)="delAnswer()">Quitar una respuesta</button>
-        </div>
-        <div class="me-2">
-          <button type="button"
-                  class="btn btn-success"
-                  (click)="onNewQuestion()">Agregar pregunta</button>
-        </div>
-
       </div>
-      <nav aria-label="Page navigation example">
+      <nav aria-label="Page navigation example"
+           *ngIf="quiz.preguntas.length>1">
         <ul class="pagination">
-          <li class="page-item" ><button class="page-link"
-            (click)="onNavBar(currectQuestion-1)">Anterior</button></li>
+          <li class="page-item"
+              *ngIf="currectQuestion-1>0"><button class="page-link"
+                    (click)="onNavBar(currectQuestion-1)">Anterior</button></li>
           <div *ngFor="let question of quiz.preguntas">
             <li class="page-item"><button class="page-link"
                       (click)="onNavBar(question.page)">{{question.page}}</button></li>
           </div>
-          <li class="page-item" ><button class="page-link" (click)="onNavBar(currectQuestion+1)">Siguiente</button></li>
+          <li class="page-item"
+              *ngIf="currectQuestion+1===quiz.preguntas.length"><button class="page-link"
+                    (click)="onNavBar(currectQuestion+1)">Siguiente</button></li>
         </ul>
       </nav>
-      <div class="me-2">
-        <button type="button"
-                class="btn btn-primary"
-                (click)="onSubmitQuiz()">Finalizar Formulario</button>
-      </div>
-      <div class="me-2">
-        <button type="button"
-                class="btn btn-secondary">Cancelar</button>
+      <div class="input-group mb-3">
+        <div class="me-2">
+          <button type="button"
+                  class="btn btn-success"
+                  (click)="onNewQuestion()"><i class="fa-solid fa-plus"></i> Pregunta</button>
+        </div>
+        <div class="me-2">
+          <button type="button"
+                  class="btn btn-secondary"
+                  (click)="onBackToCheckIn()">Cancelar</button>
+        </div>
+        <div class="me-2" *ngIf="currectQuestion>3">
+          <button type="button"
+                  class="btn btn-primary"
+                  (click)="onSubmitQuiz()">Finalizar Formulario</button>
+        </div>
       </div>
     </div>
   </div>

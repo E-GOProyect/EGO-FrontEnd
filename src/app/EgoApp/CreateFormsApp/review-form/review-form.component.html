@@ -1,23 +1,35 @@
 <app-loading-page [isLoading]="isLoading"></app-loading-page>
 <div class="container"
      *ngIf="!isLoading">
-     <section class="align-items-center mt-5">
-        <div class="container">
-            <select (change)="fun($event.target)" class="form-select select-css">
+     <div class="container" style="max-width: 40em;">
+        <h1 class="mb-3">Seleccione un Quiz para crear una Sala</h1>
+        <form [formGroup]="form">
+            <select class="form-select select-css"
+                    formControlName="quizSelect">
+                <option [ngValue]="'-1'"
+                        [selected]="true">Seleccione un Quiz</option>
                 <option *ngFor="let item of quizList; let i=index;"
-                        [value]="i+1"
-                        (click)="onSelectQuiz(item?.idCuestionario)">
+                        [ngValue]="item?.idCuestionario">
                     {{item.nombreCuestionario}}
                 </option>
             </select>
-            <div class="textBox mt-2">
+        </form>
+        <div class="input-group mt-4 mb-3">
+            <div class="me-3">
                 <button type="button"
                         class="btn btn-secondary"
-                        (click)="onCreateLobby()">
+                        (click)="onSelectQuiz()">
                     CREAR LOBBY
                 </button>
             </div>
+            <div class="me-3">
+                <button type="button"
+                        class="btn btn-danger"
+                        (click)="onSelectQuiz()">
+                    CANCELAR
+                </button>
+            </div>
+
         </div>
-        
-    </section>
+    </div>
 </div>
