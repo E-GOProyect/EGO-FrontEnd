@@ -1,48 +1,55 @@
-<form [formGroup]="form">
-    <section class="align-items-center mt-5">
-        <div class=" buttonCard gap-2 justify-content-end"
-             style="width: 100%;"
-             *ngIf="!isLogin">
-            <button type="button"
-                    class="btn btn-secondary"
-                    data-bs-toggle="button"
-                    (click)="onSingUp()">
-                <span>
-                    <fa-icon [icon]="['fas','door-open']"
-                             [styles]="{'color': 'white'}"></fa-icon>
-                    REGISTRATE
-                </span>
-            </button>
-            <button type="button"
-                    class="btn btn-secondary me-4"
-                    data-bs-toggle="button"
-                    (click)="onLogin()">
-                <span>
-                    <fa-icon [icon]="['fas','right-to-bracket']"
-                             [styles]="{'color': 'white'}"></fa-icon>
-                    INICIA SESIÓN
-                </span>
-            </button>
-        </div>
-        <div class="buttonCard gap-2 justify-content-end padding-left"
-             *ngIf="isLogin">
-            <div class="alert alert-light"
-                 role="alert">
-                <div class="grid">
-                    <span class="me-3">Bienvenido: </span>
-                    <i class="fa-solid fa-user"></i> {{userData?.username}}
-                </div>
+<div class=" buttonCard gap-2 justify-content-end"
+     style="width: 100%; margin-bottom: 8em;"
+     *ngIf="!isLogin">
+    <button type="button"
+            class="btn btn-secondary col-2"
+            data-bs-toggle="button"
+            (click)="onSingUp()"
+            style="min-width: 120px;">
+        <span style="inline-size: max-content;">
+            <fa-icon [icon]="['fas','door-open']"
+                     [styles]="{'color': 'white'}"></fa-icon>
+            REGISTRATE
+        </span>
+    </button>
+    <button type="button"
+            class="btn btn-secondary me-4 col-2"
+            data-bs-toggle="button"
+            style="min-width: 120px;"
+            (click)="onLogin()">
+        <span>
+            <fa-icon [icon]="['fas','right-to-bracket']"
+                     [styles]="{'color': 'white'}"></fa-icon>
+            INICIA SESIÓN
+        </span>
+    </button>
+</div>
+<div class="buttonCard gap-2 justify-content-end padding-left"
+     *ngIf="isLogin">
+    <div class="alert alert-light col-4"
+    style="min-width: 170px; margin-top: 2em;"
+         role="alert">
+        <div class="row justify-content-start">
+            <span class="me-3 col-4">Bienvenido: </span>
+            <div class="col-1"
+            style="min-width: 120px;inline-size: max-content;">
+                <i class="fa-solid fa-user"></i> <span>  {{userData?.username}}</span>
             </div>
         </div>
+    </div>
+</div>
+<section class="col align-items-center mt-5"
+style="margin-bottom: 16em;"
+>
+    <form [formGroup]="form">
         <div class="container">
-            <div class="col-4 col-sm-7 col-md-11 row justify-content-center"
-                 style="margin-top: 9em;">
-                <div class="col-4 col">
-                    <div class="col align-self-center">
+            <div class="row justify-content-center">
+                <div class="col-6 align-self-cente row justify-content-center">
+                    <div class="col-2 textBox">
                         <h1 class="title text-center"
                             style="inline-size: max-content;">E-GO</h1>
                     </div>
-                    <div class="col-2 textBox">
+                    <div class="col-3 textBox">
                         <div class="input-group mb-3">
                             <input type="text"
                                    class="form-control"
@@ -53,7 +60,7 @@
                         </div>
                         <div class="d-grid gap-2">
                             <input type="button"
-                                   class="btn btn-secondary"
+                                   class="btn btn-primary"
                                    value="INGRESAR"
                                    (click)="onSubmitId()">
                         </div>
@@ -71,12 +78,16 @@
                                     (click)="onInitQuiz()">
                                 INICIAR CUESTIONARIO
                             </button>
+                            <button type="button"
+                                    class="btn btn-danger"
+                                    (click)="onClosedSession()">
+                                CERRAR SESION
+                            </button>
                         </div>
                     </div>
                 </div>
-
             </div>
 
         </div>
-    </section>
-</form>
+    </form>
+</section>

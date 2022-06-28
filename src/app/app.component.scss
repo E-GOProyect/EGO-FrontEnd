@@ -1,4 +1,12 @@
 @import './styles/fonts';
-.font{
-    font-family: RifficFree !important; 
+
+.font {
+    font-family: RifficFree !important;
+}
+
+.abs-center {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
 }

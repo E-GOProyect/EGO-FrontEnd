@@ -1,29 +1,74 @@
 <app-loading-page [isLoading]="isLoading"></app-loading-page>
-<div class="inicio Sesión">
-  <form class="custom-form" [formGroup]="form">
-    <h1>INICIA SESION</h1>
-    <input
-      type="text"
-      name="usuario"
-      placeholder="USUARIO"
-      required="required"
-      formControlName="user"
-    />
-    <input
-      type="password"
-      name="password"
-      placeholder="CONTRASEÑA"
-      formControlName="pass"
-      required="required"
-    />
-    <div class="col">
-      <button type="submit" (click)="onLogIn()">ingresar</button>
-      <div class="center">
-        <a routerLink="/authentication/singup"
-           routerLinkActive="active"
-           class="text-decoration-none">O REGISTRATE AQUÍ</a>
+<div class="container-fluid"
+     *ngIf="!isLoading"
+     style="margin: auto;">
+  <section class="row justify-content-center">
+    <div class=" col-12"
+         style="max-width: 30em; min-width: 15em;">
+      <div class="card text-bg-secondary mb-3">
+        <div class="card-header">
+          <div class="row justify-content-end">
+            <button type="button"
+                    class="col-1 align-self-end btn btn-light"
+                    style="padding: 0px;"
+                    (click)="onBackToCheckIn()">
+              <i class="fa-solid fa-xmark"
+                 style="font-size:1.5em; inline-size: max-content;">
+              </i>
+            </button>
+          </div>
+        </div>
+        <div class="card-body row justify-content-center ms-4 me-4">
+          <h1 class="card-title mt-3 mb-5"
+              style="text-align: center;">INICIA SESION</h1>
+          <div [formGroup]="form">
+            <div class="input-group mb-3">
+              <span class="input-group-text"
+                    id="basic-addon1"><i class="fa-solid fa-user"></i></span>
+              <input type="text"
+                     class="form-control"
+                     placeholder="NICKNAME"
+                     formControlName="user"
+                     aria-label="Username"
+                     aria-describedby="basic-addon1">
+            </div>
+            <div class="input-group mb-3">
+              <span class="input-group-text"
+                    id="basic-addon1"><i class="fa-solid fa-key"></i></span>
+              <input type="password"
+                     class="form-control"
+                     placeholder="CONTRASEÑA"
+                     formControlName="pass"
+                     aria-label="Username"
+                     aria-describedby="basic-addon1">
+            </div>
+            <div class="input-group mb-3">
+              <div class="form-check form-switch">
+                <input class="form-check-input"
+                       type="checkbox"
+                       role="switch"
+                       formControlName="stayLogged"
+                       id="flexSwitchCheckDefault">
+                <label class="form-check-label"
+                       for="flexSwitchCheckDefault">Mantener sesion iniciada</label>
+              </div>
+            </div>
+            <div class="input-group mb-3">
+              <button type="button"
+                      type="submit"
+                      class="btn btn-secondary col"
+                      (click)="onLogIn()">INGRESAR</button>
+            </div>
+            <div class="input-group mb-3">
+              <a routerLink="/authentication/singup"
+                 style="text-align: center; margin: auto;"
+                 routerLinkActive="active"
+                 class="text-decoration-none">O REGISTRATE AQUÍ</a>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
-    
-  </form>
+
+  </section>
 </div>
