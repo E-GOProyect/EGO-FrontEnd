@@ -83,8 +83,21 @@ export class CheckInComponent implements OnInit {
     this.userData= JSON.parse(sessionStorage.getItem(ParamStorage.userData));
     if(this.userData){
       this.isLogin=true;
-      console.log('esta logeado!!')
+      console.log('esta logeado!!');
+    }else{
+      this.userData= JSON.parse(localStorage.getItem(ParamStorage.userData));
+      if(this.userData){
+        console.log('esta logeado!!');
+        this.isLogin=true;
+        sessionStorage.setItem(ParamStorage.userData, JSON.stringify(this.userData));
+        sessionStorage.setItem(ParamStorage.userId, this.userData.idUsuario);
+      }
     }
+  }
+  public onClosedSession(){
+    this.isLogin=false;
+    sessionStorage.clear();
+    localStorage.clear();
   }
   // eslint-disable-next-line @angular-eslint/no-empty-lifecycle-method
   ngOnInit(): void {

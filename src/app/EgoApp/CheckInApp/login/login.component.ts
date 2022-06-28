@@ -38,11 +38,14 @@ export class LoginComponent implements OnInit {
   ngOnInit(): void {
     this.createForm();
     this.initParamenters();
+    // this.isLoading=true;
+
   }
   public createForm() {
     this.form = new FormGroup({
       user: new FormControl('', Validators.required),
       pass: new FormControl('', Validators.required),
+      stayLogged: new FormControl(''),
     });
     console.log(this.form.valid);
   }
@@ -52,7 +55,7 @@ export class LoginComponent implements OnInit {
         username: this.form.value.user,
         password: this.form.value.pass
       } as IUserCredentials; 
-      console.log('onLogIn ~ this.credentials', this.credentials);
+      console.log('onLogIn ~ this.credentials', this.form.value);
       this.loginUser();
     }else{
       console.log("No existen credenciales -> ", this.form.value);
@@ -79,6 +82,10 @@ export class LoginComponent implements OnInit {
       console.log(res);
       if (res.responseStatus['codigoRespuesta'] === CodeType.SUCCESS) {
         const data = res.responseData as IUserData;
+        if(this.form.value.stayLogged){
+          localStorage.setItem(ParamStorage.userData, JSON.stringify(data));
+          localStorage.setItem(ParamStorage.userId, data.idUsuario);
+        }
         sessionStorage.setItem(ParamStorage.userData, JSON.stringify(data));
         sessionStorage.setItem(ParamStorage.userId, data.idUsuario);
         const temp = JSON.parse(
@@ -101,6 +108,9 @@ export class LoginComponent implements OnInit {
     }finally{
       this.isLoading=false;
     }
+  }
+  public onBackToCheckIn(){
+    this.router.navigate(nav(RouterNavigate.CHECK_IN));
   }
   private mockCredentials() {
     // ? Cambiar las credenciales si se desea probar otra cuenta
