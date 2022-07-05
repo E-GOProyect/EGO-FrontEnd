@@ -102,6 +102,7 @@ export class AddQuestionComponent implements OnInit {
     });
   }
   public onBackToCheckIn(){
+    this.router.navigate(nav(RouterNavigate.CHECK_IN));
 
   }
   public getQuestion(pageNumber: number) {
@@ -144,9 +145,9 @@ export class AddQuestionComponent implements OnInit {
       if (ques.page === this.currectQuestion) {
         return (ques = {
           descripcionPregunta: this.form.value.question,
+          valorPregunta: parseInt(values.points),
           opciones: opciones,
-          page: this.currectQuestion,
-          valorPregunta: values.points,
+          page: this.currectQuestion
         } as IPregunta);
       }
       return ques;

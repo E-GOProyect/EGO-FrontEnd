@@ -73,7 +73,7 @@
                       (click)="onNavBar(question.page)">{{question.page}}</button></li>
           </div>
           <li class="page-item"
-              *ngIf="currectQuestion+1===quiz.preguntas.length"><button class="page-link"
+              *ngIf="currectQuestion+1<=quiz.preguntas.length"><button class="page-link"
                     (click)="onNavBar(currectQuestion+1)">Siguiente</button></li>
         </ul>
       </nav>
